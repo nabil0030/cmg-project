@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrôle Bascule HJ & DS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            color: #5e72e4;
+            margin-bottom: 20px;
+        }
+
+        .form-section, .table-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .form-row input, .form-row textarea {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #5e72e4;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5e72e4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #324cdd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5e72e4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="sidebar-title">Argon Dashboard</h1>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item"><i class="fas fa-home"></i><a href="home.html">Dashboard</a></li>
+        <li class="nav-item"><i class="fas fa-weight"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
+        <li class="nav-item"><i class="fas fa-weight-hanging"></i><a href="controle-bascule-dsnord.html">C. Bascule DS NORD</a></li>
+        <li class="nav-item"><i class="fas fa-truck-loading"></i><a href="controle-bascule-ka.html">C. Bascule KA</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="page-title">Contrôle Bascule HJ & DS</div>
+
+    <div class="form-section">
+        <h2>Ajouter une entrée</h2>
+        <form id="hjds-form">
+            <div class="form-row">
+                <input type="date" id="date" required>
+                <input type="text" id="transporteur" placeholder="Transporteur" required>
+                <input type="text" id="numeroBL" placeholder="N° BL" required>
+                <input type="text" id="immatricule" placeholder="Immatricule" required>
+                <input type="number" step="0.01" id="netDS" placeholder="Net DS" required>
+                <input type="number" step="0.01" id="netCMG" placeholder="Net CMG" required>
+                <textarea id="observation" placeholder="Observation"></textarea>
+            </div>
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h2>Historique</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Transporteur</th>
+                <th>N° BL</th>
+                <th>Immatricule</th>
+                <th>Net DS</th>
+                <th>Net CMG</th>
+                <th>Écart CMG</th>
+                <th>Observation</th>
+            </tr>
+            </thead>
+            <tbody id="data-body">
+            <!-- Rempli dynamiquement -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('hjds-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = {
+            date: document.getElementById('date').value,
+            transporteur: document.getElementById('transporteur').value,
+            numeroBL: document.getElementById('numeroBL').value,
+            immatricule: document.getElementById('immatricule').value,
+            netDS: parseFloat(document.getElementById('netDS').value),
+            netCMG: parseFloat(document.getElementById('netCMG').value),
+            observation: document.getElementById('observation').value
+        };
+
+        fetch('/api/bascule-hj-ds', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        })
+            .then(res => {
+                if (res.ok) {
+                    alert('✅ Enregistré avec succès');
+                    document.getElementById('hjds-form').reset();
+                    loadTable();
+                } else {
+                    alert('❌ Erreur lors de l’enregistrement');
+                }
+            });
+    });
+
+    function loadTable() {
+        fetch('/api/bascule-hj-ds')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = '';
+
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.date}</td>
+                        <td>${item.transporteur}</td>
+                        <td>${item.numeroBL}</td>
+                        <td>${item.immatricule}</td>
+                        <td>${item.netDS}</td>
+                        <td>${item.netCMG}</td>
+                        <td>${item.ecart}</td>
+                        <td>${item.observation || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+    }
+
+    window.onload = loadTable;
+</script>
+</body>
+</html>
