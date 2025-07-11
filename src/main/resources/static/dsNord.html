@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV DS NORD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            color: #5e72e4;
+            margin-bottom: 20px;
+        }
+        .form-section, .table-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #5e72e4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #5e72e4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="sidebar-title">Argon Dashboard</h1>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <i class="fas fa-home"></i>
+            <a href="home.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="dsClassique.html">DS classique</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight-hanging"></i>
+            <a href="dsNord.html">DS NORD</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="controle-bascule-ka.html">C. Bascule KA</a>
+        </li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="page-title">TV DS NORD</div>
+
+    <div class="form-section">
+        <h2>Ajouter ou Modifier une entrée</h2>
+        <form id="dsnord-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <input type="date" id="date" required>
+            <input type="time" id="hEntree" required>
+            <input type="time" id="hSortie" required>
+
+            <select id="transporteur" required>
+                <option value="">-- Transporteur --</option>
+                <option value="OUMJIRAN">OUMJIRAN</option>
+                <option value="BOUDRHAM">BOUDRHAM</option>
+            </select>
+
+            <input type="text" id="numeroBL" placeholder="N° BL" required>
+            <input type="text" id="immatricule" placeholder="Immatricule" required>
+            <input type="number" step="0.01" id="tb" placeholder="TB" required>
+            <input type="number" step="0.01" id="tare" placeholder="TARE" required>
+
+            <select id="poste" required>
+                <option value="">-- Poste --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+
+            <input type="text" id="lieuDeDecharge" placeholder="Lieu de Décharge">
+            <textarea id="observation" placeholder="Observation" style="grid-column: span 2;"></textarea>
+
+            <div style="grid-column: span 2; text-align: right;">
+                <button type="submit">💾 Ajouter</button>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="table-section">
+        <h2>Historique</h2>
+        <button onclick="exportExcel()" style="margin-bottom: 10px;">📥 Exporter Excel</button>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>H Entrée</th>
+                <th>H Sortie</th>
+                <th>Transporteur</th>
+                <th>N° BL</th>
+                <th>Immatricule</th>
+                <th>TB</th>
+                <th>TARE</th>
+                <th>NET</th>
+                <th>Poste</th>
+                <th>Lieu Décharge</th>
+                <th>Observation</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let currentId = null;
+
+    document.getElementById('dsnord-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        function formatTime(value) {
+            return value && value.length === 5 ? value + ":00" : value;
+        }
+
+        const formData = {
+            date: document.getElementById('date').value,
+            hEntree: formatTime(document.getElementById('hEntree').value),
+            hSortie: formatTime(document.getElementById('hSortie').value),
+            transporteur: document.getElementById('transporteur').value,
+            numeroBL: document.getElementById('numeroBL').value,
+            immatricule: document.getElementById('immatricule').value,
+            tb: parseFloat(document.getElementById('tb').value),
+            tare: parseFloat(document.getElementById('tare').value),
+            poste: parseInt(document.getElementById('poste').value),
+            lieuDeDecharge: document.getElementById('lieuDeDecharge').value,
+            observation: document.getElementById('observation').value
+        };
+
+        const method = currentId ? 'PUT' : 'POST';
+        const url = currentId ? `/api/dsnord/${currentId}` : '/api/dsnord';
+
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        }).then(res => {
+            if (res.ok) {
+                alert(currentId ? '✅ Modifié avec succès' : '✅ Ajouté avec succès');
+                loadTable();
+                document.getElementById('dsnord-form').reset();
+                document.querySelector('button[type="submit"]').textContent = "Ajouter";
+                currentId = null;
+            } else {
+                res.text().then(text => alert('❌ Erreur : ' + text));
+            }
+        });
+    });
+
+    function loadTable() {
+        fetch('/api/dsnord')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = '';
+                let totalNet = 0;
+
+                data.forEach(item => {
+                    const netValue = item.net !== null && !isNaN(item.net) ? item.net.toFixed(2) : '';
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.date}</td>
+                        <td>${item.hEntree}</td>
+                        <td>${item.hSortie}</td>
+                        <td>${item.transporteur}</td>
+                        <td>${item.numeroBL}</td>
+                        <td>${item.immatricule}</td>
+                        <td>${item.tb}</td>
+                        <td>${item.tare}</td>
+                        <td>${netValue}</td>
+                        <td>${item.poste}</td>
+                        <td>${item.lieuDeDecharge || ''}</td>
+                        <td>${item.observation || ''}</td>
+                        <td>
+                            <button onclick="editRecord(${item.id})">✏️</button>
+                            <button onclick="deleteRecord(${item.id})">🗑️</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                    totalNet += item.net || 0;
+                });
+
+                const totalRow = document.createElement('tr');
+                totalRow.innerHTML = `
+                    <td colspan="8" style="background: yellow; font-weight: bold;">TOTAL</td>
+                    <td style="background: yellow; font-weight: bold;">${totalNet.toFixed(2)}</td>
+                    <td colspan="4" style="background: yellow;"></td>
+                `;
+                tbody.appendChild(totalRow);
+            });
+    }
+
+    function editRecord(id) {
+        fetch(`/api/dsnord/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                currentId = id;
+                document.getElementById('date').value = data.date;
+                document.getElementById('hEntree').value = data.hEntree.substring(0, 5); // "HH:mm:ss" → "HH:mm"
+                document.getElementById('hSortie').value = data.hSortie.substring(0, 5);
+                document.getElementById('transporteur').value = data.transporteur;
+                document.getElementById('numeroBL').value = data.numeroBL;
+                document.getElementById('immatricule').value = data.immatricule;
+                document.getElementById('tb').value = data.tb;
+                document.getElementById('tare').value = data.tare;
+                document.getElementById('poste').value = data.poste;
+                document.getElementById('lieuDeDecharge').value = data.lieuDeDecharge;
+                document.getElementById('observation').value = data.observation;
+                document.querySelector('button[type="submit"]').textContent = "Modifier";
+            });
+    }
+
+    function deleteRecord(id) {
+        if (confirm("❗Supprimer cette ligne ?")) {
+            fetch(`/api/dsnord/${id}`, { method: 'DELETE' })
+                .then(res => {
+                    if (res.ok) {
+                        alert('✅ Supprimé');
+                        loadTable();
+                    } else {
+                        alert('❌ Erreur suppression');
+                    }
+                });
+        }
+    }
+
+    function exportExcel() {
+        window.open('/api/dsnord/export/excel', '_blank');
+    }
+
+    window.onload = loadTable;
+</script>
+
+
+</body>
+</html>

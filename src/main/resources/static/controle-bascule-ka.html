@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>KOUDIAT AÏCHA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .nav-item i {
+            margin-right: 10px;
+        }
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            color: #5e72e4;
+            margin-bottom: 20px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        input, select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #5e72e4;
+            color: white;
+        }
+        .form-section, .table-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px;
+            background-color: #5e72e4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="sidebar-title">Argon Dashboard</h1>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <i class="fas fa-home"></i>
+            <a href="home.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="dsClassique.html">DS classique</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight-hanging"></i>
+            <a href="dsNord.html">DS NORD</a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="controle-bascule-ka.html">C. Bascule KA</a>
+        </li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="page-title">KOUDIAT AÏCHA - Contrôle Bascule</div>
+
+    <div class="form-section">
+        <h2>Ajouter une ligne</h2>
+        <form id="form-ka">
+            <input type="date" id="date" required>
+            <input type="time" id="hEntree" required>
+            <input type="time" id="hSortie" required>
+            <select id="transporteur" required>
+                <option value="">Transporteur</option>
+                <option value="BOUDRHAM">BOUDRHAM</option>
+                <option value="OUMJRANE">OUMJRANE</option>
+            </select>
+            <input type="text" id="numeroBL" placeholder="N° BL" required>
+            <input type="text" id="immatricule" placeholder="Immatricule" required>
+            <input type="number" id="tb" step="0.01" placeholder="TB" required>
+            <input type="number" id="tare" step="0.01" placeholder="TARE" required>
+            <select id="poste" required>
+                <option value="">Poste</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <input type="text" id="lieuDeDecharge" placeholder="Lieu de Décharge">
+            <button type="submit" style="grid-column: span 2;">💾 Ajouter</button>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h2>Historique</h2>
+        <button onclick="exportExcel()">📥 Exporter Excel</button>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th><th>Immatricule</th><th>TB</th><th>TARE</th><th>NET</th><th>Poste</th><th>Lieu</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let currentId = null;
+
+    document.getElementById('form-ka').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const data = {
+            date: date.value,
+            hEntree: hEntree.value,
+            hSortie: hSortie.value,
+            transporteur: transporteur.value,
+            numeroBL: numeroBL.value,
+            immatricule: immatricule.value,
+            tb: isNaN(parseFloat(tb.value)) ? 0 : parseFloat(tb.value),
+            tare: isNaN(parseFloat(tare.value)) ? 0 : parseFloat(tare.value),
+            poste: parseInt(poste.value),
+            lieuDeDecharge: lieuDeDecharge.value
+        };
+
+        const url = currentId ? `/api/ka/${currentId}` : '/api/ka';
+        const method = currentId ? 'PUT' : 'POST';
+
+        fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(res => {
+            if (res.ok) {
+                alert(currentId ? '🔄 Modifié' : '✅ Ajouté');
+                currentId = null;
+                document.getElementById('form-ka').reset();
+                loadTable();
+            }
+        });
+    });
+
+    function loadTable() {
+        fetch('/api/ka')
+            .then(res => res.json())
+            .then(data => {
+                let total = 0;
+                const dataBody = document.getElementById('data-body');
+                dataBody.innerHTML = '';
+                data.forEach(item => {
+                    total += item.net;
+                    dataBody.innerHTML += `
+            <tr>
+              <td>${item.date}</td><td>${item.hEntree}</td><td>${item.hSortie}</td><td>${item.transporteur}</td>
+              <td>${item.numeroBL}</td><td>${item.immatricule}</td><td>${item.tb}</td><td>${item.tare}</td>
+              <td>${item.net.toFixed(2)}</td><td>${item.poste}</td><td>${item.lieuDeDecharge || ''}</td>
+              <td>
+                <button onclick="edit(${item.id})">✏️</button>
+                <button onclick="del(${item.id})">🗑️</button>
+              </td>
+            </tr>`;
+                });
+                dataBody.innerHTML += `<tr><td colspan="8">TOTAL</td><td><strong>${total.toFixed(2)}</strong></td><td colspan="3"></td></tr>`;
+            });
+    }
+
+    function edit(id) {
+        fetch(`/api/ka/${id}`)
+            .then(res => res.json())
+            .then(item => {
+                currentId = id;
+                date.value = item.date;
+                hEntree.value = item.hEntree;
+                hSortie.value = item.hSortie;
+                transporteur.value = item.transporteur;
+                numeroBL.value = item.numeroBL;
+                immatricule.value = item.immatricule;
+                tb.value = item.tb;
+                tare.value = item.tare;
+                poste.value = item.poste;
+                lieuDeDecharge.value = item.lieuDeDecharge;
+            });
+    }
+
+    function del(id) {
+        if (confirm("Supprimer cette ligne ?")) {
+            fetch(`/api/ka/${id}`, { method: 'DELETE' })
+                .then(() => loadTable());
+        }
+    }
+
+    function exportExcel() {
+        window.open('/api/ka/export/excel', '_blank');
+    }
+
+    window.onload = loadTable;
+</script>
+</body>
+</html>
