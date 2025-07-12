@@ -1,63 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrôle Bascule HJ & DS</title>
+    <title>Contrôle Bascule HJ & DS - Enhanced</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            display: flex;
-            min-height: 100vh;
+        /* --- Root Variables for a Modern Theme --- */
+        :root {
+            --primary-color: #4A90E2; /* Modern Blue */
+            --secondary-color: #2C3E50; /* Darker Blue-Gray for sidebar */
+            --accent-color: #2ECC71; /* Green for success/highlights */
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #F8F9FA; /* Off-white background */
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+            --input-border-focus: #4A90E2;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 10px;
         }
 
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--text-dark);
+        }
+
+        /* --- Animated Background Gradient (Subtle) --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #E6EBF2 50%, #DDE5F0 100%);
+            background-size: 200% 200%;
+            animation: gradientAnimation 15s ease infinite alternate;
+            z-index: -2; /* Below everything */
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* --- Sidebar Styling --- */
         .sidebar {
-            width: 250px;
-            background-color: #1a1a2e;
+            width: 260px; /* Slightly wider */
+            background-color: var(--secondary-color);
             color: white;
-            padding: 20px 0;
+            padding: 30px 0; /* More padding */
             height: 100vh;
             position: sticky;
             top: 0;
             flex-shrink: 0;
+            box-shadow: var(--shadow-light);
+            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+            border-top-right-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Push footer to bottom */
+            z-index: 10; /* Ensure sidebar is above main content */
         }
 
         .sidebar-header {
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 30px 30px; /* More padding */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More prominent divider */
+            text-align: center;
         }
 
         .sidebar-title {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.8rem; /* Larger title */
+            font-weight: 700; /* Bolder */
             margin: 0;
             color: white;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            animation: fadeInScale 0.8s ease-out forwards; /* Initial animation */
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .nav-menu {
             list-style: none;
             padding: 0;
-            margin: 20px 0 0 0;
+            margin: 30px 0 0 0;
+            flex-grow: 1; /* Allows menu to take available space */
         }
 
         .nav-item {
-            padding: 12px 20px;
+            padding: 15px 30px; /* More padding */
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease, transform 0.2s ease, border-left-color 0.3s ease;
             display: flex;
             align-items: center;
+            border-left: 5px solid transparent; /* For active state */
         }
 
         .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly stronger hover */
+            transform: translateX(8px); /* More pronounced slide */
+            border-left-color: var(--primary-color); /* Highlight on hover */
+        }
+
+        .nav-item.active {
+            background-color: rgba(74, 144, 226, 0.3); /* Lighter active background */
+            border-left: 5px solid var(--accent-color); /* Stronger highlight for active */
+            font-weight: 600;
         }
 
         .nav-item i {
-            margin-right: 10px;
-            font-size: 1.1rem;
+            margin-right: 15px; /* More space for icon */
+            font-size: 1.2rem; /* Larger icons */
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+        }
+
+        .nav-item:hover i, .nav-item.active i {
+            color: white; /* Icons become white on hover/active */
         }
 
         .nav-item a {
@@ -66,156 +138,646 @@
             display: flex;
             align-items: center;
             width: 100%;
+            font-size: 1.05rem; /* Slightly larger text */
         }
 
+        .sidebar-footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Main Content Styling --- */
         .main-content {
             flex: 1;
-            padding: 30px;
+            padding: 40px; /* More padding for content */
+            display: flex;
+            flex-direction: column;
+            gap: 30px; /* Space between sections */
+            position: relative;
+            z-index: 1;
         }
 
         .page-title {
-            font-size: 1.75rem;
-            color: #5e72e4;
+            font-size: 2.5rem; /* Larger and bolder title */
+            color: var(--text-dark);
             margin-bottom: 20px;
+            font-weight: 800; /* Extra bold */
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.05);
+            animation: slideInLeft 0.7s ease-out forwards;
         }
 
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- Section Cards (Form and Table) --- */
         .form-section, .table-section {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px; /* More internal padding */
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* For overflow mask */
+            overflow: hidden; /* For inner animations */
         }
 
-        .form-row {
+        .form-section:hover, .table-section:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+            box-shadow: var(--shadow-hover);
+        }
+
+        .section-header {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
         }
 
-        .form-row input, .form-row textarea {
-            flex: 1;
-            min-width: 150px;
+        .section-header h2 {
+            font-size: 1.6rem; /* Section titles */
+            color: var(--primary-color);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .section-actions button, .section-actions input[type="text"] {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .section-actions button:hover {
+            background-color: rgba(74, 144, 226, 0.1);
+        }
+
+        /* --- Form Styling --- */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
+            gap: 20px; /* Space between inputs */
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
         input, textarea {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
+            width: 100%; /* Ensure they fill their grid column */
+            padding: 12px 15px;
+            border-radius: 8px; /* Slightly larger radius */
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--bg-light); /* Light background for inputs */
         }
 
         input:focus, textarea:focus {
-            border-color: #5e72e4;
+            border-color: var(--input-border-focus);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Subtle glow effect */
             outline: none;
+            background-color: white;
         }
 
-        button {
-            padding: 10px 20px;
-            background-color: #5e72e4;
+        textarea {
+            min-height: 80px;
+            resize: vertical; /* Allow vertical resizing */
+            grid-column: 1 / -1; /* Make textarea span all columns */
+        }
+
+        .form-section button[type="submit"] {
+            padding: 14px 25px; /* Larger button */
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3); /* Button shadow */
+            margin-top: 15px; /* Space above button */
+            justify-self: end; /* Align button to the right */
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        button:hover {
-            background-color: #324cdd;
+        .form-section button[type="submit"]:hover {
+            background-color: #397BC7; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        /* --- Table Styling --- */
+        .table-responsive {
+            overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
+            -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+            border-radius: var(--border-radius); /* Apply radius to container */
+            border: 1px solid var(--border-color); /* Subtle border for the table container */
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate; /* Allows border-radius on cells */
+            border-spacing: 0; /* Remove default spacing */
+            min-width: 900px; /* Ensure table doesn't get too squished */
         }
 
         th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 15px 20px; /* More padding in cells */
+            text-align: left;
+            border-bottom: 1px solid var(--border-color); /* Only bottom border */
+            border-right: 1px solid var(--border-color); /* Right border for columns */
+        }
+
+        th:last-child, td:last-child {
+            border-right: none; /* No right border on last column */
         }
 
         th {
-            background-color: #5e72e4;
+            background-color: var(--primary-color);
             color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0; /* Sticky header for long tables */
+            z-index: 1; /* Keep header above scrolling content */
+        }
+
+        /* Rounded corners for table header */
+        th:first-child { border-top-left-radius: var(--border-radius); }
+        th:last-child { border-top-right-radius: var(--border-radius); }
+
+        tbody tr {
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #EBF2FA; /* Light highlight on row hover */
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none; /* No bottom border on last row */
+        }
+
+        /* Action buttons in table */
+        .table-actions {
+            white-space: nowrap; /* Prevent buttons from wrapping */
+            text-align: center;
+        }
+        .table-actions button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin: 0 3px; /* Smaller margin for multiple buttons */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .table-actions button:hover {
+            background-color: #397BC7;
+            transform: translateY(-1px);
+        }
+
+        .table-actions button.delete-btn {
+            background-color: #E74C3C; /* Red for delete */
+        }
+        .table-actions button.delete-btn:hover {
+            background-color: #C0392B;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 30px;
+            }
+            .page-title {
+                font-size: 2.2rem;
+            }
+            .form-section, .table-section {
+                padding: 25px;
+            }
+            .section-header h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 75px; /* Collapsed sidebar for tablets */
+                padding: 20px 0;
+            }
+            .sidebar-header {
+                padding: 0 10px 20px;
+            }
+            .sidebar-title {
+                font-size: 1.2rem;
+                white-space: nowrap; /* Prevent wrapping */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: none; /* Hide text, only icon visible */
+            }
+            .sidebar-title i {
+                margin-right: 0;
+            }
+            .nav-item {
+                padding: 15px 0; /* Center icons when collapsed */
+                justify-content: center;
+                border-left: none; /* Remove border when collapsed */
+            }
+            .nav-item i {
+                margin-right: 0; /* No margin when text is hidden */
+            }
+            .nav-item a {
+                display: none; /* Hide link text */
+            }
+            .nav-item.active {
+                background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
+                border-radius: var(--border-radius); /* Rounded background */
+                margin: 0 10px; /* Some margin to show background */
+            }
+            .sidebar-footer {
+                display: none; /* Hide footer when collapsed */
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 2rem;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .section-header h2 {
+                width: 100%;
+                text-align: center;
+            }
+            .section-actions {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-radius: 0;
+                padding: 15px 0;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .sidebar-header {
+                padding: 0 15px 15px;
+                border-bottom: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .sidebar-title {
+                display: block; /* Show title again on very small screens */
+                font-size: 1.5rem;
+            }
+            .sidebar-title i {
+                margin-right: 10px;
+            }
+            .nav-menu {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .nav-item {
+                flex-basis: auto;
+                padding: 10px 15px;
+                margin: 5px;
+                border-radius: 8px;
+                display: flex; /* Ensure flex for icon/text alignment */
+                align-items: center;
+            }
+            .nav-item a {
+                display: block; /* Show link text again */
+                margin-left: 5px;
+            }
+            .nav-item i {
+                margin-right: 8px;
+            }
+            .nav-item.active {
+                border-left: 5px solid var(--accent-color); /* Bring back border for active */
+                background-color: rgba(74, 144, 226, 0.2);
+            }
+
+            .main-content {
+                padding: 15px;
+                gap: 20px;
+            }
+            .page-title {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+            .form-section, .table-section {
+                padding: 20px;
+            }
+            .form-row {
+                grid-template-columns: 1fr; /* Single column layout for forms */
+            }
+            .form-section button[type="submit"] {
+                width: 100%; /* Full width button */
+            }
+            .table-responsive {
+                border-radius: 0; /* No border radius for full width */
+                border-left: none;
+                border-right: none;
+            }
         }
     </style>
 </head>
 <body>
 <div class="sidebar">
-    <div class="sidebar-header">
-        <h1 class="sidebar-title">Argon Dashboard</h1>
+    <div>
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">
+                <i class="fas fa-cubes"></i>
+                CMG App
+            </h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
+            <li class="nav-item active"><i class="fas fa-truck-ramp-box"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
+            <li class="nav-item"><i class="fas fa-truck-front"></i><a href="dsClassique.html">DS Classique</a></li>
+            <li class="nav-item"><i class="fas fa-mountain"></i><a href="dsNord.html">DS NORD</a></li>
+            <li class="nav-item"><i class="fas fa-weight-scale"></i><a href="controle-bascule-ka.html">C. Bascule KA</a></li>
+            <li class="nav-item"><i class="fas fa-fire"></i><a href="chauxVive.html">Chaux Vive</a></li>
+            <li class="nav-item"><i class="fas fa-industry"></i><a href="chauxViveLafarge.html">Chaux Vive Lafarge</a></li>
+            <li class="nav-item"><i class="fas fa-truck-field"></i><a href="cbulkArgentifere.html">C,BULK (Stuffing Lead)</a></li>
+            <li class="nav-item"><i class="fas fa-train"></i><a href="expZincOncf.html">Exp Zinc ONCF</a></li>
+        </ul>
     </div>
-    <ul class="nav-menu">
-        <li class="nav-item">
-            <i class="fas fa-home"></i>
-            <a href="index.html">Dashboard</a>
-        </li>
-        <li class="nav-item">
-            <i class="fas fa-weight"></i>
-            <a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a>
-        </li>
-        <li class="nav-item">
-            <i class="fas fa-weight"></i>
-            <a href="dsClassique.html">DS classique</a>
-        </li>
-        <li class="nav-item">
-            <i class="fas fa-weight-hanging"></i>
-            <a href="dsNord.html">DS NORD</a>
-        </li>
-        <li class="nav-item">
-            <i class="fas fa-truck-loading"></i>
-            <a href="controle-bascule-ka.html">C. Bascule KA</a>
-        </li>
-    </ul>
+    <div class="sidebar-footer">
+        <p>&copy; 2025 CMG Operations</p>
+    </div>
 </div>
 
 <div class="main-content">
-    <div class="page-title">Contrôle Bascule HJ & DS</div>
+    <h1 class="page-title">Contrôle Bascule HJ & DS</h1>
 
     <div class="form-section">
-        <h2>Ajouter une entrée</h2>
+        <div class="section-header">
+            <h2>Ajouter une entrée</h2>
+        </div>
         <form id="hjds-form">
             <div class="form-row">
-                <input type="date" id="date" required>
-                <input type="text" id="transporteur" placeholder="Transporteur" required>
-                <input type="text" id="numeroBL" placeholder="N° BL" required>
-                <input type="text" id="immatricule" placeholder="Immatricule" required>
-                <input type="number" step="0.01" id="netDS" placeholder="Net DS" required>
-                <input type="number" step="0.01" id="netCMG" placeholder="Net CMG" required>
-                <textarea id="observation" placeholder="Observation"></textarea>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="transporteur">Transporteur</label>
+                    <input type="text" id="transporteur" placeholder="Nom du Transporteur" required>
+                </div>
+                <div class="form-group">
+                    <label for="numeroBL">N° BL</label>
+                    <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
+                </div>
+                <div class="form-group">
+                    <label for="immatricule">Matricule</label>
+                    <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+                </div>
+                <div class="form-group">
+                    <label for="netDS">Net DS</label>
+                    <input type="number" step="0.01" id="netDS" placeholder="Poids Net DS" required>
+                </div>
+                <div class="form-group">
+                    <label for="netCMG">Net CMG</label>
+                    <input type="number" step="0.01" id="netCMG" placeholder="Poids Net CMG" required>
+                </div>
+                <div class="form-group">
+                    <label for="observation">Observation</label>
+                    <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+                </div>
             </div>
-            <button type="submit">Ajouter</button>
+            <button type="submit"><i class="fas fa-plus"></i> Ajouter</button>
         </form>
     </div>
 
     <div class="table-section">
-        <h2>Historique</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Transporteur</th>
-                <th>N° BL</th>
-                <th>Immatricule</th>
-                <th>Net DS</th>
-                <th>Net CMG</th>
-                <th>Écart CMG</th>
-                <th>Observation</th>
-            </tr>
-            </thead>
-            <tbody id="data-body">
-            <!-- Rempli dynamiquement -->
-            </tbody>
-        </table>
+        <div class="section-header">
+            <h2>Historique</h2>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>Immatricule</th>
+                    <th>Net DS</th>
+                    <th>Net CMG</th>
+                    <th>Écart CMG</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="data-body">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('hjds-form').addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Utility to format date for display
+    function formatDate(isoDate) {
+        if (!isoDate) return '';
+        const [year, month, day] = isoDate.split('-');
+        return `${day}/${month}/${year}`; // Format DD/MM/YYYY for display
+    }
 
+    function loadTable() {
+        fetch('/api/bascule-hj-ds')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = '';
+
+                // Tri par date DESC
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (data.length === 0) {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="9" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée.</td>`;
+                    tbody.appendChild(noDataRow);
+                    return;
+                }
+
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${formatDate(item.date)}</td>
+                        <td>${item.transporteur}</td>
+                        <td>${item.numeroBL}</td>
+                        <td>${item.immatricule}</td>
+                        <td>${item.netDS}</td>
+                        <td>${item.netCMG}</td>
+                        <td>${item.ecart}</td>
+                        <td>${item.observation || '-'}</td>
+                        <td class="table-actions">
+                            <button onclick="editEntry(${item.id})"><i class="fas fa-edit"></i> Modifier</button>
+                            <button class="delete-btn" onclick="deleteEntry(${item.id})"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des données:", error);
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
+            });
+    }
+
+    function deleteEntry(id) {
+        if (confirm("❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.")) {
+            fetch(`/api/bascule-hj-ds/${id}`, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text(); // Or .json() if your API sends JSON on success
+                })
+                .then(() => {
+                    alert("✅ Supprimé avec succès.");
+                    loadTable();
+                })
+                .catch(error => {
+                    console.error("Erreur lors de la suppression:", error);
+                    alert("❌ Impossible de supprimer l'entrée.");
+                });
+        }
+    }
+
+    function editEntry(id) {
+        fetch(`/api/bascule-hj-ds/${id}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(item => {
+                document.getElementById('date').value = item.date;
+                document.getElementById('transporteur').value = item.transporteur;
+                document.getElementById('numeroBL').value = item.numeroBL;
+                document.getElementById('immatricule').value = item.immatricule;
+                document.getElementById('netDS').value = item.netDS;
+                document.getElementById('netCMG').value = item.netCMG;
+                document.getElementById('observation').value = item.observation || '';
+
+                const form = document.getElementById('hjds-form');
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+                submitButton.style.backgroundColor = '#F39C12'; // Orange for update
+                submitButton.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+
+
+                form.onsubmit = function (e) {
+                    e.preventDefault();
+                    const updatedData = {
+                        date: form.date.value,
+                        transporteur: form.transporteur.value,
+                        numeroBL: form.numeroBL.value,
+                        immatricule: form.immatricule.value,
+                        netDS: parseFloat(form.netDS.value),
+                        netCMG: parseFloat(form.netCMG.value),
+                        observation: form.observation.value
+                    };
+
+                    fetch(`/api/bascule-hj-ds/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedData)
+                    }).then(response => {
+                        if (!response.ok) {
+                            // Check for 409 Conflict if that's how your backend signals duplicates on PUT
+                            if (response.status === 409) {
+                                alert("❌ Doublon détecté ou conflit de données.");
+                            }
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json(); // Or .text() if your API sends no body on success
+                    }).then(() => {
+                        alert("✅ Modifié avec succès.");
+                        form.reset();
+                        submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter'; // Reset button text
+                        submitButton.style.backgroundColor = 'var(--primary-color)';
+                        submitButton.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+                        form.onsubmit = handleAdd; // reattach the normal add handler
+                        loadTable();
+                    }).catch(error => {
+                        console.error("Erreur lors de la modification:", error);
+                        alert(`❌ Une erreur est survenue lors de la modification: ${error.message}`);
+                    });
+                };
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération des données pour modification:", error);
+                alert("❌ Impossible de charger l'entrée pour modification.");
+            });
+    }
+
+    // Normal handler for adding
+    function handleAdd(e) {
+        e.preventDefault();
         const formData = {
             date: document.getElementById('date').value,
             transporteur: document.getElementById('transporteur').value,
@@ -228,45 +790,32 @@
 
         fetch('/api/bascule-hj-ds', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
-        })
-            .then(res => {
-                if (res.ok) {
-                    alert('✅ Enregistré avec succès');
-                    document.getElementById('hjds-form').reset();
-                    loadTable();
-                } else {
-                    alert('❌ Erreur lors de l’enregistrement');
-                }
-            });
-    });
-
-    function loadTable() {
-        fetch('/api/bascule-hj-ds')
-            .then(res => res.json())
-            .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = '';
-
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.date}</td>
-                        <td>${item.transporteur}</td>
-                        <td>${item.numeroBL}</td>
-                        <td>${item.immatricule}</td>
-                        <td>${item.netDS}</td>
-                        <td>${item.netCMG}</td>
-                        <td>${item.ecart}</td>
-                        <td>${item.observation || ''}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            });
+        }).then(res => {
+            if (res.status === 409) { // Check for specific duplicate status code
+                alert("❌ Doublon détecté : une entrée avec ce N° BL existe déjà pour cette date.");
+                return; // Stop further processing
+            }
+            if (!res.ok) { // Check if HTTP status is 2xx
+                // Attempt to read error message from response body if available
+                return res.json().then(err => { throw new Error(err.message || 'Erreur réseau ou du serveur.'); });
+            }
+            return res.json(); // Parse JSON response for success case
+        }).then(() => {
+            alert('✅ Enregistré avec succès.');
+            document.getElementById('hjds-form').reset();
+            loadTable();
+        }).catch(error => {
+            console.error('Error:', error);
+            alert(`❌ Une erreur est survenue: ${error.message}`);
+        });
     }
 
+    // Initialisation
+    document.getElementById('hjds-form').onsubmit = handleAdd;
     window.onload = loadTable;
 </script>
+
 </body>
 </html>
