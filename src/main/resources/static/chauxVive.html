@@ -72,7 +72,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
-        input, select {
+        input, select, textarea {
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -114,7 +114,7 @@
         <h1 class="sidebar-title">Argon Dashboard</h1>
     </div>
     <ul class="nav-menu">
-        <li class="nav-item"><i class="fas fa-home"></i><a href="home.html">Dashboard</a></li>
+        <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
         <li class="nav-item"><i class="fas fa-weight"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
         <li class="nav-item"><i class="fas fa-weight"></i><a href="dsClassique.html">DS classique</a></li>
         <li class="nav-item"><i class="fas fa-weight-hanging"></i><a href="dsNord.html">DS NORD</a></li>
@@ -127,38 +127,32 @@
 
     <div class="form-section">
         <h2>Ajouter ou Modifier une entrée</h2>
-        <form id="chaux-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <form id="chaux-form">
             <input type="date" id="date" required />
             <input type="time" id="hEntree" required />
             <input type="time" id="hSortie" required />
-
             <select id="transporteur" required>
                 <option value="">-- Transporteur --</option>
                 <option value="SOSAMAC">SOSAMAC</option>
                 <option value="GTC-CSL">GTC-CSL</option>
             </select>
-
             <input type="text" id="numeroBL" placeholder="N° BL" required />
             <input type="text" id="immatricule" placeholder="Immatricule" required />
             <input type="number" step="0.01" id="tb" placeholder="TB" required />
             <input type="number" step="0.01" id="tare" placeholder="TARE" required />
             <input type="number" step="0.01" id="netCosumar" placeholder="Net COSUMAR" required />
-
             <select id="poste" required>
                 <option value="">-- Poste --</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
-
-            <input type="text" id="lieuChargement" placeholder="Lieu Chargement" />
+            <input type="text" id="lieuChargement" value="LAFARGE" placeholder="Lieu Chargement" required />
             <select id="lieuDechargement" required>
                 <option value="COSUMAR" selected>COSUMAR</option>
                 <option value="LAVERIE CMG">LAVERIE CMG</option>
             </select>
-
             <textarea id="observation" placeholder="Observation" style="grid-column: span 2;"></textarea>
-
             <div style="grid-column: span 2; text-align: right;">
                 <button type="submit">💾 Ajouter</button>
             </div>
@@ -195,6 +189,7 @@
         const ecart = netCMG - netCosumar;
 
         const data = {
+            id: currentId ?? "",
             date: document.getElementById('date').value,
             hEntree: document.getElementById('hEntree').value,
             hSortie: document.getElementById('hSortie').value,
@@ -211,60 +206,85 @@
             observation: document.getElementById('observation').value
         };
 
-        const method = currentId ? 'PUT' : 'POST';
-        const url = currentId ? `/chauxVive/update` : '/chauxVive/add';
+        const url = currentId ? '/chauxVive/update' : '/chauxVive/add';
 
         fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: new URLSearchParams(data)
-        }).then(() => {
-            alert('✅ Opération réussie');
-            document.getElementById('chaux-form').reset();
-            currentId = null;
-            loadTable();
-        });
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(Object.entries(data)).toString()
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        alert("❌ Doublon détecté !");
+                    } else {
+                        alert("❌ Une erreur est survenue.");
+                    }
+                    throw new Error("Erreur HTTP");
+                }
+                return response.text();
+            })
+            .then(() => {
+                alert('✅ Opération réussie');
+                document.getElementById('chaux-form').reset();
+                currentId = null;
+                loadTable();
+            })
+            .catch(err => console.error(err));
     });
 
-
     function loadTable() {
-        fetch('/chauxVive')
-            .then(res => res.text())
-            .then(html => {
-                fetch('/api/chauxVive')
-                    .then(res => res.json())
-                    .then(data => {
-                        const tbody = document.getElementById('data-body');
-                        tbody.innerHTML = '';
-                        let total = 0;
-                        data.forEach(item => {
-                            const netCMG = (item.tb - item.tare).toFixed(2);
-                            total += parseFloat(netCMG);
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                  <td>${item.date}</td><td>${item.hEntree}</td><td>${item.hSortie}</td>
-                  <td>${item.transporteur}</td><td>${item.numeroBL}</td><td>${item.immatricule}</td>
-                  <td>${item.tb}</td><td>${item.tare}</td><td>${netCMG}</td><td>${item.poste}</td>
-                  <td>${item.netCosumar}</td><td>${item.ecart}</td><td>${item.lieuChargement}</td>
-                  <td>${item.lieuDechargement}</td><td>${item.observation}</td>
-                  <td>
-                    <button onclick="editRecord(${item.id})">✏️</button>
-                    <button onclick="deleteRecord(${item.id})">🗑️</button>
-                  </td>
-                `;
-                            tbody.appendChild(row);
-                        });
+        fetch('/api/chauxVive')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = '';
+                let total = 0;
 
-                        const totalRow = document.createElement('tr');
-                        totalRow.innerHTML = `
+                if (!Array.isArray(data)) return;
+
+                data.forEach(item => {
+                    const netCMG = item.tb - item.tare;
+                    const ecart = netCMG - item.netCosumar;
+                    total += netCMG;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>${item.date}</td>
+                    <td>${item.hentree ? item.hentree.substring(0, 5) : "—"}</td>
+                    <td>${item.hsortie ? item.hsortie.substring(0, 5) : "—"}</td>
+                    <td>${item.transporteur}</td>
+                    <td>${item.numeroBL}</td>
+                    <td>${item.immatricule}</td>
+                    <td>${+item.tb.toFixed(3)}</td>
+                    <td>${+item.tare.toFixed(3)}</td>
+                    <td>${+netCMG.toFixed(3)}</td>
+                    <td>${item.poste}</td>
+                    <td>${+item.netCosumar.toFixed(3)}</td>
+                    <td>${+ecart.toFixed(3)}</td>
+                    <td>${item.lieuChargement}</td>
+                    <td>${item.lieuDechargement}</td>
+                    <td>${item.observation}</td>
+                    <td>
+                        <button onclick="editRecord(${item.id})">✏️</button>
+                        <button onclick="deleteRecord(${item.id})">🗑️</button>
+                    </td>
+                `;
+                    tbody.appendChild(row);
+                });
+
+                const totalRow = document.createElement('tr');
+                totalRow.innerHTML = `
                 <td colspan="8" style="background: yellow; font-weight: bold;">TOTAL</td>
-                <td style="background: yellow; font-weight: bold;">${total.toFixed(2)}</td>
+                <td style="background: yellow; font-weight: bold;">${+total.toFixed(3)}</td>
                 <td colspan="6"></td>
-              `;
-                        tbody.appendChild(totalRow);
-                    });
+            `;
+                tbody.appendChild(totalRow);
             });
     }
+
+
+
 
     function editRecord(id) {
         fetch(`/api/chauxVive/${id}`)
@@ -272,8 +292,15 @@
             .then(item => {
                 currentId = item.id;
                 document.getElementById('date').value = item.date;
-                document.getElementById('hEntree').value = item.hEntree;
-                document.getElementById('hSortie').value = item.hSortie;
+
+                // ✅ Format pour champs <input type="time">
+                const hEntree = item.hentree?.substring(0, 5) || '';
+                const hSortie = item.hsortie?.substring(0, 5) || '';
+
+
+                document.getElementById('hEntree').value = hEntree;
+                document.getElementById('hSortie').value = hSortie;
+
                 document.getElementById('transporteur').value = item.transporteur;
                 document.getElementById('numeroBL').value = item.numeroBL;
                 document.getElementById('immatricule').value = item.immatricule;
@@ -281,7 +308,6 @@
                 document.getElementById('tare').value = item.tare;
                 document.getElementById('poste').value = item.poste;
                 document.getElementById('netCosumar').value = item.netCosumar;
-                document.getElementById('ecart').value = item.ecart;
                 document.getElementById('lieuChargement').value = item.lieuChargement;
                 document.getElementById('lieuDechargement').value = item.lieuDechargement;
                 document.getElementById('observation').value = item.observation;
@@ -289,8 +315,8 @@
     }
 
     function deleteRecord(id) {
-        if (confirm("❗Supprimer cette ligne ?")) {
-            fetch(`/chauxVive/delete/${id}`, {method: 'GET'}).then(() => loadTable());
+        if (confirm("❗ Supprimer cette ligne ?")) {
+            fetch(`/chauxVive/delete/${id}`, { method: 'GET' }).then(() => loadTable());
         }
     }
 
@@ -300,5 +326,6 @@
 
     window.onload = loadTable;
 </script>
+
 </body>
 </html>

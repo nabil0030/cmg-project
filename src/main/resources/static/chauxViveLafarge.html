@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chaux Vive - Lafarge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        body {
+            margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa; display: flex; min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px; background-color: #1a1a2e; color: white; padding: 20px 0;
+            height: 100vh; position: sticky; top: 0; flex-shrink: 0;
+        }
+        .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-title { font-size: 1.5rem; font-weight: 600; margin: 0; color: white; }
+        .nav-menu { list-style: none; padding: 0; margin: 20px 0 0 0; }
+        .nav-item { padding: 12px 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; }
+        .nav-item:hover { background-color: rgba(255,255,255,0.1); }
+        .nav-item i { margin-right: 10px; font-size: 1.1rem; }
+        .nav-item a { color: white; text-decoration: none; display: flex; width: 100%; }
+        .main-content { flex: 1; padding: 30px; }
+        .page-title { font-size: 1.75rem; color: #5e72e4; margin-bottom: 20px; }
+        .form-section, .table-section {
+            background-color: white; border-radius: 8px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input, select, textarea {
+            width: 100%; padding: 10px; margin-bottom: 15px;
+            border-radius: 4px; border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px; background-color: #5e72e4; color: white;
+            border: none; border-radius: 4px; cursor: pointer;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background-color: #5e72e4; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header"><h1 class="sidebar-title">Argon Dashboard</h1></div>
+    <ul class="nav-menu">
+        <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
+        <li class="nav-item"><i class="fas fa-weight"></i><a href="dsClassique.html">DS classique</a></li>
+        <li class="nav-item"><i class="fas fa-weight-hanging"></i><a href="dsNord.html">DS NORD</a></li>
+        <li class="nav-item"><i class="fas fa-truck-loading"></i><a href="chauxViveLafarge.html">Chaux Lafarge</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="page-title">Chaux Vive - LAFARGE</div>
+
+    <div class="form-section">
+        <form id="form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <input type="date" id="date" required />
+            <input type="time" id="hEntree" required />
+            <input type="time" id="hSortie" required />
+            <select id="transporteur" required>
+                <option value="">-- Transporteur --</option>
+                <option value="GTC-CSL">GTC-CSL</option>
+                <option value="SOSAMAC">SOSAMAC</option>
+            </select>
+            <input type="text" id="numeroBL" placeholder="N° BL" required />
+            <input type="text" id="immatricule" placeholder="Immatricule" required />
+            <input type="number" step="0.01" id="tb" placeholder="TB" required />
+            <input type="number" step="0.01" id="tare" placeholder="TARE" required />
+            <input type="number" step="0.01" id="netLafarge" placeholder="Net LAFARGE" required />
+            <select id="poste" required>
+                <option value="">-- Poste --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <input type="text" id="lieuChargement" value="LAFARGE" required />
+            <input type="text" id="lieuDechargement" value="LAVERIE" required />
+            <textarea id="observation" placeholder="Observation" style="grid-column: span 2;"></textarea>
+            <div style="grid-column: span 2; text-align: right;"><button type="submit">💾 Ajouter</button></div>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h2>Historique</h2>
+        <button onclick="exportExcel()" style="margin-bottom: 10px;">📥 Exporter Excel</button>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th>
+                <th>Immatricule</th><th>TB</th><th>TARE</th><th>NET CMG</th><th>Poste</th>
+                <th>Net LAFARGE</th><th>ÉCART</th><th>Chargement</th><th>Déchargement</th><th>Obs.</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let currentId = null;
+
+    document.getElementById('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const tb = parseFloat(document.getElementById('tb').value);
+        const tare = parseFloat(document.getElementById('tare').value);
+        const netCMG = tb - tare;
+        const netLafarge = parseFloat(document.getElementById('netLafarge').value);
+        const ecart = netCMG - netLafarge;
+
+        const data = {
+            id: currentId,
+            date: document.getElementById('date').value,
+            hEntree: document.getElementById('hEntree').value,
+            hSortie: document.getElementById('hSortie').value,
+            transporteur: document.getElementById('transporteur').value,
+            numeroBL: document.getElementById('numeroBL').value,
+            immatricule: document.getElementById('immatricule').value,
+            tb: tb,
+            tare: tare,
+            poste: parseInt(document.getElementById('poste').value),
+            netLafarge: netLafarge,
+            ecart: ecart,
+            lieuChargement: document.getElementById('lieuChargement').value,
+            lieuDechargement: document.getElementById('lieuDechargement').value,
+            observation: document.getElementById('observation').value
+        };
+
+        const url = currentId ? '/chauxViveLafarge/update' : '/chauxViveLafarge/add';
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data)
+        }).then(() => {
+            alert(currentId ? '✏️ Modifié' : '✅ Ajouté');
+            loadTable();
+            document.getElementById('form').reset();
+            currentId = null;
+            document.querySelector('button[type="submit"]').textContent = "💾 Ajouter";
+        });
+    });
+
+    function loadTable() {
+        fetch('/api/chauxViveLafarge')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const netCMG = (item.tb - item.tare).toFixed(2);
+                    const ecart = (netCMG - item.netLafarge).toFixed(2);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+            <td>${item.date}</td>
+            <td>${item.hEntree}</td>
+            <td>${item.hSortie}</td>
+            <td>${item.transporteur}</td>
+            <td>${item.numeroBL}</td>
+            <td>${item.immatricule}</td>
+            <td>${item.tb}</td>
+            <td>${item.tare}</td>
+            <td>${netCMG}</td>
+            <td>${item.poste}</td>
+            <td>${item.netLafarge}</td>
+            <td>${ecart}</td>
+            <td>${item.lieuChargement}</td>
+            <td>${item.lieuDechargement}</td>
+            <td>${item.observation || ''}</td>
+            <td>
+              <button onclick="editRecord(${item.id})">✏️</button>
+              <button onclick="deleteRecord(${item.id})">🗑️</button>
+            </td>
+          `;
+                    tbody.appendChild(row);
+                });
+            });
+    }
+
+    function editRecord(id) {
+        fetch(`/api/chauxViveLafarge/${id}`)
+            .then(res => res.json())
+            .then(item => {
+                currentId = item.id;
+                document.getElementById('date').value = item.date;
+                document.getElementById('hEntree').value = item.hEntree;
+                document.getElementById('hSortie').value = item.hSortie;
+                document.getElementById('transporteur').value = item.transporteur;
+                document.getElementById('numeroBL').value = item.numeroBL;
+                document.getElementById('immatricule').value = item.immatricule;
+                document.getElementById('tb').value = item.tb;
+                document.getElementById('tare').value = item.tare;
+                document.getElementById('netLafarge').value = item.netLafarge;
+                document.getElementById('poste').value = item.poste;
+                document.getElementById('lieuChargement').value = item.lieuChargement;
+                document.getElementById('lieuDechargement').value = item.lieuDechargement;
+                document.getElementById('observation').value = item.observation || '';
+                document.querySelector('button[type="submit"]').textContent = "✏️ Modifier";
+            });
+    }
+
+    function deleteRecord(id) {
+        if (confirm("❗ Supprimer cette ligne ?")) {
+            fetch(`/chauxViveLafarge/delete/${id}`, { method: 'GET' })
+                .then(() => loadTable());
+        }
+    }
+
+    function exportExcel() {
+        window.open('/export/chauxViveLafarge/excel', '_blank');
+    }
+
+    window.onload = loadTable;
+</script>
+
+
+</body>
+</html>

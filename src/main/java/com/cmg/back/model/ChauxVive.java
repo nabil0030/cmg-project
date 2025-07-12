@@ -1,7 +1,12 @@
 package com.cmg.back.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -14,150 +19,56 @@ public class ChauxVive {
     private Long id;
 
     private String date;
-    private String hEntree;
-    private String hSortie;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime hEntree;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime hSortie;
+
+
     private String transporteur;
     private String numeroBL;
     private String immatricule;
-    private double tb;
-    private double tare;
 
-    public double getNetCMG() {
-        return tb - tare;
-    }
+    private Double tb;
+    private Double tare;
+    private Double netCmg;      // = tb - tare
 
-    private int poste;
-    private double netCosumar;
-    private double ecart;
+    private Integer poste;
+    private Double netCosumar;
+    private Double ecart;       // = netCmg - netCosumar
+
     private String lieuChargement;
     private String lieuDechargement;
     private String observation;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void sethEntree(String hEntree) {
-        this.hEntree = hEntree;
-    }
-
-    public void sethSortie(String hSortie) {
-        this.hSortie = hSortie;
-    }
-
-    public void setTransporteur(String transporteur) {
-        this.transporteur = transporteur;
-    }
-
-    public void setNumeroBL(String numeroBL) {
-        this.numeroBL = numeroBL;
-    }
-
-    public void setImmatricule(String immatricule) {
-        this.immatricule = immatricule;
-    }
-
-    public void setTb(double tb) {
+    // Setters personnalisés pour assurer le recalcul automatique
+    public void setTb(Double tb) {
         this.tb = tb;
+        recalculateNetCmgAndEcart();
     }
 
-    public void setTare(double tare) {
+    public void setTare(Double tare) {
         this.tare = tare;
+        recalculateNetCmgAndEcart();
     }
 
-    public void setPoste(int poste) {
-        this.poste = poste;
-    }
-
-    public void setNetCosumar(double netCosumar) {
+    public void setNetCosumar(Double netCosumar) {
         this.netCosumar = netCosumar;
+        recalculateEcart();
     }
 
-    public void setEcart(double ecart) {
-        this.ecart = ecart;
+    private void recalculateNetCmgAndEcart() {
+        if (tb != null && tare != null) {
+            this.netCmg = tb - tare;
+            recalculateEcart();
+        }
     }
 
-    public void setLieuChargement(String lieuChargement) {
-        this.lieuChargement = lieuChargement;
-    }
-
-    public void setLieuDechargement(String lieuDechargement) {
-        this.lieuDechargement = lieuDechargement;
-    }
-
-    public void setObservation(String observation) {
-        this.observation = observation;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String gethEntree() {
-        return hEntree;
-    }
-
-    public String gethSortie() {
-        return hSortie;
-    }
-
-    public String getTransporteur() {
-        return transporteur;
-    }
-
-    public String getNumeroBL() {
-        return numeroBL;
-    }
-
-    public String getImmatricule() {
-        return immatricule;
-    }
-
-    public double getTb() {
-        return tb;
-    }
-
-    public double getTare() {
-        return tare;
-    }
-
-    public int getPoste() {
-        return poste;
-    }
-
-    public double getNetCosumar() {
-        return netCosumar;
-    }
-
-    public double getEcart() {
-        return ecart;
-    }
-
-    public String getLieuChargement() {
-        return lieuChargement;
-    }
-
-    public String getLieuDechargement() {
-        return lieuDechargement;
-    }
-
-    public String getObservation() {
-        return observation;
-    }
-
-    public double getHEntree() {
-        return 0;
-    }
-
-    public double getHSortie() {
-        return 0;
+    private void recalculateEcart() {
+        if (netCmg != null && netCosumar != null) {
+            this.ecart = netCmg - netCosumar;
+        }
     }
 }

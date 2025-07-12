@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>C BULK ARGENTIFERE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .nav-item i {
+            margin-right: 10px;
+        }
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+        .page-title {
+            font-size: 1.75rem;
+            color: #5e72e4;
+            margin-bottom: 20px;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        input, select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #5e72e4;
+            color: white;
+        }
+        .form-section, .table-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px;
+            background-color: #5e72e4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="sidebar-title">Argon Dashboard</h1>
+    </div>
+    <ul class="nav-menu">
+        <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
+        <li class="nav-item"><i class="fas fa-weight"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
+        <li class="nav-item"><i class="fas fa-weight"></i><a href="dsClassique.html">DS classique</a></li>
+        <li class="nav-item"><i class="fas fa-weight-hanging"></i><a href="dsNord.html">DS NORD</a></li>
+        <li class="nav-item"><i class="fas fa-truck-loading"></i><a href="controle-bascule-ka.html">C. Bascule KA</a></li>
+        <li class="nav-item"><i class="fas fa-truck"></i><a href="cbulkArgentifere.html">C Bulk Argentifère</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="page-title">C BULK ARGENTIFÈRE</div>
+
+    <div class="form-section">
+        <h2>Ajouter / Modifier</h2>
+        <form id="cbulk-form">
+            <input type="date" id="date" required />
+            <input type="time" id="hEntree" required />
+            <input type="time" id="hSortie" required />
+            <input type="text" id="transporteur" placeholder="Transporteur" required />
+            <input type="text" id="numeroBL" placeholder="N° BL" required />
+            <input type="text" id="matricule" placeholder="Matricule" required />
+            <input type="number" step="0.01" id="tb" placeholder="TB" required />
+            <input type="number" step="0.01" id="tare" placeholder="TARE" required />
+            <input type="text" id="numeroContenaire" placeholder="N° Contenaire" required />
+            <select id="poste" required>
+                <option value="">-- Poste --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <input type="text" id="lieuDechargement" placeholder="Lieu de déchargement" value="ONCF" required />
+            <input type="text" id="observation" placeholder="Observation" />
+            <div style="grid-column: span 2; text-align: right;">
+                <button type="submit">💾 Enregistrer</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h2>Historique</h2>
+        <button onclick="exportExcel()">📥 Exporter Excel</button>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th>
+                <th>Matricule</th><th>TB</th><th>TARE</th><th>TN H</th><th>N° Contenaire</th>
+                <th>Poste</th><th>Déchargement</th><th>Observation</th><th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="data-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let currentId = null;
+
+    document.getElementById('cbulk-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const data = {
+            date: date.value,
+            hEntree: hEntree.value,
+            hSortie: hSortie.value,
+            transporteur: transporteur.value,
+            numeroBL: numeroBL.value,
+            matricule: matricule.value,
+            tb: parseFloat(tb.value),
+            tare: parseFloat(tare.value),
+            numeroContenaire: numeroContenaire.value,
+            poste: parseInt(poste.value),
+            lieuDeDechargement: lieuDechargement.value,
+            observation: observation.value
+        };
+
+        const url = currentId ? `/api/cbulkargentifere/${currentId}` : "/api/cbulkargentifere";
+        const method = currentId ? "PUT" : "POST";
+
+        fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 409) {
+                alert("❌ Doublon détecté : les données existent déjà.");
+                return;
+            }
+            alert("✅ Enregistré");
+            currentId = null;
+            document.getElementById('cbulk-form').reset();
+            loadTable();
+        });
+    });
+
+    function loadTable() {
+        fetch("/api/cbulkargentifere")
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById("data-body");
+                tbody.innerHTML = '';
+                let total = 0;
+
+                data.forEach(item => {
+                    total += item.tnH;
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${item.date}</td><td>${item.hEntree}</td><td>${item.hSortie}</td>
+                        <td>${item.transporteur}</td><td>${item.numeroBL}</td><td>${item.matricule}</td>
+                        <td>${item.tb}</td><td>${item.tare}</td><td>${item.tnH}</td>
+                        <td>${item.numeroContenaire}</td><td>${item.poste}</td><td>${item.lieuDeDechargement}</td>
+                        <td>${item.observation || ''}</td>
+                        <td>
+                            <button onclick="editEntry(${item.id})">✏️</button>
+                            <button onclick="deleteEntry(${item.id})">🗑️</button>
+                        </td>`;
+                    tbody.appendChild(row);
+                });
+
+                const totalRow = document.createElement("tr");
+                totalRow.innerHTML = `<td colspan="8" style="background: yellow; font-weight: bold;">TOTAL</td>
+                                      <td style="background: yellow; font-weight: bold;">${total.toFixed(2)}</td>
+                                      <td colspan="5"></td>`;
+                tbody.appendChild(totalRow);
+            });
+    }
+
+    function editEntry(id) {
+        fetch(`/api/cbulkargentifere/${id}`)
+            .then(res => res.json())
+            .then(item => {
+                currentId = item.id;
+                date.value = item.date;
+                hEntree.value = item.hEntree;
+                hSortie.value = item.hSortie;
+                transporteur.value = item.transporteur;
+                numeroBL.value = item.numeroBL;
+                matricule.value = item.matricule;
+                tb.value = item.tb;
+                tare.value = item.tare;
+                numeroContenaire.value = item.numeroContenaire;
+                poste.value = item.poste;
+                lieuDechargement.value = item.lieuDeDechargement;
+                observation.value = item.observation;
+            });
+    }
+
+    function deleteEntry(id) {
+        if (confirm("❗ Supprimer cette ligne ?")) {
+            fetch(`/api/cbulkargentifere/${id}`, { method: 'DELETE' }).then(() => loadTable());
+        }
+    }
+
+    function exportExcel() {
+        const table = document.querySelector("table");
+        const html = table.outerHTML.replace(/ /g, '%20');
+        const a = document.createElement("a");
+        a.href = 'data:application/vnd.ms-excel,' + html;
+        a.download = 'cbulk-argentifere.xls';
+        a.click();
+    }
+
+    window.onload = loadTable;
+</script>
+</body>
+</html>
