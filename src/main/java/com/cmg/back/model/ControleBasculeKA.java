@@ -1,19 +1,30 @@
 package com.cmg.back.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
-@Data
+@Table(name = "controle_bascule_ka")
 public class ControleBasculeKA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String date;
-    private String hEntree;
-    private String hSortie;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    @Column(name = "h_entree")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime hEntree;
+
+    @Column(name = "h_sortie")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime hSortie;
+
     private String transporteur;
     private String numeroBL;
     private String immatricule;
@@ -23,6 +34,7 @@ public class ControleBasculeKA {
     private Integer poste;
     private String lieuDeDecharge;
 
+    // Calcule net = tb - tare
     @PrePersist
     @PreUpdate
     public void calculerNet() {
@@ -31,67 +43,21 @@ public class ControleBasculeKA {
         }
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void sethEntree(String hEntree) {
-        this.hEntree = hEntree;
-    }
-
-    public void sethSortie(String hSortie) {
-        this.hSortie = hSortie;
-    }
-
-    public void setTransporteur(String transporteur) {
-        this.transporteur = transporteur;
-    }
-
-    public void setNumeroBL(String numeroBL) {
-        this.numeroBL = numeroBL;
-    }
-
-    public void setImmatricule(String immatricule) {
-        this.immatricule = immatricule;
-    }
-
-    public void setTb(Double tb) {
-        this.tb = tb;
-    }
-
-    public void setTare(Double tare) {
-        this.tare = tare;
-    }
-
-    public void setNet(Double net) {
-        this.net = net;
-    }
-
-    public void setPoste(Integer poste) {
-        this.poste = poste;
-    }
-
-    public void setLieuDeDecharge(String lieuDeDecharge) {
-        this.lieuDeDecharge = lieuDeDecharge;
-    }
+    // ─── GETTERS ──────────────────────────────────────────
 
     public Long getId() {
         return id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public String gethEntree() {
+    public LocalTime getHEntree() {
         return hEntree;
     }
 
-    public String gethSortie() {
+    public LocalTime getHSortie() {
         return hSortie;
     }
 
@@ -127,11 +93,53 @@ public class ControleBasculeKA {
         return lieuDeDecharge;
     }
 
-    public double getHEntree() {
-        return 0;
+    // ─── SETTERS ──────────────────────────────────────────
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public double getHSortie() {
-        return 0;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setHEntree(LocalTime hEntree) {
+        this.hEntree = hEntree;
+    }
+
+    public void setHSortie(LocalTime hSortie) {
+        this.hSortie = hSortie;
+    }
+
+    public void setTransporteur(String transporteur) {
+        this.transporteur = transporteur;
+    }
+
+    public void setNumeroBL(String numeroBL) {
+        this.numeroBL = numeroBL;
+    }
+
+    public void setImmatricule(String immatricule) {
+        this.immatricule = immatricule;
+    }
+
+    public void setTb(Double tb) {
+        this.tb = tb;
+    }
+
+    public void setTare(Double tare) {
+        this.tare = tare;
+    }
+
+    public void setNet(Double net) {
+        this.net = net;
+    }
+
+    public void setPoste(Integer poste) {
+        this.poste = poste;
+    }
+
+    public void setLieuDeDecharge(String lieuDeDecharge) {
+        this.lieuDeDecharge = lieuDeDecharge;
     }
 }

@@ -24,20 +24,35 @@ public class ControleBasculeKAController {
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ControleBasculeKA getById(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
     @PostMapping
-    public ControleBasculeKA create(@RequestBody ControleBasculeKA item) {
-        return repository.save(item);
+    public String create(@RequestBody ControleBasculeKA item) {
+        item.setNet(item.getTb() - item.getTare());
+        boolean dup = repository.isDuplicate(
+                item.getDate(), item.getHEntree(), item.getHSortie(),
+                item.getTransporteur(), item.getNumeroBL(), item.getImmatricule(),
+                item.getTb(), item.getTare(), item.getPoste(), item.getLieuDeDecharge()
+        );
+        if (dup) {
+            return "⚠️ Doublon détecté : cette entrée existe déjà.";
+        }
+        repository.save(item);
+        return "✅ Enregistrement réussi.";
     }
 
     @PutMapping("/{id}")
-    public ControleBasculeKA update(@PathVariable Long id, @RequestBody ControleBasculeKA updated) {
-        updated.setId(id);
-        return repository.save(updated);
+    public String update(@PathVariable Long id, @RequestBody ControleBasculeKA item) {
+        item.setId(id);
+        item.setNet(item.getTb() - item.getTare());
+        boolean dup = repository.isDuplicate(
+                item.getDate(), item.getHEntree(), item.getHSortie(),
+                item.getTransporteur(), item.getNumeroBL(), item.getImmatricule(),
+                item.getTb(), item.getTare(), item.getPoste(), item.getLieuDeDecharge()
+        );
+        if (dup) {
+            return "⚠️ Doublon détecté : cette entrée existe déjà.";
+        }
+        repository.save(item);
+        return "✅ Mise à jour réussie.";
     }
 
     @DeleteMapping("/{id}")
@@ -47,37 +62,41 @@ public class ControleBasculeKAController {
 
     @GetMapping("/export/excel")
     public void exportExcel(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=koudiat-aicha.xlsx");
-
+        response.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=controle_ka_" + java.time.LocalDate.now() + ".xlsx"
+        );
         List<ControleBasculeKA> list = repository.findAll();
-
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("KA");
-
-        Row header = sheet.createRow(0);
-        String[] titles = {"DATE", "H Entrée", "H Sortie", "Transporteur", "N° BL", "Immatricule", "TB", "TARE", "NET", "Poste", "Lieu Décharge"};
+        Workbook wb = new XSSFWorkbook();
+        Sheet sheet = wb.createSheet("KA");
+        String[] titles = {
+                "Date","H Entrée","H Sortie","Transporteur","N° BL",
+                "Immatricule","TB","TARE","NET","Poste","Lieu Décharge"
+        };
+        Row h = sheet.createRow(0);
         for (int i = 0; i < titles.length; i++) {
-            header.createCell(i).setCellValue(titles[i]);
+            h.createCell(i).setCellValue(titles[i]);
         }
-
-        int rowIdx = 1;
-        for (ControleBasculeKA r : list) {
-            Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue(r.getDate());
-            row.createCell(1).setCellValue(r.getHEntree());
-            row.createCell(2).setCellValue(r.getHSortie());
-            row.createCell(3).setCellValue(r.getTransporteur());
-            row.createCell(4).setCellValue(r.getNumeroBL());
-            row.createCell(5).setCellValue(r.getImmatricule());
-            row.createCell(6).setCellValue(r.getTb());
-            row.createCell(7).setCellValue(r.getTare());
-            row.createCell(8).setCellValue(r.getNet());
-            row.createCell(9).setCellValue(r.getPoste());
-            row.createCell(10).setCellValue(r.getLieuDeDecharge());
+        int r = 1;
+        for (ControleBasculeKA c : list) {
+            Row row = sheet.createRow(r++);
+            row.createCell(0).setCellValue(c.getDate().toString());
+            row.createCell(1).setCellValue(c.getHEntree().toString());
+            row.createCell(2).setCellValue(c.getHSortie().toString());
+            row.createCell(3).setCellValue(c.getTransporteur());
+            row.createCell(4).setCellValue(c.getNumeroBL());
+            row.createCell(5).setCellValue(c.getImmatricule());
+            row.createCell(6).setCellValue(c.getTb());
+            row.createCell(7).setCellValue(c.getTare());
+            row.createCell(8).setCellValue(c.getNet());
+            row.createCell(9).setCellValue(c.getPoste());
+            row.createCell(10).setCellValue(c.getLieuDeDecharge());
         }
-
-        workbook.write(response.getOutputStream());
-        workbook.close();
+        for (int i = 0; i < titles.length; i++) sheet.autoSizeColumn(i);
+        wb.write(response.getOutputStream());
+        wb.close();
     }
 }
