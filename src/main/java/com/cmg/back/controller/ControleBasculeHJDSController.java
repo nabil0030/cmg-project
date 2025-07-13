@@ -2,11 +2,18 @@ package com.cmg.back.controller;
 
 import com.cmg.back.model.ControleBasculeHJDS;
 import com.cmg.back.repository.ControleBasculeHJDSRepository;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.cmg.back.export.ControleBasculeHJDSExportService;
 
+
+
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,4 +82,12 @@ public class ControleBasculeHJDSController {
             return ResponseEntity.notFound().build();
         }
     }
+    @Autowired
+    private com.cmg.back.export.ControleBasculeHJDSExportService exportService;
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) throws IOException {
+        exportService.exportToExcel(response);
+    }
+
 }
