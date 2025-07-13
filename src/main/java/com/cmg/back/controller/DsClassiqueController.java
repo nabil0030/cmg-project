@@ -18,7 +18,8 @@ public class DsClassiqueController {
     private final DsClassiqueRepository repository;
     private final DsClassiqueExportService exportService;
 
-    public DsClassiqueController(DsClassiqueRepository repository, DsClassiqueExportService exportService) {
+    public DsClassiqueController(DsClassiqueRepository repository,
+                                 DsClassiqueExportService exportService) {
         this.repository = repository;
         this.exportService = exportService;
     }
@@ -34,14 +35,50 @@ public class DsClassiqueController {
     }
 
     @PostMapping
-    public DsClassique create(@RequestBody DsClassique record) {
-        return repository.save(record);
+    public String create(@RequestBody DsClassique record) {
+        record.setNet(record.getTb() - record.getTare());
+        boolean dup = repository.isDuplicate(
+                record.getDate(),
+                record.getHEntree(),
+                record.getHSortie(),
+                record.getTransporteur(),
+                record.getNumeroBL(),
+                record.getImmatricule(),
+                record.getTb(),
+                record.getTare(),
+                record.getPoste(),
+                record.getLieuDeDecharge(),
+                record.getObservation()
+        );
+        if (dup) {
+            return "⚠️ Ligne dupliquée : cette entrée existe déjà.";
+        }
+        repository.save(record);
+        return "✅ Ligne ajoutée avec succès.";
     }
 
     @PutMapping("/{id}")
-    public DsClassique update(@PathVariable Long id, @RequestBody DsClassique record) {
+    public String update(@PathVariable Long id, @RequestBody DsClassique record) {
         record.setId(id);
-        return repository.save(record);
+        record.setNet(record.getTb() - record.getTare());
+        boolean dup = repository.isDuplicate(
+                record.getDate(),
+                record.getHEntree(),
+                record.getHSortie(),
+                record.getTransporteur(),
+                record.getNumeroBL(),
+                record.getImmatricule(),
+                record.getTb(),
+                record.getTare(),
+                record.getPoste(),
+                record.getLieuDeDecharge(),
+                record.getObservation()
+        );
+        if (dup) {
+            return "⚠️ Ligne dupliquée : cette entrée existe déjà.";
+        }
+        repository.save(record);
+        return "✅ Ligne modifiée avec succès.";
     }
 
     @DeleteMapping("/{id}")

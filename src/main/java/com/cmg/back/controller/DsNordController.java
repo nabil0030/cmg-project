@@ -16,8 +16,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class DsNordController {
 
+    private final DsNordRecordService service;
+    private final DsNordExportService exportService;
+
     @Autowired
-    private DsNordRecordService service;
+    public DsNordController(DsNordRecordService service, DsNordExportService exportService) {
+        this.service = service;
+        this.exportService = exportService;
+    }
 
     @GetMapping
     public List<DsNordRecord> getAll() {
@@ -30,26 +36,33 @@ public class DsNordController {
     }
 
     @PostMapping
-    public DsNordRecord create(@RequestBody DsNordRecord record) {
-        return service.save(record);
+    public String create(@RequestBody DsNordRecord record) {
+        record.setNet(record.getTb() - record.getTare());
+        if (service.isDuplicate(record)) {
+            return "⚠️ Ligne dupliquée : cette entrée existe déjà.";
+        }
+        service.save(record);
+        return "✅ Ligne ajoutée avec succès.";
     }
-    @Autowired
-    private DsNordExportService exportService;
-
-    @GetMapping("/export/excel")
-    public void exportExcel(HttpServletResponse response) throws IOException {
-        exportService.exportToExcel(response);
-    }
-
 
     @PutMapping("/{id}")
-    public DsNordRecord update(@PathVariable Long id, @RequestBody DsNordRecord record) {
+    public String update(@PathVariable Long id, @RequestBody DsNordRecord record) {
         record.setId(id);
-        return service.save(record);
+        record.setNet(record.getTb() - record.getTare());
+        if (service.isDuplicate(record)) {
+            return "⚠️ Ligne dupliquée : cette entrée existe déjà.";
+        }
+        service.save(record);
+        return "✅ Ligne modifiée avec succès.";
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @GetMapping("/export/excel")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        exportService.exportToExcel(response);
     }
 }
