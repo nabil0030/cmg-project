@@ -772,7 +772,7 @@
         <div class="section-header">
             <h2>Historique</h2>
             <div class="section-actions">
-                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exporterExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -986,8 +986,8 @@
         }
     }
 
-    function exportExcel() {
-        window.open("/api/chauxViveLafarge/export", "_blank");
+    function exporterExcel() {
+        window.location.href = '/api/chauxViveLafarge/export';
     }
 
     // Sidebar toggle functionality

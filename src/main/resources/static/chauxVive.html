@@ -783,7 +783,7 @@
         <div class="section-header">
             <h2>Historique</h2>
             <div class="section-actions">
-                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exporterExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -946,10 +946,9 @@
         }
     }
 
-    function exportExcel() {
-        window.open('/export/chauxVive/excel', '_blank');
+    function exporterExcel() {
+        window.location.href = '/chauxVive/export';
     }
-
     window.onload = loadTable;
 </script>
 

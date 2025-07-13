@@ -2,10 +2,13 @@ package com.cmg.back.controller;
 
 import com.cmg.back.model.ChauxVive;
 import com.cmg.back.repository.ChauxViveRepository;
+import com.cmg.back.service.ChauxViveExportService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,10 +18,13 @@ public class ChauxViveController {
     @Autowired
     private ChauxViveRepository repository;
 
+    @Autowired
+    private ChauxViveExportService exportService;
+
     // 1. ✅ Affichage de la page HTML
     @GetMapping("/chauxVive")
     public String afficherPage() {
-        return "chauxVive"; // doit être dans /resources/static/chauxVive.html
+        return "chauxVive";
     }
 
     // 2. ✅ API - Obtenir tous les enregistrements
@@ -69,5 +75,11 @@ public class ChauxViveController {
     @ResponseBody
     public void supprimer(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    // 7. ✅ Export Excel
+    @GetMapping("/chauxVive/export")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        exportService.exportToExcel(response);
     }
 }
