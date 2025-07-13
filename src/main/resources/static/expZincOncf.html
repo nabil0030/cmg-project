@@ -772,7 +772,7 @@
         <div class="section-header">
             <h2>Historique</h2>
             <div class="section-actions">
-                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exporterExcel() "><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -975,8 +975,8 @@
         }
     }
 
-    function exportExcel() {
-        window.open('/api/expzinconcf/export/excel', '_blank');
+    function exporterExcel() {
+        window.location.href = '/api/expzinconcf/export';
     }
 
     // Sidebar toggle functionality
