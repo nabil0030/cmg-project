@@ -1,54 +1,45 @@
 package com.cmg.back.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "chaux_vive_lafarge")
 public class ChauxViveLafarge {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String date;
 
-    @Column(name = "h_entree")
-    private String hEntree;
+    @DateTimeFormat(pattern = "HH:mm")
+    private String heureEntree;
 
-    @Column(name = "h_sortie")
-    private String hSortie;
+    @DateTimeFormat(pattern = "HH:mm")
+    private String heureSortie;
 
     private String transporteur;
-
-    @Column(name = "numerobl")
     private String numeroBL;
-
     private String immatricule;
-    private double tb;
-    private double tare;
 
-    @Column(name = "net_lafarge")
-    private double netLafarge;
+    private Double tb;
+    private Double tare;
 
-    private int poste;
+    private Double netCmg;       // Calculé automatiquement
+    private Double netLafarge;   // Donné
+    private Double ecart;        // netCmg - netLafarge
 
-    @Column(name = "lieu_chargement")
+    private Integer poste;
+
     private String lieuChargement;
-
-    @Column(name = "lieu_dechargement")
     private String lieuDechargement;
 
     private String observation;
-
-    public double getNetCMG() {
-        return tb - tare;
-    }
-
-    public double getEcart() {
-        return getNetCMG() - netLafarge;
-    }
 }

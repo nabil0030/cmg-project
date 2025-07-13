@@ -1,69 +1,46 @@
 package com.cmg.back.controller;
 
 import com.cmg.back.model.CBulkArgentifere;
-import com.cmg.back.repository.CBulkArgentifereRepository;
+import com.cmg.back.service.CBulkArgentifereService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cbulkargentifere")
-@CrossOrigin(origins = "*")
 public class CBulkArgentifereController {
 
     @Autowired
-    private CBulkArgentifereRepository repository;
+    private CBulkArgentifereService service;
 
     @GetMapping
     public List<CBulkArgentifere> getAll() {
-        return repository.findAll();
+        return service.getAll();
     }
 
-    @PostMapping
-    public CBulkArgentifere create(@RequestBody CBulkArgentifere record) {
-        record.setTnH(record.getTb() - record.getTare());
-
-        if (existsDuplicate(record)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Doublon détecté");
-        }
-
-        return repository.save(record);
+    @PostMapping("/add")
+    public String add(@RequestBody CBulkArgentifere entry) {
+        return service.add(entry);
     }
 
-    @PutMapping("/{id}")
-    public CBulkArgentifere update(@PathVariable Long id, @RequestBody CBulkArgentifere record) {
-        record.setId(id);
-        record.setTnH(record.getTb() - record.getTare());
-
-        if (existsDuplicate(record)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Doublon détecté");
-        }
-
-        return repository.save(record);
+    @PutMapping("/update")
+    public CBulkArgentifere update(@RequestBody CBulkArgentifere entry) {
+        return service.update(entry);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
-        repository.deleteById(id);
+        service.delete(id);
+    }
+    @Autowired
+    private com.cmg.back.export.CBulkArgentifereExportService exportService;
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) throws IOException {
+        exportService.exportToExcel(response);
     }
 
-    private boolean existsDuplicate(CBulkArgentifere record) {
-        return repository.findAll().stream().anyMatch(existing ->
-                existing.getDate().equals(record.getDate()) &&
-                        existing.gethEntree().equals(record.gethEntree()) &&
-                        existing.gethSortie().equals(record.gethSortie()) &&
-                        existing.getTransporteur().equals(record.getTransporteur()) &&
-                        existing.getNumeroBL().equals(record.getNumeroBL()) &&
-                        existing.getMatricule().equals(record.getMatricule()) &&
-                        Double.compare(existing.getTb(), record.getTb()) == 0 &&
-                        Double.compare(existing.getTare(), record.getTare()) == 0 &&
-                        existing.getNumeroContenaire().equals(record.getNumeroContenaire()) &&
-                        existing.getPoste() == record.getPoste() &&
-                        existing.getLieuDeDechargement().equals(record.getLieuDeDechargement()) &&
-                        (record.getId() == null || !existing.getId().equals(record.getId()))
-        );
-    }
 }
