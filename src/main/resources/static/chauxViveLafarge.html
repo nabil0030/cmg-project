@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Chaux Vive - Lafarge</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
@@ -57,28 +57,31 @@
 
     <div class="form-section">
         <form id="form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-            <input type="date" id="date" required />
-            <input type="time" id="hEntree" required />
-            <input type="time" id="hSortie" required />
-            <select id="transporteur" required>
+            <input type="date" id="date" name="date" required />
+            <input type="time" id="hEntree" name="hEntree" value="00:00" required />
+            <input type="time" id="hSortie" name="hSortie" value="00:00" required />
+
+
+
+            <select id="transporteur" name="transporteur" required>
                 <option value="">-- Transporteur --</option>
                 <option value="GTC-CSL">GTC-CSL</option>
                 <option value="SOSAMAC">SOSAMAC</option>
             </select>
-            <input type="text" id="numeroBL" placeholder="N° BL" required />
-            <input type="text" id="immatricule" placeholder="Immatricule" required />
-            <input type="number" step="0.01" id="tb" placeholder="TB" required />
-            <input type="number" step="0.01" id="tare" placeholder="TARE" required />
-            <input type="number" step="0.01" id="netLafarge" placeholder="Net LAFARGE" required />
-            <select id="poste" required>
+            <input type="text" id="numeroBL" name="numeroBL" placeholder="N° BL" required />
+            <input type="text" id="immatricule" name="immatricule" placeholder="Immatricule" required />
+            <input type="number" step="0.01" id="tb" name="tb" placeholder="TB" required />
+            <input type="number" step="0.01" id="tare" name="tare" placeholder="TARE" required />
+            <input type="number" step="0.01" id="netLafarge" name="netLafarge" placeholder="Net LAFARGE" required />
+            <select id="poste" name="poste" required>
                 <option value="">-- Poste --</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
-            <input type="text" id="lieuChargement" value="LAFARGE" required />
-            <input type="text" id="lieuDechargement" value="LAVERIE" required />
-            <textarea id="observation" placeholder="Observation" style="grid-column: span 2;"></textarea>
+            <input type="text" id="lieuChargement" name="lieuChargement" value="LAFARGE" required />
+            <input type="text" id="lieuDechargement" name="lieuDechargement" value="LAVERIE" required />
+            <textarea id="observation" name="observation" placeholder="Observation" style="grid-column: span 2;"></textarea>
             <div style="grid-column: span 2; text-align: right;"><button type="submit">💾 Ajouter</button></div>
         </form>
     </div>
@@ -112,7 +115,7 @@
         const ecart = netCMG - netLafarge;
 
         const data = {
-            id: currentId,
+            id: currentId ?? "",
             date: document.getElementById('date').value,
             hEntree: document.getElementById('hEntree').value,
             hSortie: document.getElementById('hSortie').value,
@@ -135,13 +138,22 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams(data)
-        }).then(() => {
-            alert(currentId ? '✏️ Modifié' : '✅ Ajouté');
-            loadTable();
-            document.getElementById('form').reset();
-            currentId = null;
-            document.querySelector('button[type="submit"]').textContent = "💾 Ajouter";
-        });
+        })
+            .then(response => {
+                if (!response.ok) {
+                    alert("❌ Erreur lors de l'enregistrement.");
+                    throw new Error("Erreur HTTP");
+                }
+                return response.text();
+            })
+            .then(() => {
+                alert(currentId ? '✏️ Modifié' : '✅ Ajouté');
+                document.getElementById('form').reset();
+                currentId = null;
+                document.querySelector('button[type="submit"]').textContent = "💾 Ajouter";
+                loadTable();
+            })
+            .catch(err => console.error(err));
     });
 
     function loadTable() {
@@ -150,33 +162,45 @@
             .then(data => {
                 const tbody = document.getElementById('data-body');
                 tbody.innerHTML = '';
+                let total = 0;
+
                 data.forEach(item => {
-                    const netCMG = (item.tb - item.tare).toFixed(2);
-                    const ecart = (netCMG - item.netLafarge).toFixed(2);
+                    const netCMG = item.tb - item.tare;
+                    const ecart = netCMG - item.netLafarge;
+                    total += netCMG;
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
-            <td>${item.date}</td>
-            <td>${item.hEntree}</td>
-            <td>${item.hSortie}</td>
-            <td>${item.transporteur}</td>
-            <td>${item.numeroBL}</td>
-            <td>${item.immatricule}</td>
-            <td>${item.tb}</td>
-            <td>${item.tare}</td>
-            <td>${netCMG}</td>
-            <td>${item.poste}</td>
-            <td>${item.netLafarge}</td>
-            <td>${ecart}</td>
-            <td>${item.lieuChargement}</td>
-            <td>${item.lieuDechargement}</td>
-            <td>${item.observation || ''}</td>
-            <td>
-              <button onclick="editRecord(${item.id})">✏️</button>
-              <button onclick="deleteRecord(${item.id})">🗑️</button>
-            </td>
-          `;
+                        <td>${item.date}</td>
+                        <td>${item.hEntree?.substring(0, 5) || '--:--'}</td>
+                        <td>${item.hSortie?.substring(0, 5) || '--:--'}</td>
+                        <td>${item.transporteur}</td>
+                        <td>${item.numeroBL}</td>
+                        <td>${item.immatricule}</td>
+                        <td>${item.tb.toFixed(2)}</td>
+                        <td>${item.tare.toFixed(2)}</td>
+                        <td>${netCMG.toFixed(2)}</td>
+                        <td>${item.poste}</td>
+                        <td>${item.netLafarge.toFixed(2)}</td>
+                        <td>${ecart.toFixed(2)}</td>
+                        <td>${item.lieuChargement}</td>
+                        <td>${item.lieuDechargement}</td>
+                        <td>${item.observation || ''}</td>
+                        <td>
+                            <button onclick="editRecord(${item.id})">✏️</button>
+                            <button onclick="deleteRecord(${item.id})">🗑️</button>
+                        </td>
+                    `;
                     tbody.appendChild(row);
                 });
+
+                const totalRow = document.createElement('tr');
+                totalRow.innerHTML = `
+                    <td colspan="8" style="font-weight: bold; background-color: yellow;">TOTAL</td>
+                    <td style="font-weight: bold; background-color: yellow;">${total.toFixed(2)}</td>
+                    <td colspan="6"></td>
+                `;
+                tbody.appendChild(totalRow);
             });
     }
 
@@ -186,15 +210,15 @@
             .then(item => {
                 currentId = item.id;
                 document.getElementById('date').value = item.date;
-                document.getElementById('hEntree').value = item.hEntree;
-                document.getElementById('hSortie').value = item.hSortie;
+                document.getElementById('hEntree').value = item.hEntree?.substring(0, 5) || '00:00';
+                document.getElementById('hSortie').value = item.hSortie?.substring(0, 5) || '00:00';
                 document.getElementById('transporteur').value = item.transporteur;
                 document.getElementById('numeroBL').value = item.numeroBL;
                 document.getElementById('immatricule').value = item.immatricule;
                 document.getElementById('tb').value = item.tb;
                 document.getElementById('tare').value = item.tare;
-                document.getElementById('netLafarge').value = item.netLafarge;
                 document.getElementById('poste').value = item.poste;
+                document.getElementById('netLafarge').value = item.netLafarge;
                 document.getElementById('lieuChargement').value = item.lieuChargement;
                 document.getElementById('lieuDechargement').value = item.lieuDechargement;
                 document.getElementById('observation').value = item.observation || '';
@@ -215,7 +239,6 @@
 
     window.onload = loadTable;
 </script>
-
 
 </body>
 </html>

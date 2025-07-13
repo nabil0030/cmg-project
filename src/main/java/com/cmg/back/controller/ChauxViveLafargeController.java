@@ -26,21 +26,41 @@ public class ChauxViveLafargeController {
     }
 
     @PostMapping("/chauxViveLafarge/add")
-    public String add(ChauxViveLafarge item) {
-        repository.save(item);
-        return "redirect:/chauxViveLafarge";
+    @ResponseBody
+    public String add(@ModelAttribute ChauxViveLafarge item) {
+        boolean duplicate = repository.existsDuplicate(
+                item.getDate(),
+                item.getHEntree(),
+                item.getHSortie(),
+                item.getTransporteur(),
+                item.getNumeroBL(),
+                item.getImmatricule(),
+                item.getTb(),
+                item.getTare(),
+                item.getPoste(),
+                item.getLieuChargement(),
+                item.getLieuDechargement()
+        );
+
+        if (!duplicate) {
+            repository.save(item);
+            return "OK";
+        } else {
+            return "DUPLICATE";
+        }
     }
 
     @PostMapping("/chauxViveLafarge/update")
-    public String update(ChauxViveLafarge item) {
+    @ResponseBody
+    public String update(@ModelAttribute ChauxViveLafarge item) {
         repository.save(item);
-        return "redirect:/chauxViveLafarge";
+        return "OK";
     }
 
     @GetMapping("/chauxViveLafarge/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    @ResponseBody
+    public void delete(@PathVariable Long id) {
         repository.deleteById(id);
-        return "redirect:/chauxViveLafarge";
     }
 
     @GetMapping("/export/chauxViveLafarge/excel")
@@ -51,7 +71,7 @@ public class ChauxViveLafargeController {
     @ResponseBody
     @GetMapping("/api/chauxViveLafarge")
     public List<ChauxViveLafarge> getAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByDateAsc();
     }
 
     @ResponseBody
