@@ -20,10 +20,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable()) // DURING DEVELOPMENT ONLY - re-enable for production!
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Permitted HTML pages and static resources
                         .requestMatchers(
+                                "/", // root URL that redirects to /home.html
+                                "/home",          // ✅ autorise l'accès à http://localhost:8081/home
+                                "/home.html",   // ✅ public landing page
                                 "/signup",
                                 "/login",
                                 "/css/**",
@@ -42,14 +44,16 @@ public class WebSecurityConfig {
                                 "/expCuivreOncf.html",
                                 "/expCuivreNord.html",
                                 "/expPbCmgOnf.html",
-
+                                "/login",      // ✅ allow login GET
+                                "/signup",     // ✅ allow signup GET
 
                                 // Permitted API Endpoints
                                 "/api/cbulkargentifere/**",
                                 "/api/chauxVive/**",
-                                "/chauxVive/add", // Specific API endpoint not under /api
-                                "/chauxVive/update", // Specific API endpoint not under /api
-                                "/chauxVive/delete/**", // Specific API endpoint not under /api
+
+                                "/chauxVive/add",
+                                "/chauxVive/update",
+                                "/chauxVive/delete/**",
                                 "/api/chauxViveLafarge/**",
                                 "/api/bascule-hj-ds/**",
                                 "/api/ka/**",
@@ -61,11 +65,10 @@ public class WebSecurityConfig {
                                 "/api/exp-cuivre-nord/**",
                                 "/api/exp-pb-cmg-onf/**"
                         ).permitAll()
-                        // All other requests require authentication
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/home") // ✅ redirect to landing after logout
                         .permitAll()
                 )
                 .build();

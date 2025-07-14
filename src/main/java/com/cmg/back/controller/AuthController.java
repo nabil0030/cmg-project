@@ -18,6 +18,18 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+
+    @Controller
+    public class StaticRedirectController {
+
+        @GetMapping("/home")
+        public String redirectToStaticHome() {
+            return "redirect:/home.html"; // ✅ va chercher /static/home.html
+        }
+    }
+
+
+
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("user", new User());
