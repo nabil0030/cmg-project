@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                                 "/expZincOncf.html",
                                 "/expCuivreOncf.html",
                                 "/expCuivreNord.html",
+                                "/expPbCmgOnf.html",
 
 
                                 // Permitted API Endpoints
@@ -57,7 +58,8 @@ public class WebSecurityConfig {
                                 "/api/expzinconcf/**",
                                 "/api/exp-zinc-safi/**",
                                 "/api/exp-cuivre-oncf/**",
-                                "/api/exp-cuivre-nord/**"
+                                "/api/exp-cuivre-nord/**",
+                                "/api/exp-pb-cmg-onf/**"
                         ).permitAll()
                         // All other requests require authentication
                         .anyRequest().authenticated()

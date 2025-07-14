@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXP ZINC ONCF - Enhanced</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <title>EXP PB CMG/ONF - Enhanced</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <style>
         /* --- Root Variables for a Modern Theme --- */
         :root {
@@ -28,7 +28,7 @@
             margin: 0;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
             background-color: var(--bg-light);
-            display: flex;
+            display: flex; /* Use flexbox for sidebar and main content */
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -315,7 +315,7 @@
         }
 
         /* --- Form Styling --- */
-        #expzinc-form {
+        #expPbCmgOnfForm {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -357,7 +357,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #expzinc-form button[type="submit"] {
+        #expPbCmgOnfForm button[type="submit"] {
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -374,9 +374,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            grid-column: span 2; /* Adjust button span based on form grid */
         }
 
-        #expzinc-form button[type="submit"]:hover {
+        #expPbCmgOnfForm button[type="submit"]:hover {
             background-color: #397BC7; /* Darker blue on hover */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
@@ -394,7 +395,7 @@
             width: 100%;
             border-collapse: separate; /* Allows border-radius on cells */
             border-spacing: 0; /* Remove default spacing */
-            min-width: 1200px; /* Ensure table doesn't get too squished for this data */
+            min-width: 1400px; /* Ensure table doesn't get too squished for this data */
         }
 
         th, td {
@@ -471,19 +472,35 @@
             background-color: #C0392B;
         }
 
-        .total-row {
-            background-color: #FFEB3B !important; /* Yellow for total row */
-            font-weight: 700;
-            color: var(--text-dark);
-            box-shadow: none !important; /* Remove lift/shadow from total row */
-            cursor: default !important;
-        }
-        .total-row:hover {
-            background-color: #FFEB3B !important;
-            transform: none !important;
-            box-shadow: none !important;
+        /* --- Alert Messages --- */
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.5s ease-out;
         }
 
+        .alert.success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+
+        .alert.error {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
@@ -658,10 +675,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #expzinc-form {
+            #expPbCmgOnfForm {
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #expzinc-form button[type="submit"] {
+            #expPbCmgOnfForm button[type="submit"] {
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -767,86 +784,92 @@
 </div>
 
 <div class="main-content">
-    <h1 class="page-title">EXP ZINC ONCF</h1>
+    <h1 class="page-title">EXP PB CMG/ONF</h1>
 
     <div class="form-section">
         <div class="section-header">
             <h2>Ajouter ou Modifier une entrée</h2>
         </div>
-        <form id="expzinc-form">
+        <form id="expPbCmgOnfForm" autocomplete="off">
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" id="date" required />
+                <input type="date" id="date" required>
             </div>
             <div class="form-group">
-                <label for="heureEntree">Heure Entrée</label>
-                <input type="time" id="heureEntree" required />
+                <label for="hEntree">Heure Entrée</label>
+                <input type="time" id="hEntree" required>
             </div>
             <div class="form-group">
-                <label for="heureSortie">Heure Sortie</label>
-                <input type="time" id="heureSortie" required />
+                <label for="hSortie">Heure Sortie</label>
+                <input type="time" id="hSortie" required>
             </div>
             <div class="form-group">
                 <label for="transporteur">Transporteur</label>
-                <input type="text" id="transporteur" placeholder="Nom du Transporteur" required />
+                <input type="text" id="transporteur" placeholder="Nom du transporteur" required>
             </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="Numéro Bon de Livraison" required />
+                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required>
             </div>
             <div class="form-group">
-                <label for="matricule">Matricule</label>
-                <input type="text" id="matricule" placeholder="Immatriculation Véhicule" required />
+                <label for="matricule">Immatricule</label>
+                <input type="text" id="matricule" placeholder="Immatriculation du Véhicule" required>
             </div>
             <div class="form-group">
                 <label for="tb">TB</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids TB" required />
+                <input type="number" id="tb" placeholder="Poids TB" step="0.01" required>
             </div>
             <div class="form-group">
                 <label for="tare">TARE</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids TARE" required />
+                <input type="number" id="tare" placeholder="Poids TARE" step="0.01" required>
             </div>
             <div class="form-group">
-                <label for="numeroContenaire">N° Contenaire</label>
-                <input type="text" id="numeroContenaire" placeholder="Numéro de Contenaire" required />
+                <label for="numeroContenaire">N° CONTENAIRE</label>
+                <input type="text" id="numeroContenaire" placeholder="Numéro du contenaire" required>
             </div>
             <div class="form-group">
                 <label for="poste">Poste</label>
-                <select id="poste" required>
-                    <option value="">-- Sélectionner Poste --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <input type="number" id="poste" placeholder="Poste (1, 2 ou 3)" min="1" max="3" required>
             </div>
             <div class="form-group">
-                <label for="lieuDechargement">Lieu de déchargement</label>
-                <input type="text" id="lieuDechargement" value="ONCF" required readonly />
+                <label for="lieuDeDechargement">Lieu de déchargement</label>
+                <input type="text" id="lieuDeDechargement" placeholder="Ex: Port de Safi" required>
             </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
+            <div class="form-group" style="grid-column: span 2;">
                 <label for="observation">Observation</label>
                 <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
             </div>
             <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit"><i class="fas fa-save"></i> Enregistrer</button>
+                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
             </div>
         </form>
     </div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique</h2>
+            <h2>Historique des Expéditions</h2>
             <div class="section-actions">
-                <button onclick="exporterExcel() "><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th>
-                    <th>Matricule</th><th>TB</th><th>TARE</th><th>TN H</th><th>N° Contenaire</th>
-                    <th>Poste</th><th>Déchargement</th><th>Observation</th><th>Actions</th>
+                    <th>Date</th>
+                    <th>H Entrée</th>
+                    <th>H Sortie</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>Matricule</th>
+                    <th>TB</th>
+                    <th>TARE</th>
+                    <th>TN H</th>
+                    <th>N° Contenaire</th>
+                    <th>Poste</th>
+                    <th>Lieu de déchargement</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody id="data-body"></tbody>
@@ -854,216 +877,218 @@
         </div>
     </div>
 </div>
-
 <script>
-    let currentId = null;
+    let currentEditId = null;
 
-    // Utility to format date for display
-    function formatDateForDisplay(isoDate) {
-        if (!isoDate) return '';
-        const [year, month, day] = isoDate.split('-');
-        return `${day}/${month}/${year}`; // Format DD/MM/YYYY for display
+    // A utility function to show messages, consistent with other pages
+    function showMessage(msg, type){
+        const div = document.createElement('div');
+        div.className = `alert ${type}`;
+        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        const mainContent = document.querySelector('.main-content');
+        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
+        setTimeout(()=> div.remove(), 4000);
     }
 
-    document.getElementById('expzinc-form').addEventListener('submit', function (e) {
-        e.preventDefault();
+    function loadTable() {
+        fetch('/api/exp-pb-cmg-onf')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Erreur de réseau ou du serveur lors du chargement des données.');
+                }
+                return res.json();
+            })
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = ''; // Clear existing rows
+                // Sort data by date in descending order
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        function formatTime(value) {
-            return value && value.length === 5 ? value + ":00" : value;
-        }
+                if (!Array.isArray(data) || data.length === 0) {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="14" style="text-align: center;">Aucune donnée trouvée.</td>`;
+                    tbody.appendChild(noDataRow);
+                    return;
+                }
+
+                data.forEach(e => {
+                    // Calculate TNH on the client-side for display, assuming it's TB - TARE
+                    const tnH = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                            <td>${e.date || ''}</td>
+                            <td>${e.hEntree || ''}</td>
+                            <td>${e.hSortie || ''}</td>
+                            <td>${e.transporteur || ''}</td>
+                            <td>${e.numeroBL || ''}</td>
+                            <td>${e.matricule || ''}</td>
+                            <td>${e.tb ?? ''}</td>
+                            <td>${e.tare ?? ''}</td>
+                            <td>${tnH}</td>
+                            <td>${e.numeroContenaire || ''}</td>
+                            <td>${e.poste ?? ''}</td>
+                            <td>${e.lieuDeDechargement || ''}</td>
+                            <td>${e.observation || ''}</td>
+                            <td class="table-actions">
+                                <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
+                                <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
+                            </td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des données:", error);
+                showMessage(`❌ ${error.message}`, 'error');
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+            });
+    }
+
+    document.getElementById('expPbCmgOnfForm').onsubmit = function(e) {
+        e.preventDefault();
 
         const tbValue = parseFloat(document.getElementById('tb').value);
         const tareValue = parseFloat(document.getElementById('tare').value);
-        const tnH = (tbValue - tareValue).toFixed(2);
+        const tnHValue = (tbValue - tareValue).toFixed(2); // Calculate TNH
 
-        const formData = {
+        const entry = {
             date: document.getElementById('date').value,
-            heureEntree: formatTime(document.getElementById('heureEntree').value),
-            heureSortie: formatTime(document.getElementById('heureSortie').value),
+            hEntree: document.getElementById('hEntree').value,
+            hSortie: document.getElementById('hSortie').value,
             transporteur: document.getElementById('transporteur').value,
             numeroBL: document.getElementById('numeroBL').value,
             matricule: document.getElementById('matricule').value,
             tb: tbValue,
             tare: tareValue,
-            tnH: parseFloat(tnH), // Store calculated TNH
+            tnH: parseFloat(tnHValue), // Include TNH in the data sent
             numeroContenaire: document.getElementById('numeroContenaire').value,
             poste: parseInt(document.getElementById('poste').value),
-            lieuDeDechargement: document.getElementById('lieuDechargement').value,
+            lieuDeDechargement: document.getElementById('lieuDeDechargement').value,
             observation: document.getElementById('observation').value
         };
 
-        const url = currentId ? `/api/expzinconcf/${currentId}` : "/api/expzinconcf";
-        const method = currentId ? "PUT" : "POST";
+        const method = currentEditId ? 'PUT' : 'POST';
+        const url = currentEditId ? `/api/exp-pb-cmg-onf/${currentEditId}` : '/api/exp-pb-cmg-onf';
 
         fetch(url, {
             method: method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        }).then(response => {
-            if (response.status === 409) {
-                alert("❌ Doublon détecté ! L'entrée avec le même N° BL ou N° Contenaire existe déjà.");
-                return;
-            }
-            if (!response.ok) {
-                return response.text().then(text => { throw new Error(text || 'Erreur réseau ou du serveur.'); });
-            }
-            return response.json();
-        }).then(() => {
-            alert(currentId ? '✅ Modifié avec succès.' : '✅ Enregistré avec succès.');
-            loadTable();
-            document.getElementById('expzinc-form').reset();
-            currentId = null;
-            const submitButton = document.querySelector('#expzinc-form button[type="submit"]');
-            submitButton.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
-            submitButton.style.backgroundColor = 'var(--primary-color)';
-            submitButton.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
-        }).catch(error => {
-            console.error('Error:', error);
-            alert(`❌ Une erreur est survenue: ${error.message}`);
-        });
-    });
-
-    function loadTable() {
-        fetch("/api/expzinconcf")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.getElementById("data-body");
-                tbody.innerHTML = '';
-                let totalTNH = 0;
-
-                // Sort by date DESC
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                if (data.length === 0) {
-                    const noDataRow = document.createElement('tr');
-                    noDataRow.innerHTML = `<td colspan="14" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée.</td>`;
-                    tbody.appendChild(noDataRow);
-                    return;
-                }
-
-                data.forEach(item => {
-                    const tnH = (item.tb - item.tare).toFixed(2); // Recalculate for display if not provided in item
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${formatDateForDisplay(item.date)}</td>
-                        <td>${item.heureEntree}</td>
-                        <td>${item.heureSortie}</td>
-                        <td>${item.transporteur}</td>
-                        <td>${item.numeroBL}</td>
-                        <td>${item.matricule}</td>
-                        <td>${item.tb}</td>
-                        <td>${item.tare}</td>
-                        <td>${tnH}</td>
-                        <td>${item.numeroContenaire}</td>
-                        <td>${item.poste}</td>
-                        <td>${item.lieuDeDechargement || '-'}</td>
-                        <td>${item.observation || '-'}</td>
-                        <td class="table-actions">
-                            <button onclick="editEntry(${item.id})"><i class="fas fa-edit"></i> Modifier</button>
-                            <button class="delete-btn" onclick="deleteEntry(${item.id})"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                        </td>`;
-                    tbody.appendChild(row);
-                    totalTNH += parseFloat(tnH) || 0;
-                });
-
-                const totalRow = document.createElement("tr");
-                totalRow.classList.add('total-row');
-                totalRow.innerHTML = `
-                    <td colspan="8" style="text-align: right; padding-right: 20px;">TOTAL:</td>
-                    <td><strong>${totalTNH.toFixed(2)}</strong></td>
-                    <td colspan="5"></td>`;
-                tbody.appendChild(totalRow);
-            })
-            .catch(error => {
-                console.error("Erreur lors du chargement des données:", error);
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
-            });
-    }
-
-    function editEntry(id) {
-        fetch(`/api/expzinconcf/${id}`)
-            .then(res => {
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(entry)
+        })
+            .then(async res => {
                 if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
+                    let msg = (await res.text());
+                    if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
+                    throw new Error(msg || 'Doublon détecté.');
                 }
                 return res.json();
             })
-            .then(item => {
-                currentId = item.id;
-                document.getElementById('date').value = item.date;
-                document.getElementById('heureEntree').value = item.heureEntree.substring(0, 5);
-                document.getElementById('heureSortie').value = item.heureSortie.substring(0, 5);
-                document.getElementById('transporteur').value = item.transporteur;
-                document.getElementById('numeroBL').value = item.numeroBL;
-                document.getElementById('matricule').value = item.matricule;
-                document.getElementById('tb').value = item.tb;
-                document.getElementById('tare').value = item.tare;
-                document.getElementById('numeroContenaire').value = item.numeroContenaire;
-                document.getElementById('poste').value = item.poste;
-                document.getElementById('lieuDechargement').value = item.lieuDeDechargement;
-                document.getElementById('observation').value = item.observation || '';
-
-                const submitButton = document.querySelector('#expzinc-form button[type="submit"]');
-                submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-                submitButton.style.backgroundColor = '#F39C12'; // Orange for update
-                submitButton.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+            .then(() => {
+                showMessage('✅ Opération réussie.', 'success');
+                this.reset();
+                currentEditId = null;
+                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
+                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
+                // Reset button styles to default
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.style.backgroundColor = 'var(--primary-color)';
+                submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+                submitBtn.onmouseover = null;
+                submitBtn.onmouseout = null;
+                loadTable();
             })
-            .catch(error => {
-                console.error("Erreur lors de la récupération des données pour modification:", error);
-                alert("❌ Impossible de charger l'entrée pour modification.");
+            .catch(err => {
+                console.error("Form submission error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
+    };
+
+    function editRow(item) {
+        currentEditId = item.id;
+        document.getElementById('date').value = item.date || '';
+        document.getElementById('hEntree').value = item.hEntree || '';
+        document.getElementById('hSortie').value = item.hSortie || '';
+        document.getElementById('transporteur').value = item.transporteur || '';
+        document.getElementById('numeroBL').value = item.numeroBL || '';
+        document.getElementById('matricule').value = item.matricule || '';
+        document.getElementById('tb').value = item.tb ?? '';
+        document.getElementById('tare').value = item.tare ?? '';
+        document.getElementById('numeroContenaire').value = item.numeroContenaire || '';
+        document.getElementById('poste').value = item.poste ?? '';
+        document.getElementById('lieuDeDechargement').value = item.lieuDeDechargement || '';
+        document.getElementById('observation').value = item.observation || '';
+
+        // Change form title and button for edit mode
+        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+        submitBtn.style.backgroundColor = '#FFA500'; // Orange color for update
+        submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+        submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E69500';
+        submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#FFA500';
+
+        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteRow(id) {
+        if(!confirm('❗ Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action est irréversible.')) {
+            return;
+        }
+        fetch(`/api/exp-pb-cmg-onf/${id}`, {method:'DELETE'})
+            .then(async res => {
+                if (!res.ok) {
+                    throw new Error((await res.text()) || 'Erreur de suppression.');
+                }
+                showMessage('✅ Entrée supprimée avec succès.', 'success');
+                loadTable();
+            })
+            .catch(err => {
+                console.error("Delete error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
             });
     }
 
-    function deleteEntry(id) {
-        if (confirm("❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.")) {
-            fetch(`/api/expzinconcf/${id}`, { method: 'DELETE' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(() => {
-                    alert('✅ Supprimé avec succès.');
-                    loadTable();
-                })
-                .catch(error => {
-                    console.error("Erreur lors de la suppression:", error);
-                    alert('❌ Impossible de supprimer l\'entrée.');
-                });
-        }
+    function exportExcel() {
+        window.open('/api/exp-pb-cmg-onf/export', '_blank');
     }
 
-    function exporterExcel() {
-        window.location.href = '/api/expzinconcf/export';
-    }
-
-    // Sidebar toggle functionality
+    // Sidebar Toggle JavaScript - Reused logic
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
+        const toggleIcon = sidebarToggle.querySelector('.fas');
 
-        // Check local storage for preferred state
+        // Check localStorage for the last sidebar state
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+        // Apply the stored state on page load
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
+            toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        } else {
+            sidebar.classList.remove('collapsed');
+            toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
         }
 
+        // Add event listener for the toggle button
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
-            const currentState = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentState); // Save state to local storage
-        });
-    });
+            const currentlyCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
 
-    // Load table data when the page loads
-    window.onload = loadTable;
+            // Toggle icon direction
+            if (currentlyCollapsed) {
+                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
+        });
+
+        // Initial load of table data when the DOM is ready
+        loadTable();
+    });
 </script>
 </body>
 </html>
