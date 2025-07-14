@@ -5,24 +5,40 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ChauxViveRepository extends JpaRepository<ChauxVive, Long> {
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-    @Query("SELECT COUNT(c) > 0 FROM ChauxVive c WHERE " +
-            "c.date = :date AND c.hEntree = :hEntree AND c.hSortie = :hSortie AND " +
-            "c.transporteur = :transporteur AND c.numeroBL = :numeroBL AND " +
-            "c.immatricule = :immatricule AND c.tb = :tb AND c.tare = :tare AND " +
-            "c.poste = :poste AND c.lieuChargement = :lieuChargement AND c.lieuDechargement = :lieuDechargement")
-    boolean isDuplicate(
-            @Param("date") String date,
-            @Param("hEntree") java.time.LocalTime hEntree,
-            @Param("hSortie") java.time.LocalTime hSortie,
+public interface ChauxViveRepository extends JpaRepository<ChauxVive, Long> {
+    @Query("""
+        SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END
+        FROM ChauxVive e
+        WHERE e.date = :date
+          AND e.hEntree = :hEntree
+          AND e.hSortie = :hSortie
+          AND e.transporteur = :transporteur
+          AND e.numeroBL = :numeroBL
+          AND e.immat = :immat
+          AND e.tb = :tb
+          AND e.tare = :tare
+          AND e.poste = :poste
+          AND e.netCosumar = :netCosumar
+          AND e.lieuChargement = :lieuChargement
+          AND e.lieuDechargement = :lieuDechargement
+          AND ((:observation IS NULL AND e.observation IS NULL) OR e.observation = :observation)
+    """)
+    boolean existsDuplicate(
+            @Param("date") LocalDate date,
+            @Param("hEntree") LocalTime hEntree,
+            @Param("hSortie") LocalTime hSortie,
             @Param("transporteur") String transporteur,
             @Param("numeroBL") String numeroBL,
-            @Param("immatricule") String immatricule,
+            @Param("immat") String immat,
             @Param("tb") Double tb,
             @Param("tare") Double tare,
             @Param("poste") Integer poste,
+            @Param("netCosumar") Double netCosumar,
             @Param("lieuChargement") String lieuChargement,
-            @Param("lieuDechargement") String lieuDechargement
+            @Param("lieuDechargement") String lieuDechargement,
+            @Param("observation") String observation
     );
 }

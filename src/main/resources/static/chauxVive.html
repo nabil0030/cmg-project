@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaux Vive - Enhanced</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <title>CHAUX VIVE - Optimized</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <style>
         /* --- Root Variables for a Modern Theme --- */
         :root {
-            --primary-color: #4A90E2; /* Modern Blue */
+            --primary-color: #FFA500; /* Orange for Chaux Vive, a warm accent */
             --secondary-color: #2C3E50; /* Darker Blue-Gray for sidebar */
             --accent-color: #2ECC71; /* Green for success/highlights */
             --text-dark: #333333;
@@ -16,19 +16,19 @@
             --bg-light: #F8F9FA; /* Off-white background */
             --card-bg: #FFFFFF;
             --border-color: #E0E0E0;
-            --input-border-focus: #4A90E2;
+            --input-border-focus: #FFA500;
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
             --border-radius: 10px;
-            --sidebar-width: 260px;
-            --sidebar-width-collapsed: 75px;
+            --sidebar-width: 240px; /* Slightly reduced sidebar width */
+            --sidebar-width-collapsed: 65px; /* Slightly reduced collapsed width */
         }
 
         body {
             margin: 0;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
             background-color: var(--bg-light);
-            display: flex;
+            display: flex; /* Use flexbox for sidebar and main content */
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -59,7 +59,7 @@
             width: var(--sidebar-width);
             background-color: var(--secondary-color);
             color: white;
-            padding: 30px 0; /* More padding */
+            padding: 25px 0; /* Reduced padding */
             height: 100vh;
             position: sticky;
             top: 0;
@@ -79,35 +79,35 @@
         }
 
         .sidebar-header {
-            padding: 0 30px 30px; /* More padding */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More prominent divider */
+            padding: 0 25px 25px; /* Reduced padding */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             text-align: center;
-            display: flex; /* For alignment of title/icon */
+            display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .sidebar.collapsed .sidebar-header {
-            padding: 0 10px 20px;
+            padding: 0 8px 15px; /* Reduced padding */
         }
 
         .sidebar-title {
-            font-size: 1.8rem; /* Larger title */
-            font-weight: 700; /* Bolder */
+            font-size: 1.6rem; /* Slightly smaller title */
+            font-weight: 700;
             margin: 0;
             color: white;
             letter-spacing: 0.5px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            animation: fadeInScale 0.8s ease-out forwards; /* Initial animation */
+            animation: fadeInScale 0.8s ease-out forwards;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .sidebar.collapsed .sidebar-title {
             opacity: 0;
             transform: translateX(-20px);
-            pointer-events: none; /* Make text unclickable when hidden */
-            width: 0; /* Collapse width */
-            overflow: hidden; /* Hide overflow */
+            pointer-events: none;
+            width: 0;
+            overflow: hidden;
         }
 
         @keyframes fadeInScale {
@@ -118,61 +118,61 @@
         .nav-menu {
             list-style: none;
             padding: 0;
-            margin: 30px 0 0 0;
-            flex-grow: 1; /* Allows menu to take available space */
+            margin: 25px 0 0 0; /* Reduced margin */
+            flex-grow: 1;
         }
 
         .nav-item {
-            padding: 15px 30px; /* More padding */
+            padding: 12px 25px; /* Reduced padding */
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, border-left-color 0.3s ease;
             display: flex;
             align-items: center;
-            border-left: 5px solid transparent; /* For active state */
+            border-left: 5px solid transparent;
         }
 
         .sidebar.collapsed .nav-item {
-            padding: 15px 0; /* Center icons when collapsed */
+            padding: 12px 0; /* Center icons when collapsed */
             justify-content: center;
-            border-left: none; /* Remove border when collapsed */
+            border-left: none;
         }
 
         .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.15); /* Slightly stronger hover */
-            transform: translateX(8px); /* More pronounced slide */
-            border-left-color: var(--primary-color); /* Highlight on hover */
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px); /* Reduced slide */
+            border-left-color: var(--primary-color);
         }
 
         .sidebar.collapsed .nav-item:hover {
-            transform: none; /* No translate when collapsed */
+            transform: none;
         }
 
         .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.3); /* Lighter active background */
-            border-left: 5px solid var(--accent-color); /* Stronger highlight for active */
+            background-color: rgba(255, 165, 0, 0.3);
+            border-left: 5px solid var(--primary-color);
             font-weight: 600;
         }
 
         .sidebar.collapsed .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
-            border-radius: var(--border-radius); /* Rounded background */
-            margin: 0 10px; /* Some margin to show background */
-            border-left: none; /* No border when collapsed, use background */
+            background-color: rgba(255, 165, 0, 0.5);
+            border-radius: var(--border-radius);
+            margin: 0 8px; /* Reduced margin */
+            border-left: none;
         }
 
         .nav-item i {
-            margin-right: 15px; /* More space for icon */
-            font-size: 1.2rem; /* Larger icons */
+            margin-right: 12px; /* Reduced space for icon */
+            font-size: 1.1rem; /* Slightly smaller icons */
             color: rgba(255, 255, 255, 0.8);
             transition: color 0.3s ease, margin-right 0.3s ease;
         }
 
         .sidebar.collapsed .nav-item i {
-            margin-right: 0; /* No margin when text is hidden */
+            margin-right: 0;
         }
 
         .nav-item:hover i, .nav-item.active i {
-            color: white; /* Icons become white on hover/active */
+            color: white;
         }
 
         .nav-item a {
@@ -181,8 +181,8 @@
             display: flex;
             align-items: center;
             width: 100%;
-            font-size: 1.05rem; /* Slightly larger text */
-            white-space: nowrap; /* Prevent wrapping */
+            font-size: 1rem; /* Slightly smaller text */
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             transition: opacity 0.3s ease;
@@ -190,14 +190,14 @@
 
         .sidebar.collapsed .nav-item a {
             opacity: 0;
-            width: 0; /* Collapse width */
-            pointer-events: none; /* Make text unclickable when hidden */
+            width: 0;
+            pointer-events: none;
         }
 
         .sidebar-footer {
-            padding: 20px;
+            padding: 15px; /* Reduced padding */
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.75rem; /* Slightly smaller font */
             color: rgba(255, 255, 255, 0.5);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             transition: opacity 0.3s ease;
@@ -210,50 +210,51 @@
         /* --- Toggle Button --- */
         .sidebar-toggle {
             position: absolute;
-            top: 20px;
-            right: -15px; /* Half outside sidebar */
+            top: 15px; /* Adjusted position */
+            right: -12px; /* Adjusted position */
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 25px; /* Smaller button */
+            height: 25px; /* Smaller button */
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, background-color 0.3s ease;
-            z-index: 11; /* Above sidebar */
+            z-index: 11;
         }
         .sidebar-toggle:hover {
-            background-color: #397BC7;
-            transform: scale(1.1);
+            background-color: #E69500;
+            transform: scale(1.05); /* Smaller scale effect */
         }
         .sidebar.collapsed .sidebar-toggle .fas {
-            transform: rotate(180deg); /* Rotate arrow when collapsed */
+            transform: rotate(180deg);
         }
         .sidebar-toggle .fas {
+            font-size: 0.8rem; /* Smaller icon */
             transition: transform 0.3s ease;
         }
 
         /* --- Main Content Styling --- */
         .main-content {
             flex: 1;
-            padding: 40px; /* More padding for content */
+            padding: 30px; /* Reduced main content padding */
             display: flex;
             flex-direction: column;
-            gap: 30px; /* Space between sections */
+            gap: 25px; /* Reduced gap between sections */
             position: relative;
             z-index: 1;
-            transition: margin-left 0.3s ease; /* To account for sidebar collapse */
+            transition: margin-left 0.3s ease;
         }
 
         .page-title {
-            font-size: 2.5rem; /* Larger and bolder title */
+            font-size: 2.3rem; /* Slightly smaller page title */
             color: var(--text-dark);
-            margin-bottom: 20px;
-            font-weight: 800; /* Extra bold */
+            margin-bottom: 15px; /* Reduced margin */
+            font-weight: 800;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.05);
             animation: slideInLeft 0.7s ease-out forwards;
         }
@@ -267,15 +268,15 @@
         .form-section, .table-section {
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 30px; /* More internal padding */
+            padding: 25px; /* Reduced internal padding */
             box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative; /* For overflow mask */
-            overflow: hidden; /* For inner animations */
+            position: relative;
+            overflow: hidden;
         }
 
         .form-section:hover, .table-section:hover {
-            transform: translateY(-5px); /* Lift effect on hover */
+            transform: translateY(-3px); /* Slightly reduced lift effect on hover */
             box-shadow: var(--shadow-hover);
         }
 
@@ -283,13 +284,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* Reduced margin */
             border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
+            padding-bottom: 12px; /* Reduced padding */
         }
 
         .section-header h2 {
-            font-size: 1.6rem; /* Section titles */
+            font-size: 1.5rem; /* Slightly smaller section titles */
             color: var(--primary-color);
             margin: 0;
             font-weight: 700;
@@ -297,7 +298,7 @@
 
         .section-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px; /* Reduced gap */
         }
 
         .section-actions button, .section-actions input[type="text"] {
@@ -305,20 +306,20 @@
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            font-size: 1rem;
-            padding: 8px 12px;
+            font-size: 0.9rem; /* Smaller font */
+            padding: 7px 10px; /* Reduced padding */
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
         .section-actions button:hover {
-            background-color: rgba(74, 144, 226, 0.1);
+            background-color: rgba(255, 165, 0, 0.1);
         }
 
         /* --- Form Styling --- */
-        #chaux-form {
+        #chauxViveForm {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
-            gap: 20px; /* Space between inputs */
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller min-width */
+            gap: 15px; /* Reduced gap between inputs */
         }
 
         .form-group {
@@ -327,85 +328,87 @@
         }
 
         .form-group label {
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Slightly smaller label font */
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 5px; /* Reduced margin below label */
             font-weight: 500;
         }
 
         input, select, textarea {
-            width: 100%; /* Ensure they fill their grid column */
-            padding: 12px 15px;
-            border-radius: 8px; /* Slightly larger radius */
+            width: 100%;
+            padding: 10px 12px; /* Reduced padding inside inputs */
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            font-size: 1rem;
+            font-size: 0.95rem; /* Slightly smaller input text font */
             color: var(--text-dark);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: var(--bg-light); /* Light background for inputs */
+            background-color: var(--bg-light);
         }
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Subtle glow effect */
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
             outline: none;
             background-color: white;
         }
 
         textarea {
-            min-height: 80px;
-            resize: vertical; /* Allow vertical resizing */
-            grid-column: 1 / -1; /* Make textarea span all columns */
+            min-height: 70px; /* Slightly reduced min-height for textarea */
+            resize: vertical;
+            grid-column: 1 / -1;
         }
 
-        #chaux-form button[type="submit"] {
-            padding: 14px 25px; /* Larger button */
+        #chauxViveForm button[type="submit"] {
+            padding: 12px 20px; /* Reduced button padding */
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem; /* Slightly smaller button font */
             font-weight: 600;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3); /* Button shadow */
-            margin-top: 15px; /* Space above button */
-            justify-self: end; /* Align button to the right */
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+            margin-top: 10px; /* Reduced margin above button */
+            justify-self: end;
             width: fit-content;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px; /* Reduced gap for icon and text */
+            grid-column: span 2;
         }
 
-        #chaux-form button[type="submit"]:hover {
-            background-color: #397BC7; /* Darker blue on hover */
-            transform: translateY(-2px); /* Slight lift */
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+        #chauxViveForm button[type="submit"]:hover {
+            background-color: #E69500;
+            transform: translateY(-1px); /* Slightly reduced lift */
+            box-shadow: 0 6px 18px rgba(255, 165, 0, 0.4);
         }
 
         /* --- Table Styling --- */
         .table-responsive {
-            overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
-            -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
-            border-radius: var(--border-radius); /* Apply radius to container */
-            border: 1px solid var(--border-color); /* Subtle border for the table container */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
         }
 
         table {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
-            border-spacing: 0; /* Remove default spacing */
-            min-width: 1200px; /* Ensure table doesn't get too squished for this data */
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         th, td {
-            padding: 15px 20px; /* More padding in cells */
+            padding: 12px 15px; /* Reduced padding in cells */
             text-align: left;
-            border-bottom: 1px solid var(--border-color); /* Only bottom border */
-            border-right: 1px solid var(--border-color); /* Right border for columns */
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            white-space: nowrap;
+            font-size: 0.9rem; /* Smaller font for table content */
         }
 
         th:last-child, td:last-child {
-            border-right: none; /* No right border on last column */
+            border-right: none;
         }
 
         th {
@@ -413,11 +416,11 @@
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Smaller font for table headers */
             letter-spacing: 0.5px;
             position: sticky;
-            top: 0; /* Sticky header for long tables */
-            z-index: 1; /* Keep header above scrolling content */
+            top: 0;
+            z-index: 1;
         }
 
         /* Rounded corners for table header */
@@ -429,140 +432,138 @@
         }
 
         tbody tr:hover {
-            background-color: #EBF2FA; /* Light highlight on row hover */
-            transform: translateY(-2px); /* Subtle lift */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background-color: #FFF3E0;
+            transform: translateY(-1px); /* Subtle lift */
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
             cursor: pointer;
         }
 
         tbody tr:last-child td {
-            border-bottom: none; /* No bottom border on last row */
+            border-bottom: none;
         }
 
         /* Action buttons in table */
         .table-actions {
-            white-space: nowrap; /* Prevent buttons from wrapping */
+            white-space: nowrap;
             text-align: center;
         }
         .table-actions button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 6px 10px; /* Smaller button padding */
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.85rem;
-            margin: 0 3px; /* Smaller margin for multiple buttons */
+            font-size: 0.8rem; /* Smaller button font */
+            margin: 0 2px; /* Reduced margin for multiple buttons */
             transition: background-color 0.3s ease, transform 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px; /* Reduced gap for icon and text */
         }
 
         .table-actions button:hover {
-            background-color: #397BC7;
+            background-color: #E69500;
             transform: translateY(-1px);
         }
 
         .table-actions button.delete-btn {
-            background-color: #E74C3C; /* Red for delete */
+            background-color: #E74C3C;
         }
         .table-actions button.delete-btn:hover {
             background-color: #C0392B;
         }
 
-        .total-row {
-            background-color: #FFEB3B !important; /* Yellow for total row */
-            font-weight: 700;
-            color: var(--text-dark);
-            box-shadow: none !important; /* Remove lift/shadow from total row */
-            cursor: default !important;
+        /* --- Alert Messages --- */
+        .alert {
+            padding: 12px 15px; /* Reduced padding */
+            margin-bottom: 15px; /* Reduced margin */
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 0.9rem; /* Slightly smaller font */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Reduced gap */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.5s ease-out;
         }
-        .total-row:hover {
-            background-color: #FFEB3B !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
             .main-content {
-                padding: 30px;
+                padding: 25px; /* Further reduced padding */
             }
             .page-title {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             .form-section, .table-section {
-                padding: 25px;
+                padding: 20px; /* Further reduced padding */
             }
             .section-header h2 {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
         }
 
         @media (max-width: 992px) {
             .sidebar {
-                width: var(--sidebar-width-collapsed); /* Collapsed sidebar for tablets */
-                padding: 20px 0;
+                width: var(--sidebar-width-collapsed);
+                padding: 15px 0;
             }
             .sidebar .sidebar-header {
-                padding: 0 10px 20px;
+                padding: 0 8px 15px;
             }
             .sidebar .sidebar-title {
-                font-size: 1.2rem;
-                white-space: nowrap; /* Prevent wrapping */
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: none; /* Hide text, only icon visible */
-            }
-            .sidebar .sidebar-title i {
-                margin-right: 0;
+                font-size: 1.1rem;
+                display: none;
             }
             .sidebar .nav-item {
-                padding: 15px 0; /* Center icons when collapsed */
-                justify-content: center;
-                border-left: none; /* Remove border when collapsed */
+                padding: 10px 0;
             }
             .sidebar .nav-item i {
-                margin-right: 0; /* No margin when text is hidden */
+                font-size: 1rem;
             }
             .sidebar .nav-item a {
-                display: none; /* Hide link text */
+                display: none;
             }
             .sidebar .nav-item.active {
-                background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
-                border-radius: var(--border-radius); /* Rounded background */
-                margin: 0 10px; /* Some margin to show background */
-                border-left: none; /* No border when collapsed, use background */
+                margin: 0 8px;
             }
             .sidebar .sidebar-footer {
-                display: none; /* Hide footer when collapsed */
+                display: none;
             }
             .sidebar .sidebar-toggle {
-                right: -15px; /* Keep toggle position relative to collapsed sidebar */
+                right: -10px; /* Adjusted position */
+                width: 20px; /* Smaller toggle */
+                height: 20px;
+            }
+            .sidebar .sidebar-toggle .fas {
+                font-size: 0.7rem;
             }
 
             .main-content {
-                padding: 20px;
+                padding: 15px; /* Even smaller padding on tablets */
             }
             .page-title {
-                font-size: 2rem;
-                text-align: center;
-                margin-bottom: 30px;
+                font-size: 1.8rem;
+                margin-bottom: 20px;
             }
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 8px;
             }
             .section-header h2 {
                 width: 100%;
                 text-align: center;
+                font-size: 1.2rem;
             }
             .section-actions {
                 width: 100%;
                 text-align: center;
+            }
+            .section-actions button {
+                font-size: 0.8rem;
+                padding: 6px 9px;
             }
         }
 
@@ -575,99 +576,135 @@
                 height: auto;
                 position: static;
                 border-radius: 0;
-                padding: 15px 0;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                padding: 10px 0;
             }
             .sidebar .sidebar-toggle {
-                display: none; /* Hide toggle button on very small screens, sidebar is always full width then */
+                display: none;
             }
             .sidebar-header {
-                padding: 0 15px 15px;
-                border-bottom: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                padding: 0 10px 10px;
             }
             .sidebar-title {
-                display: block; /* Show title again on very small screens */
-                font-size: 1.5rem;
-                opacity: 1;
-                transform: translateX(0);
-                width: auto;
+                display: block;
+                font-size: 1.3rem;
             }
             .sidebar-title i {
-                margin-right: 10px;
+                margin-right: 8px;
             }
             .nav-menu {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-top: 10px;
+                margin-top: 8px;
             }
             .nav-item {
-                flex-basis: auto;
-                padding: 10px 15px;
-                margin: 5px;
-                border-radius: 8px;
-                display: flex; /* Ensure flex for icon/text alignment */
-                align-items: center;
+                padding: 8px 12px;
+                margin: 4px;
+                border-radius: 6px;
             }
             .nav-item a {
-                display: block; /* Show link text again */
-                margin-left: 5px;
-                opacity: 1;
-                width: auto;
+                font-size: 0.9rem;
             }
             .nav-item i {
-                margin-right: 8px;
+                font-size: 0.95rem;
+                margin-right: 6px;
             }
             .nav-item.active {
-                border-left: 5px solid var(--accent-color); /* Bring back border for active */
-                background-color: rgba(74, 144, 226, 0.2);
+                border-left: 4px solid var(--primary-color); /* Slightly thinner border */
             }
-            .sidebar.collapsed { /* Remove collapsed state on small screens */
+            .sidebar.collapsed {
                 width: 100%;
-            }
-            .sidebar.collapsed .sidebar-header {
-                padding: 0 15px 15px;
-            }
-            .sidebar.collapsed .sidebar-title {
-                display: block;
-            }
-            .sidebar.collapsed .nav-item {
-                padding: 10px 15px;
-                justify-content: flex-start;
-            }
-            .sidebar.collapsed .nav-item a {
-                display: block;
-                opacity: 1;
-                width: auto;
-            }
-            .sidebar.collapsed .nav-item i {
-                margin-right: 8px;
             }
 
             .main-content {
-                padding: 15px;
-                gap: 20px;
+                padding: 10px; /* Minimal padding on very small screens */
+                gap: 15px;
             }
             .page-title {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
+                font-size: 1.6rem;
+                margin-bottom: 15px;
             }
             .form-section, .table-section {
-                padding: 20px;
+                padding: 15px;
             }
-            #chaux-form {
-                grid-template-columns: 1fr; /* Single column layout for forms */
+            #chauxViveForm {
+                grid-template-columns: 1fr;
+                gap: 12px; /* Even smaller gap */
             }
-            #chaux-form button[type="submit"] {
-                width: 100%; /* Full width button */
+            input, select, textarea {
+                padding: 8px 10px; /* Smaller input padding */
+                font-size: 0.9rem;
             }
+            .form-group label {
+                font-size: 0.8rem;
+                margin-bottom: 3px;
+            }
+            #chauxViveForm button[type="submit"] {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+                gap: 5px;
+            }
+
             .table-responsive {
-                border-radius: 0; /* No border radius for full width */
+                border-radius: 0;
                 border-left: none;
                 border-right: none;
+            }
+
+            /* Table-specific overrides for very small screens (stacking) */
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                border: 1px solid var(--border-color);
+                margin-bottom: 8px; /* Reduced margin */
+                border-radius: var(--border-radius);
+                overflow: hidden;
+            }
+
+            td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 45%; /* Adjusted for smaller data-label width */
+                text-align: right;
+                padding-top: 8px; /* Reduced vertical padding */
+                padding-bottom: 8px;
+                font-size: 0.88rem; /* Slightly smaller font for stacked data */
+            }
+
+            td:last-child {
+                border-bottom: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 8px; /* Adjusted left position */
+                width: 40%; /* Adjusted width for proper alignment */
+                padding-right: 8px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: var(--primary-color);
+                font-size: 0.85rem; /* Smaller font for stacked labels */
+            }
+            td.table-actions {
+                padding-left: 8px; /* Reset padding for actions */
+                text-align: center;
+                border-top: 1px solid #eee;
+            }
+            td.table-actions button {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+                gap: 3px;
+            }
+            td.table-actions::before {
+                content: none;
             }
         }
     </style>
@@ -685,80 +722,18 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
-                <i class="fas fa-home"></i>
-                <a href="index.html"><span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight"></i>
-                <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight"></i>
-                <a href="dsClassique.html"><span>DS classique</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight-hanging"></i>
-                <a href="dsNord.html"><span>DS NORD</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="controle-bascule-ka.html"><span>C. Bascule KA</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="chauxVive.html"><span>Chaux Vive</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
-
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
-
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="hm.html"><span> lmli7 jay </span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-cog"></i>
-                <a href="#"><span>Settings</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-question-circle"></i>
-                <a href="#"><span>Help</span></a>
-            </li>
+            <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
+            <li class="nav-item"><i class="fas fa-truck-ramp-box"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
+            <li class="nav-item"><i class="fas fa-truck-front"></i><a href="dsClassique.html">DS Classique</a></li>
+            <li class="nav-item"><i class="fas fa-mountain"></i><a href="dsNord.html">DS NORD</a></li>
+            <li class="nav-item"><i class="fas fa-weight-scale"></i><a href="controle-bascule-ka.html">C. Bascule KA</a></li>
+            <li class="nav-item active"><i class="fas fa-fire"></i><a href="chauxVive.html">Chaux Vive</a></li>
+            <li class="nav-item"><i class="fas fa-industry"></i><a href="chauxViveLafarge.html">Chaux Vive Lafarge</a></li>
+            <li class="nav-item"><i class="fas fa-truck-field"></i><a href="cbulkArgentifere.html">C,BULK (Stuffing Lead)</a></li>
+            <li class="nav-item"><i class="fas fa-train"></i><a href="expZincOncf.html">Exp Zinc ONCF</a></li>
+            <li class="nav-item"><i class="fas fa-box"></i><a href="expCuivreOncf.html">Exp C.CUIVRE ONCF</a></li>
+            <li class="nav-item"><i class="fas fa-boxes-stacked"></i><a href="expCuivreNord.html">Exp C.CUIVRE NORD</a></li>
+            <li class="nav-item"><i class="fas fa-pallet-boxes"></i><a href="expPbCmgOnf.html">Exp PB CMG/ONF</a></li>
         </ul>
     </div>
     <div class="sidebar-footer">
@@ -767,98 +742,98 @@
 </div>
 
 <div class="main-content">
-    <h1 class="page-title">Chaux Vive</h1>
+    <h1 class="page-title">CHAUX VIVE</h1>
 
     <div class="form-section">
         <div class="section-header">
             <h2>Ajouter ou Modifier une entrée</h2>
         </div>
-        <form id="chaux-form">
+        <form id="chauxViveForm" autocomplete="off">
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" id="date" required />
+                <input type="date" id="date" required>
             </div>
             <div class="form-group">
                 <label for="hEntree">Heure Entrée</label>
-                <input type="time" id="hEntree" required />
+                <input type="time" id="hEntree" required>
             </div>
             <div class="form-group">
                 <label for="hSortie">Heure Sortie</label>
-                <input type="time" id="hSortie" required />
+                <input type="time" id="hSortie" required>
             </div>
             <div class="form-group">
                 <label for="transporteur">Transporteur</label>
-                <select id="transporteur" required>
-                    <option value="">-- Transporteur --</option>
-                    <option value="SOSAMAC">SOSAMAC</option>
-                    <option value="GTC-CSL">GTC-CSL</option>
-                </select>
+                <input type="text" id="transporteur" placeholder="Nom du transporteur" required>
             </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required />
+                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required>
             </div>
             <div class="form-group">
-                <label for="immatricule">Immatricule</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required />
+                <label for="immat">Immatriculation</label>
+                <input type="text" id="immat" placeholder="Immatriculation du Véhicule" required>
             </div>
             <div class="form-group">
                 <label for="tb">TB</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids TB" required />
+                <input type="number" id="tb" placeholder="Poids TB" step="0.01" required>
             </div>
             <div class="form-group">
                 <label for="tare">TARE</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids TARE" required />
-            </div>
-            <div class="form-group">
-                <label for="netCosumar">Net COSUMAR</label>
-                <input type="number" step="0.01" id="netCosumar" placeholder="Net COSUMAR" required />
+                <input type="number" id="tare" placeholder="Poids TARE" step="0.01" required>
             </div>
             <div class="form-group">
                 <label for="poste">Poste</label>
-                <select id="poste" required>
-                    <option value="">-- Poste --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <input type="number" id="poste" placeholder="Poste (1, 2 ou 3)" min="1" max="3" required>
             </div>
             <div class="form-group">
-                <label for="lieuChargement">Lieu Chargement</label>
-                <input type="text" id="lieuChargement" value="LAFARGE" required readonly />
+                <label for="netCosumar">Net COSUMAR</label>
+                <input type="number" id="netCosumar" placeholder="Poids Net COSUMAR" step="0.01" required>
             </div>
             <div class="form-group">
-                <label for="lieuDechargement">Lieu Déchargement</label>
-                <select id="lieuDechargement" required>
-                    <option value="COSUMAR" selected>COSUMAR</option>
-                    <option value="LAVERIE CMG">LAVERIE CMG</option>
-                </select>
+                <label for="lieuChargement">Lieu de chargement</label>
+                <input type="text" id="lieuChargement" placeholder="Ex: C.M.G" required>
+            </div>
+            <div class="form-group">
+                <label for="lieuDechargement">Lieu de déchargement</label>
+                <input type="text" id="lieuDechargement" placeholder="Ex: COSUMAR" required>
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label for="observation">Observation</label>
                 <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
             </div>
             <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit"><i class="fas fa-save"></i> Enregistrer</button>
+                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
             </div>
         </form>
     </div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique</h2>
+            <h2>Historique des Chaux Vive</h2>
             <div class="section-actions">
-                <button onclick="exporterExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th>
-                    <th>N° BL</th><th>Immatricule</th><th>TB</th><th>TARE</th><th>NET CMG</th>
-                    <th>Poste</th><th>Net COSUMAR</th><th>ÉCART</th>
-                    <th>Chargement</th><th>Déchargement</th><th>Observation</th><th>Actions</th>
+                    <th>Date</th>
+                    <th>H Entrée</th>
+                    <th>H Sortie</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>IMMAT</th>
+                    <th>TB</th>
+                    <th>TARE</th>
+                    <th>NET CMG</th>
+                    <th>Poste</th>
+                    <th>Net COSUMAR</th>
+                    <th>ECART</th>
+                    <th>Lieu chargement</th>
+                    <th>Lieu déchargement</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody id="data-body"></tbody>
@@ -866,167 +841,231 @@
         </div>
     </div>
 </div>
-
 <script>
-    let currentId = null;
+    let currentEditId = null;
 
-    document.getElementById('chaux-form').addEventListener('submit', function (e) {
+    // A utility function to show messages, consistent with other pages
+    function showMessage(msg, type){
+        const div = document.createElement('div');
+        div.className = `alert ${type}`;
+        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        const mainContent = document.querySelector('.main-content');
+        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
+        setTimeout(()=> div.remove(), 4000);
+    }
+
+    function loadTable() {
+        fetch('/api/chaux-vive')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Erreur de réseau ou du serveur lors du chargement des données.');
+                }
+                return res.json();
+            })
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = ''; // Clear existing rows
+                // Sort data by date in descending order
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="16" style="text-align: center;">Aucune donnée trouvée.</td>`;
+                    tbody.appendChild(noDataRow);
+                    return;
+                }
+
+                data.forEach(e => {
+                    const tbVal = typeof e.tb === 'number' ? e.tb.toFixed(2) : '';
+                    const tareVal = typeof e.tare === 'number' ? e.tare.toFixed(2) : '';
+                    const netCosumarVal = typeof e.netCosumar === 'number' ? e.netCosumar.toFixed(2) : '';
+
+                    // Calculate NET CMG and ECART on the client-side for display
+                    const netCmg = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
+                    const ecart = (parseFloat(netCmg) - parseFloat(e.netCosumar)).toFixed(2);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                            <td data-label="Date">${e.date || ''}</td>
+                            <td data-label="H entrée">${e.hEntree || ''}</td>
+                            <td data-label="H sortie">${e.hSortie || ''}</td>
+                            <td data-label="Transporteur">${e.transporteur || ''}</td>
+                            <td data-label="N° BL">${e.numeroBL || ''}</td>
+                            <td data-label="IMMAT">${e.immat || ''}</td>
+                            <td data-label="TB">${tbVal}</td>
+                            <td data-label="TARE">${tareVal}</td>
+                            <td data-label="NET CMG">${netCmg}</td>
+                            <td data-label="Poste">${e.poste ?? ''}</td>
+                            <td data-label="Net COSUMAR">${netCosumarVal}</td>
+                            <td data-label="ECART">${ecart}</td>
+                            <td data-label="Lieu chargement">${e.lieuChargement || ''}</td>
+                            <td data-label="Lieu déchargement">${e.lieuDechargement || ''}</td>
+                            <td data-label="Observation">${e.observation || ''}</td>
+                            <td class="table-actions">
+                                <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
+                                <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
+                            </td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des données:", error);
+                showMessage(`❌ ${error.message}`, 'error');
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+            });
+    }
+
+    document.getElementById('chauxViveForm').onsubmit = function(e) {
         e.preventDefault();
 
-        const tb = parseFloat(document.getElementById('tb').value);
-        const tare = parseFloat(document.getElementById('tare').value);
-        const netCMG = tb - tare;
-        const netCosumar = parseFloat(document.getElementById('netCosumar').value);
-        const ecart = netCMG - netCosumar;
+        const tbValue = parseFloat(document.getElementById('tb').value);
+        const tareValue = parseFloat(document.getElementById('tare').value);
+        const netCosumarValue = parseFloat(document.getElementById('netCosumar').value);
 
-        const data = {
-            id: currentId ?? "",
+        const netCmgValue = (tbValue - tareValue).toFixed(2); // Calculate NET CMG
+        const ecartValue = (netCmgValue - netCosumarValue).toFixed(2); // Calculate ECART
+
+        const entry = {
             date: document.getElementById('date').value,
             hEntree: document.getElementById('hEntree').value,
             hSortie: document.getElementById('hSortie').value,
             transporteur: document.getElementById('transporteur').value,
             numeroBL: document.getElementById('numeroBL').value,
-            immatricule: document.getElementById('immatricule').value,
-            tb: tb,
-            tare: tare,
+            immat: document.getElementById('immat').value,
+            tb: tbValue,
+            tare: tareValue,
+            netCmg: parseFloat(netCmgValue), // Include NET CMG
             poste: parseInt(document.getElementById('poste').value),
-            netCosumar: netCosumar,
-            ecart: ecart,
+            netCosumar: netCosumarValue,
+            ecart: parseFloat(ecartValue), // Include ECART
             lieuChargement: document.getElementById('lieuChargement').value,
             lieuDechargement: document.getElementById('lieuDechargement').value,
             observation: document.getElementById('observation').value
         };
 
-        const url = currentId ? '/chauxVive/update' : '/chauxVive/add';
+        const method = currentEditId ? 'PUT' : 'POST';
+        const url = currentEditId ? `/api/chaux-vive/${currentEditId}` : '/api/chaux-vive';
 
         fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(Object.entries(data)).toString()
+            method: method,
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(entry)
         })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        alert("❌ Doublon détecté !");
-                    } else {
-                        alert("❌ Une erreur est survenue.");
-                    }
-                    throw new Error("Erreur HTTP");
+            .then(async res => {
+                if (!res.ok) {
+                    let msg = (await res.text());
+                    if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
+                    throw new Error(msg || 'Erreur inconnue.');
                 }
-                return response.text();
+                return res.json();
             })
             .then(() => {
-                alert('✅ Opération réussie');
-                document.getElementById('chaux-form').reset();
-                currentId = null;
+                showMessage('✅ Opération réussie.', 'success');
+                this.reset();
+                currentEditId = null;
+                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
+                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
+                // Reset button styles to default
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.style.backgroundColor = 'var(--primary-color)';
+                submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+                submitBtn.onmouseover = null;
+                submitBtn.onmouseout = null;
                 loadTable();
             })
-            .catch(err => console.error(err));
-    });
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        const currentlyCollapsed = sidebar.classList.contains('collapsed');
-        localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
+            .catch(err => {
+                console.error("Form submission error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
+    };
 
-        // Toggle icon direction
-        if (currentlyCollapsed) {
+    function editRow(item) {
+        currentEditId = item.id;
+        document.getElementById('date').value = item.date || '';
+        document.getElementById('hEntree').value = item.hEntree || '';
+        document.getElementById('hSortie').value = item.hSortie || '';
+        document.getElementById('transporteur').value = item.transporteur || '';
+        document.getElementById('numeroBL').value = item.numeroBL || '';
+        document.getElementById('immat').value = item.immat || '';
+        document.getElementById('tb').value = item.tb ?? '';
+        document.getElementById('tare').value = item.tare ?? '';
+        document.getElementById('poste').value = item.poste ?? '';
+        document.getElementById('netCosumar').value = item.netCosumar ?? '';
+        document.getElementById('lieuChargement').value = item.lieuChargement || '';
+        document.getElementById('lieuDechargement').value = item.lieuDechargement || '';
+        document.getElementById('observation').value = item.observation || '';
+
+        // Change form title and button for edit mode
+        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+        submitBtn.style.backgroundColor = '#4A90E2'; // Blue color for update
+        submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+        submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#357abd';
+        submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#4A90E2';
+
+        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteRow(id) {
+        if(!confirm('❗ Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action est irréversible.')) {
+            return;
+        }
+        fetch(`/api/chaux-vive/${id}`, {method:'DELETE'})
+            .then(async res => {
+                if (!res.ok) {
+                    throw new Error((await res.text()) || 'Erreur de suppression.');
+                }
+                showMessage('✅ Entrée supprimée avec succès.', 'success');
+                loadTable();
+            })
+            .catch(err => {
+                console.error("Delete error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
+    }
+
+    function exportExcel() {
+        window.open('/api/chaux-vive/export', '_blank');
+    }
+
+    // Sidebar Toggle JavaScript - Reused logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const toggleIcon = sidebarToggle.querySelector('.fas');
+
+        // Check localStorage for the last sidebar state
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+        // Apply the stored state on page load
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
             toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
         } else {
+            sidebar.classList.remove('collapsed');
             toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
         }
+
+        // Add event listener for the toggle button
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            const currentlyCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
+
+            // Toggle icon direction
+            if (currentlyCollapsed) {
+                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
+        });
+
+        // Initial load of table data when the DOM is ready
+        loadTable();
     });
-    function loadTable() {
-        fetch('/api/chauxVive')
-            .then(res => res.json())
-            .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = '';
-                let total = 0;
-
-                if (!Array.isArray(data)) return;
-
-                data.forEach(item => {
-                    const netCMG = item.tb - item.tare;
-                    const ecart = netCMG - item.netCosumar;
-                    total += netCMG;
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                    <td>${item.date}</td>
-                    <td>${item.hentree ? item.hentree.substring(0, 5) : "—"}</td>
-                    <td>${item.hsortie ? item.hsortie.substring(0, 5) : "—"}</td>
-                    <td>${item.transporteur}</td>
-                    <td>${item.numeroBL}</td>
-                    <td>${item.immatricule}</td>
-                    <td>${+item.tb.toFixed(3)}</td>
-                    <td>${+item.tare.toFixed(3)}</td>
-                    <td>${+netCMG.toFixed(3)}</td>
-                    <td>${item.poste}</td>
-                    <td>${+item.netCosumar.toFixed(3)}</td>
-                    <td>${+ecart.toFixed(3)}</td>
-                    <td>${item.lieuChargement}</td>
-                    <td>${item.lieuDechargement}</td>
-                    <td>${item.observation}</td>
-                    <td>
-                        <button onclick="editRecord(${item.id})">✏️</button>
-                        <button onclick="deleteRecord(${item.id})">🗑️</button>
-                    </td>
-                `;
-                    tbody.appendChild(row);
-                });
-
-                const totalRow = document.createElement('tr');
-                totalRow.innerHTML = `
-                <td colspan="8" style="background: yellow; font-weight: bold;">TOTAL</td>
-                <td style="background: yellow; font-weight: bold;">${+total.toFixed(3)}</td>
-                <td colspan="6"></td>
-            `;
-                tbody.appendChild(totalRow);
-            });
-    }
-
-
-
-
-    function editRecord(id) {
-        fetch(`/api/chauxVive/${id}`)
-            .then(res => res.json())
-            .then(item => {
-                currentId = item.id;
-                document.getElementById('date').value = item.date;
-
-                // ✅ Format pour champs <input type="time">
-                const hEntree = item.hentree?.substring(0, 5) || '';
-                const hSortie = item.hsortie?.substring(0, 5) || '';
-
-
-                document.getElementById('hEntree').value = hEntree;
-                document.getElementById('hSortie').value = hSortie;
-
-                document.getElementById('transporteur').value = item.transporteur;
-                document.getElementById('numeroBL').value = item.numeroBL;
-                document.getElementById('immatricule').value = item.immatricule;
-                document.getElementById('tb').value = item.tb;
-                document.getElementById('tare').value = item.tare;
-                document.getElementById('poste').value = item.poste;
-                document.getElementById('netCosumar').value = item.netCosumar;
-                document.getElementById('lieuChargement').value = item.lieuChargement;
-                document.getElementById('lieuDechargement').value = item.lieuDechargement;
-                document.getElementById('observation').value = item.observation;
-            });
-    }
-
-    function deleteRecord(id) {
-        if (confirm("❗ Supprimer cette ligne ?")) {
-            fetch(`/chauxVive/delete/${id}`, { method: 'GET' }).then(() => loadTable());
-        }
-    }
-
-    function exporterExcel() {
-        window.location.href = '/chauxVive/export';
-    }
-    window.onload = loadTable;
 </script>
-
 </body>
 </html>

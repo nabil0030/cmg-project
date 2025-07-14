@@ -63,7 +63,8 @@ public class WebSecurityConfig {
                                 "/api/exp-zinc-safi/**",
                                 "/api/exp-cuivre-oncf/**",
                                 "/api/exp-cuivre-nord/**",
-                                "/api/exp-pb-cmg-onf/**"
+                                "/api/exp-pb-cmg-onf/**",
+                                "/api/chaux-vive/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,85 +1,111 @@
 package com.cmg.back.controller;
 
 import com.cmg.back.model.ChauxVive;
-import com.cmg.back.repository.ChauxViveRepository;
-import com.cmg.back.service.ChauxViveExportService;
+import com.cmg.back.service.ChauxViveService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-@Controller
+@RestController
+@RequestMapping("/api/chaux-vive")
+@CrossOrigin(origins = "*")
 public class ChauxViveController {
 
     @Autowired
-    private ChauxViveRepository repository;
+    private ChauxViveService service;
 
-    @Autowired
-    private ChauxViveExportService exportService;
-
-    // 1. ✅ Affichage de la page HTML
-    @GetMapping("/chauxVive")
-    public String afficherPage() {
-        return "chauxVive";
-    }
-
-    // 2. ✅ API - Obtenir tous les enregistrements
-    @GetMapping("/api/chauxVive")
-    @ResponseBody
+    @GetMapping
     public List<ChauxVive> getAll() {
-        return repository.findAll();
+        return service.findAll();
     }
 
-    // 3. ✅ API - Obtenir une ligne par ID
-    @GetMapping("/api/chauxVive/{id}")
-    @ResponseBody
-    public Optional<ChauxVive> getById(@PathVariable Long id) {
-        return repository.findById(id);
+    @PostMapping
+    public ChauxVive add(@RequestBody ChauxVive entry) {
+        return service.save(entry);
     }
 
-    // 4. ✅ API - Ajouter une entrée
-    @PostMapping("/chauxVive/add")
-    @ResponseBody
-    public String ajouter(ChauxVive chauxVive) {
-        chauxVive.setNetCmg(chauxVive.getTb() - chauxVive.getTare());
-        chauxVive.setEcart(chauxVive.getNetCmg() - chauxVive.getNetCosumar());
+    @PutMapping("/{id}")
+    public ChauxVive update(@PathVariable Long id, @RequestBody ChauxVive entry) {
+        return service.update(id, entry);
+    }
 
-        boolean exists = repository.isDuplicate(
-                chauxVive.getDate(), chauxVive.getHEntree(), chauxVive.getHSortie(),
-                chauxVive.getTransporteur(), chauxVive.getNumeroBL(), chauxVive.getImmatricule(),
-                chauxVive.getTb(), chauxVive.getTare(), chauxVive.getPoste(),
-                chauxVive.getLieuChargement(), chauxVive.getLieuDechargement()
-        );
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 
-        if (exists && chauxVive.getId() == null) {
-            throw new RuntimeException("Doublon détecté");
+    @GetMapping("/export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<ChauxVive> list = service.findAll();
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("CHAUX VIVE");
+        CellStyle decimalStyle = workbook.createCellStyle();
+        decimalStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00"));
+
+        // Header
+        Row header = sheet.createRow(0);
+        String[] columns = {"DATE", "H entrée", "H sortie", "Transporteur", "N° BL", "IMMAT", "TB", "TARE", "NET CMG", "Poste", "Net COSUMAR", "ECART", "Lieu de chargement", "Lieu de déchargement", "Observation"};
+        for (int i = 0; i < columns.length; i++) header.createCell(i).setCellValue(columns[i]);
+
+        int rowIdx = 1;
+        for (ChauxVive e : list) {
+            Row row = sheet.createRow(rowIdx++);
+            row.createCell(0).setCellValue(e.getDate() != null ? e.getDate().toString() : "");
+            row.createCell(1).setCellValue(e.getHEntree() != null ? e.getHEntree().toString() : "");
+            row.createCell(2).setCellValue(e.getHSortie() != null ? e.getHSortie().toString() : "");
+            row.createCell(3).setCellValue(e.getTransporteur());
+            row.createCell(4).setCellValue(e.getNumeroBL());
+            row.createCell(5).setCellValue(e.getImmat());
+
+            // Cellules numériques formatées
+            Cell cell6 = row.createCell(6); cell6.setCellValue(e.getTb() != null ? round2(e.getTb()) : 0.0); cell6.setCellStyle(decimalStyle);
+            Cell cell7 = row.createCell(7); cell7.setCellValue(e.getTare() != null ? round2(e.getTare()) : 0.0); cell7.setCellStyle(decimalStyle);
+            Cell cell8 = row.createCell(8); cell8.setCellValue(e.getNetCmg() != null ? round2(e.getNetCmg()) : 0.0); cell8.setCellStyle(decimalStyle);
+            row.createCell(9).setCellValue(e.getPoste() != null ? e.getPoste() : 0);
+            Cell cell10 = row.createCell(10); cell10.setCellValue(e.getNetCosumar() != null ? round2(e.getNetCosumar()) : 0.0); cell10.setCellStyle(decimalStyle);
+            Cell cell11 = row.createCell(11); cell11.setCellValue(e.getEcart() != null ? round2(e.getEcart()) : 0.0); cell11.setCellStyle(decimalStyle);
+
+            row.createCell(12).setCellValue(e.getLieuChargement());
+            row.createCell(13).setCellValue(e.getLieuDechargement());
+            row.createCell(14).setCellValue(e.getObservation());
+        }
+        for (int i = 0; i < columns.length; i++) sheet.autoSizeColumn(i);
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=chaux_vive.xlsx");
+        workbook.write(response.getOutputStream());
+        workbook.close();
+    }
+
+    private double round2(Double val) {
+        if(val == null) return 0.0;
+        return Math.round(val * 100.0) / 100.0;
+    }
+
+    @GetMapping("/compte")
+    public Map<String, Double> getComptes() {
+        List<ChauxVive> list = service.findAll();
+        double totalNetCmg = 0.0;
+        double totalNetCosumar = 0.0;
+        double totalEcart = 0.0;
+
+        for (ChauxVive c : list) {
+            totalNetCmg += c.getNetCmg() != null ? c.getNetCmg() : 0.0;
+            totalNetCosumar += c.getNetCosumar() != null ? c.getNetCosumar() : 0.0;
+            totalEcart += c.getEcart() != null ? c.getEcart() : 0.0;
         }
 
-        repository.save(chauxVive);
-        return "ok";
-    }
-
-    // 5. ✅ API - Modifier une entrée
-    @PostMapping("/chauxVive/update")
-    @ResponseBody
-    public String modifier(ChauxVive chauxVive) {
-        return ajouter(chauxVive); // même logique
-    }
-
-    // 6. ✅ API - Supprimer une entrée
-    @GetMapping("/chauxVive/delete/{id}")
-    @ResponseBody
-    public void supprimer(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
-
-    // 7. ✅ Export Excel
-    @GetMapping("/chauxVive/export")
-    public void exportExcel(HttpServletResponse response) throws IOException {
-        exportService.exportToExcel(response);
+        Map<String, Double> res = new HashMap<>();
+        res.put("totalNetCmg", round2(totalNetCmg));
+        res.put("totalNetCosumar", round2(totalNetCosumar));
+        res.put("totalEcart", round2(totalEcart));
+        return res;
     }
 }
