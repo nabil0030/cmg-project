@@ -32,12 +32,16 @@ public class WebSecurityConfig {
                                 "/index.html",
                                 "/cbulkArgentifere.html",
                                 "/chauxVive.html",
+                                "/expZincSafi.html",
                                 "/chauxViveLafarge.html",
                                 "/controle-bascule-hjds.html",
                                 "/controle-bascule-ka.html",
                                 "/dsClassique.html",
                                 "/dsNord.html",
                                 "/expZincOncf.html",
+                                "/expCuivreOncf.html",
+                                "/expCuivreNord.html",
+
 
                                 // Permitted API Endpoints
                                 "/api/cbulkargentifere/**",
@@ -50,7 +54,10 @@ public class WebSecurityConfig {
                                 "/api/ka/**",
                                 "/api/ds-classique/**",
                                 "/api/dsnord/**",
-                                "/api/expzinconcf/**"
+                                "/api/expzinconcf/**",
+                                "/api/exp-zinc-safi/**",
+                                "/api/exp-cuivre-oncf/**",
+                                "/api/exp-cuivre-nord/**"
                         ).permitAll()
                         // All other requests require authentication
                         .anyRequest().authenticated()

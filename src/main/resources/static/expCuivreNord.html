@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaux Vive - Enhanced</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <title>EXP C.CUIVRE NORD - Enhanced</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <style>
         /* --- Root Variables for a Modern Theme --- */
         :root {
@@ -28,7 +28,7 @@
             margin: 0;
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
             background-color: var(--bg-light);
-            display: flex;
+            display: flex; /* Use flexbox for sidebar and main content */
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -315,7 +315,7 @@
         }
 
         /* --- Form Styling --- */
-        #chaux-form {
+        #expCuivreNordForm {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -357,7 +357,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #chaux-form button[type="submit"] {
+        #expCuivreNordForm button[type="submit"] {
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -374,9 +374,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            grid-column: span 2; /* Adjust button span based on form grid */
         }
 
-        #chaux-form button[type="submit"]:hover {
+        #expCuivreNordForm button[type="submit"]:hover {
             background-color: #397BC7; /* Darker blue on hover */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
@@ -394,7 +395,7 @@
             width: 100%;
             border-collapse: separate; /* Allows border-radius on cells */
             border-spacing: 0; /* Remove default spacing */
-            min-width: 1200px; /* Ensure table doesn't get too squished for this data */
+            min-width: 1400px; /* Ensure table doesn't get too squished for this data */
         }
 
         th, td {
@@ -471,19 +472,35 @@
             background-color: #C0392B;
         }
 
-        .total-row {
-            background-color: #FFEB3B !important; /* Yellow for total row */
-            font-weight: 700;
-            color: var(--text-dark);
-            box-shadow: none !important; /* Remove lift/shadow from total row */
-            cursor: default !important;
-        }
-        .total-row:hover {
-            background-color: #FFEB3B !important;
-            transform: none !important;
-            box-shadow: none !important;
+        /* --- Alert Messages --- */
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.5s ease-out;
         }
 
+        .alert.success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+
+        .alert.error {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
@@ -658,10 +675,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #chaux-form {
+            #expCuivreNordForm {
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #chaux-form button[type="submit"] {
+            #expCuivreNordForm button[type="submit"] {
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -688,12 +705,14 @@
             <li class="nav-item"><i class="fas fa-home"></i><a href="index.html">Dashboard</a></li>
             <li class="nav-item"><i class="fas fa-truck-ramp-box"></i><a href="controle-bascule-hjds.html">C. Bascule HJ & DS</a></li>
             <li class="nav-item"><i class="fas fa-truck-front"></i><a href="dsClassique.html">DS Classique</a></li>
-            <li class="nav-item"><i class="fas fa-mountain"></i><a href="dsNord.html">DS NORD</a></li>
+            <li class="nav-item active"><i class="fas fa-mountain"></i><a href="dsNord.html">DS NORD</a></li>
             <li class="nav-item"><i class="fas fa-weight-scale"></i><a href="controle-bascule-ka.html">C. Bascule KA</a></li>
-            <li class="nav-item active"><i class="fas fa-fire"></i><a href="chauxVive.html">Chaux Vive</a></li>
+            <li class="nav-item"><i class="fas fa-fire"></i><a href="chauxVive.html">Chaux Vive</a></li>
             <li class="nav-item"><i class="fas fa-industry"></i><a href="chauxViveLafarge.html">Chaux Vive Lafarge</a></li>
             <li class="nav-item"><i class="fas fa-truck-field"></i><a href="cbulkArgentifere.html">C,BULK (Stuffing Lead)</a></li>
             <li class="nav-item"><i class="fas fa-train"></i><a href="expZincOncf.html">Exp Zinc ONCF</a></li>
+            <li class="nav-item"><i class="fas fa-box"></i><a href="expCuivreOncf.html">Exp C.CUIVRE ONCF</a></li>
+            <li class="nav-item active"><i class="fas fa-boxes-stacked"></i><a href="expCuivreNord.html">Exp C.CUIVRE NORD</a></li>
         </ul>
     </div>
     <div class="sidebar-footer">
@@ -702,98 +721,92 @@
 </div>
 
 <div class="main-content">
-    <h1 class="page-title">Chaux Vive</h1>
+    <h1 class="page-title">EXP C.CUIVRE NORD</h1>
 
     <div class="form-section">
         <div class="section-header">
             <h2>Ajouter ou Modifier une entrée</h2>
         </div>
-        <form id="chaux-form">
+        <form id="expCuivreNordForm" autocomplete="off">
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" id="date" required />
+                <input type="date" id="date" required>
             </div>
             <div class="form-group">
                 <label for="hEntree">Heure Entrée</label>
-                <input type="time" id="hEntree" required />
+                <input type="time" id="hEntree" required>
             </div>
             <div class="form-group">
                 <label for="hSortie">Heure Sortie</label>
-                <input type="time" id="hSortie" required />
+                <input type="time" id="hSortie" required>
             </div>
             <div class="form-group">
                 <label for="transporteur">Transporteur</label>
-                <select id="transporteur" required>
-                    <option value="">-- Transporteur --</option>
-                    <option value="SOSAMAC">SOSAMAC</option>
-                    <option value="GTC-CSL">GTC-CSL</option>
-                </select>
+                <input type="text" id="transporteur" placeholder="Nom du transporteur" required>
             </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required />
+                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required>
             </div>
             <div class="form-group">
-                <label for="immatricule">Immatricule</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required />
+                <label for="matricule">Immatricule</label>
+                <input type="text" id="matricule" placeholder="Immatriculation du Véhicule" required>
             </div>
             <div class="form-group">
                 <label for="tb">TB</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids TB" required />
+                <input type="number" id="tb" placeholder="Poids TB" step="0.01" required>
             </div>
             <div class="form-group">
                 <label for="tare">TARE</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids TARE" required />
+                <input type="number" id="tare" placeholder="Poids TARE" step="0.01" required>
             </div>
             <div class="form-group">
-                <label for="netCosumar">Net COSUMAR</label>
-                <input type="number" step="0.01" id="netCosumar" placeholder="Net COSUMAR" required />
+                <label for="numeroContenaire">N° CONTENAIRE</label>
+                <input type="text" id="numeroContenaire" placeholder="Numéro du contenaire" required>
             </div>
             <div class="form-group">
                 <label for="poste">Poste</label>
-                <select id="poste" required>
-                    <option value="">-- Poste --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <input type="number" id="poste" placeholder="Poste (1, 2 ou 3)" min="1" max="3" required>
             </div>
             <div class="form-group">
-                <label for="lieuChargement">Lieu Chargement</label>
-                <input type="text" id="lieuChargement" value="LAFARGE" required readonly />
+                <label for="lieuDeDechargement">Lieu de déchargement</label>
+                <input type="text" id="lieuDeDechargement" placeholder="Ex: Port de Safi" required>
             </div>
-            <div class="form-group">
-                <label for="lieuDechargement">Lieu Déchargement</label>
-                <select id="lieuDechargement" required>
-                    <option value="COSUMAR" selected>COSUMAR</option>
-                    <option value="LAVERIE CMG">LAVERIE CMG</option>
-                </select>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
+            <div class="form-group" style="grid-column: span 2;">
                 <label for="observation">Observation</label>
                 <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
             </div>
             <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit"><i class="fas fa-save"></i> Enregistrer</button>
+                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
             </div>
         </form>
     </div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique</h2>
+            <h2>Historique des Expéditions</h2>
             <div class="section-actions">
-                <button onclick="exporterExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th>
-                    <th>N° BL</th><th>Immatricule</th><th>TB</th><th>TARE</th><th>NET CMG</th>
-                    <th>Poste</th><th>Net COSUMAR</th><th>ÉCART</th>
-                    <th>Chargement</th><th>Déchargement</th><th>Observation</th><th>Actions</th>
+                    <th>Date</th>
+                    <th>H Entrée</th>
+                    <th>H Sortie</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>Immatricule</th>
+                    <th>TB</th>
+                    <th>TARE</th>
+                    <th>TN H</th>
+                    <th>N° Contenaire</th>
+                    <th>Poste</th>
+                    <th>Lieu de déchargement</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody id="data-body"></tbody>
@@ -801,167 +814,220 @@
         </div>
     </div>
 </div>
-
 <script>
-    let currentId = null;
+    let currentEditId = null;
 
-    document.getElementById('chaux-form').addEventListener('submit', function (e) {
+    // A utility function to show messages, consistent with Chaux Vive
+    function showMessage(msg, type){
+        const div = document.createElement('div');
+        div.className = `alert ${type}`;
+        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        const mainContent = document.querySelector('.main-content');
+        // Insert after the page title or before the first section
+        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
+        setTimeout(()=> div.remove(), 4000);
+    }
+
+    function loadTable() {
+        fetch('/api/exp-cuivre-nord')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Erreur de réseau ou du serveur lors du chargement des données.');
+                }
+                return res.json();
+            })
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = ''; // Clear existing rows
+                // Sort data by date in descending order
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="14" style="text-align: center;">Aucune donnée trouvée.</td>`;
+                    tbody.appendChild(noDataRow);
+                    return;
+                }
+
+                data.forEach(e => {
+                    // Calculate TNH on the client-side for display, assuming it's TB - TARE
+                    const tnH = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                            <td>${e.date || ''}</td>
+                            <td>${e.hEntree || ''}</td>
+                            <td>${e.hSortie || ''}</td>
+                            <td>${e.transporteur || ''}</td>
+                            <td>${e.numeroBL || ''}</td>
+                            <td>${e.matricule || ''}</td>
+                            <td>${e.tb ?? ''}</td>
+                            <td>${e.tare ?? ''}</td>
+                            <td>${tnH}</td>
+                            <td>${e.numeroContenaire || ''}</td>
+                            <td>${e.poste ?? ''}</td>
+                            <td>${e.lieuDeDechargement || ''}</td>
+                            <td>${e.observation || ''}</td>
+                            <td class="table-actions">
+                                <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
+                                <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
+                            </td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des données:", error);
+                showMessage(`❌ ${error.message}`, 'error');
+                const tbody = document.getElementById('data-body');
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+            });
+    }
+
+    document.getElementById('expCuivreNordForm').onsubmit = function(e) {
         e.preventDefault();
 
-        const tb = parseFloat(document.getElementById('tb').value);
-        const tare = parseFloat(document.getElementById('tare').value);
-        const netCMG = tb - tare;
-        const netCosumar = parseFloat(document.getElementById('netCosumar').value);
-        const ecart = netCMG - netCosumar;
+        const tbValue = parseFloat(document.getElementById('tb').value);
+        const tareValue = parseFloat(document.getElementById('tare').value);
+        const tnHValue = (tbValue - tareValue).toFixed(2); // Calculate TNH
 
-        const data = {
-            id: currentId ?? "",
+        const entry = {
             date: document.getElementById('date').value,
             hEntree: document.getElementById('hEntree').value,
             hSortie: document.getElementById('hSortie').value,
             transporteur: document.getElementById('transporteur').value,
             numeroBL: document.getElementById('numeroBL').value,
-            immatricule: document.getElementById('immatricule').value,
-            tb: tb,
-            tare: tare,
+            matricule: document.getElementById('matricule').value,
+            tb: tbValue,
+            tare: tareValue,
+            tnH: parseFloat(tnHValue), // Include TNH in the data sent
+            numeroContenaire: document.getElementById('numeroContenaire').value,
             poste: parseInt(document.getElementById('poste').value),
-            netCosumar: netCosumar,
-            ecart: ecart,
-            lieuChargement: document.getElementById('lieuChargement').value,
-            lieuDechargement: document.getElementById('lieuDechargement').value,
+            lieuDeDechargement: document.getElementById('lieuDeDechargement').value,
             observation: document.getElementById('observation').value
         };
 
-        const url = currentId ? '/chauxVive/update' : '/chauxVive/add';
+        const method = currentEditId ? 'PUT' : 'POST';
+        const url = currentEditId ? `/api/exp-cuivre-nord/${currentEditId}` : '/api/exp-cuivre-nord';
 
         fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(Object.entries(data)).toString()
+            method: method,
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(entry)
         })
-            .then(response => {
-                if (!response.ok) {
-                    if (response.status === 409) {
-                        alert("❌ Doublon détecté !");
-                    } else {
-                        alert("❌ Une erreur est survenue.");
-                    }
-                    throw new Error("Erreur HTTP");
+            .then(async res => {
+                if (!res.ok) {
+                    let msg = (await res.text());
+                    if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
+                    throw new Error(msg || 'Erreur inconnue.');
                 }
-                return response.text();
+                return res.json();
             })
             .then(() => {
-                alert('✅ Opération réussie');
-                document.getElementById('chaux-form').reset();
-                currentId = null;
+                showMessage('✅ Opération réussie.', 'success');
+                this.reset();
+                currentEditId = null;
+                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
+                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
+                // Reset button styles to default
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.style.backgroundColor = 'var(--primary-color)';
+                submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+                submitBtn.onmouseover = null;
+                submitBtn.onmouseout = null;
                 loadTable();
             })
-            .catch(err => console.error(err));
-    });
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        const currentlyCollapsed = sidebar.classList.contains('collapsed');
-        localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
+            .catch(err => {
+                console.error("Form submission error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
+    };
 
-        // Toggle icon direction
-        if (currentlyCollapsed) {
+    function editRow(item) {
+        currentEditId = item.id;
+        document.getElementById('date').value = item.date || '';
+        document.getElementById('hEntree').value = item.hEntree || '';
+        document.getElementById('hSortie').value = item.hSortie || '';
+        document.getElementById('transporteur').value = item.transporteur || '';
+        document.getElementById('numeroBL').value = item.numeroBL || '';
+        document.getElementById('matricule').value = item.matricule || '';
+        document.getElementById('tb').value = item.tb ?? '';
+        document.getElementById('tare').value = item.tare ?? '';
+        document.getElementById('numeroContenaire').value = item.numeroContenaire || '';
+        document.getElementById('poste').value = item.poste ?? '';
+        document.getElementById('lieuDeDechargement').value = item.lieuDeDechargement || '';
+        document.getElementById('observation').value = item.observation || '';
+
+        // Change form title and button for edit mode
+        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+        submitBtn.style.backgroundColor = '#FFA500'; // Orange color for update
+        submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+        submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E69500';
+        submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#FFA500';
+
+        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteRow(id) {
+        if(!confirm('❗ Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action est irréversible.')) {
+            return;
+        }
+        fetch(`/api/exp-cuivre-nord/${id}`, {method:'DELETE'})
+            .then(async res => {
+                if (!res.ok) {
+                    throw new Error((await res.text()) || 'Erreur de suppression.');
+                }
+                showMessage('✅ Entrée supprimée avec succès.', 'success');
+                loadTable();
+            })
+            .catch(err => {
+                console.error("Delete error:", err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
+    }
+
+    function exportExcel() {
+        window.open('/api/exp-cuivre-nord/export', '_blank');
+    }
+
+    // Sidebar Toggle JavaScript - Reused from Chaux Vive
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const toggleIcon = sidebarToggle.querySelector('.fas');
+
+        // Check localStorage for the last sidebar state
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+        // Apply the stored state on page load
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
             toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
         } else {
+            // Ensure it's not collapsed and the icon is correct if not collapsed
+            sidebar.classList.remove('collapsed');
             toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
         }
+
+        // Add event listener for the toggle button
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            const currentlyCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
+
+            // Toggle icon direction
+            if (currentlyCollapsed) {
+                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
+        });
+
+        // Initial load of table data when the DOM is ready
+        loadTable();
     });
-    function loadTable() {
-        fetch('/api/chauxVive')
-            .then(res => res.json())
-            .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = '';
-                let total = 0;
-
-                if (!Array.isArray(data)) return;
-
-                data.forEach(item => {
-                    const netCMG = item.tb - item.tare;
-                    const ecart = netCMG - item.netCosumar;
-                    total += netCMG;
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                    <td>${item.date}</td>
-                    <td>${item.hentree ? item.hentree.substring(0, 5) : "—"}</td>
-                    <td>${item.hsortie ? item.hsortie.substring(0, 5) : "—"}</td>
-                    <td>${item.transporteur}</td>
-                    <td>${item.numeroBL}</td>
-                    <td>${item.immatricule}</td>
-                    <td>${+item.tb.toFixed(3)}</td>
-                    <td>${+item.tare.toFixed(3)}</td>
-                    <td>${+netCMG.toFixed(3)}</td>
-                    <td>${item.poste}</td>
-                    <td>${+item.netCosumar.toFixed(3)}</td>
-                    <td>${+ecart.toFixed(3)}</td>
-                    <td>${item.lieuChargement}</td>
-                    <td>${item.lieuDechargement}</td>
-                    <td>${item.observation}</td>
-                    <td>
-                        <button onclick="editRecord(${item.id})">✏️</button>
-                        <button onclick="deleteRecord(${item.id})">🗑️</button>
-                    </td>
-                `;
-                    tbody.appendChild(row);
-                });
-
-                const totalRow = document.createElement('tr');
-                totalRow.innerHTML = `
-                <td colspan="8" style="background: yellow; font-weight: bold;">TOTAL</td>
-                <td style="background: yellow; font-weight: bold;">${+total.toFixed(3)}</td>
-                <td colspan="6"></td>
-            `;
-                tbody.appendChild(totalRow);
-            });
-    }
-
-
-
-
-    function editRecord(id) {
-        fetch(`/api/chauxVive/${id}`)
-            .then(res => res.json())
-            .then(item => {
-                currentId = item.id;
-                document.getElementById('date').value = item.date;
-
-                // ✅ Format pour champs <input type="time">
-                const hEntree = item.hentree?.substring(0, 5) || '';
-                const hSortie = item.hsortie?.substring(0, 5) || '';
-
-
-                document.getElementById('hEntree').value = hEntree;
-                document.getElementById('hSortie').value = hSortie;
-
-                document.getElementById('transporteur').value = item.transporteur;
-                document.getElementById('numeroBL').value = item.numeroBL;
-                document.getElementById('immatricule').value = item.immatricule;
-                document.getElementById('tb').value = item.tb;
-                document.getElementById('tare').value = item.tare;
-                document.getElementById('poste').value = item.poste;
-                document.getElementById('netCosumar').value = item.netCosumar;
-                document.getElementById('lieuChargement').value = item.lieuChargement;
-                document.getElementById('lieuDechargement').value = item.lieuDechargement;
-                document.getElementById('observation').value = item.observation;
-            });
-    }
-
-    function deleteRecord(id) {
-        if (confirm("❗ Supprimer cette ligne ?")) {
-            fetch(`/chauxVive/delete/${id}`, { method: 'GET' }).then(() => loadTable());
-        }
-    }
-
-    function exporterExcel() {
-        window.location.href = '/chauxVive/export';
-    }
-    window.onload = loadTable;
 </script>
-
 </body>
 </html>
