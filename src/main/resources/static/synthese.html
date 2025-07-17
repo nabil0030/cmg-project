@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Synthèse Globale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif; /* Changed font to Arial for closer resemblance */
+            background-color: #e0e0e0; /* Lighter background to simulate Excel sheet area */
+            color: #333;
+            padding: 20px; /* Add some padding around the main content */
+        }
+        header {
+            background-color: #2c3e50; /* Dark blue for the main header, similar to the Excel sheet's main section headers */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border: 1px solid black; /* Add border to header */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow for depth */
+            position: relative; /* Added for positioning the button */
+        }
+        /* Style for the home button */
+        .home-button {
+            position: absolute; /* Position it relative to the header */
+            left: 20px; /* Adjust as needed */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for perfect vertical centering */
+            background-color: #5cb85c; /* Green, similar to a success/home color */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Remove underline for links */
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .home-button:hover {
+            background-color: #4cae4c; /* Darker green on hover */
+        }
+
+        .container {
+            padding: 0; /* Remove container padding as body has it */
+            max-width: 1200px; /* Increase max-width to accommodate wider table */
+            margin: auto;
+            background-color: white; /* Table background will be white, so container acts as a canvas */
+            border: 1px solid black; /* Main border for the entire content area */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .filters {
+            display: flex;
+            gap: 15px;
+            padding: 15px; /* Padding inside the filter section */
+            background-color: #f0f0f0; /* Light grey background for filters */
+            border-bottom: 1px solid black; /* Separator for filters */
+            flex-wrap: wrap;
+        }
+        .filters label {
+            font-weight: bold;
+        }
+        .filters input, .filters button {
+            padding: 8px;
+            font-size: 0.9em;
+            border: 1px solid #a0a0a0;
+            border-radius: 3px;
+        }
+        .filters button {
+            background-color: #3a8ee6; /* Blue button, slightly different shade */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .filters button:hover {
+            background-color: #2a7bd3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white; /* Ensure table background is white */
+            margin-top: 0; /* No margin as it's within container */
+        }
+        th, td {
+            border: 1px solid black; /* Solid black borders for all cells */
+            padding: 8px 12px; /* Slightly more horizontal padding */
+            text-align: left;
+            font-size: 0.9em;
+        }
+        th {
+            background-color: #4a77a8; /* Darker blue for headers, similar to Excel */
+            color: white;
+            font-weight: bold;
+            text-align: center; /* Center header text */
+            white-space: nowrap; /* Prevent wrapping for headers */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9; /* Very subtle alternating row color, less noticeable than original */
+        }
+        tbody td:nth-child(2) { /* Target the 'Total (NET)' column for right alignment */
+            text-align: right;
+        }
+
+        /* Specific styles for cumulative rows */
+        .cumul-mensuel-label {
+            background-color: #4a77a8; /* Dark blue for label, matching header */
+            color: white;
+            font-weight: bold;
+        }
+        .cumul-mensuel-value {
+            background-color: #6a9bd6; /* Lighter blue for value cells */
+            color: white;
+            font-weight: bold;
+            text-align: right; /* Ensure values are right-aligned */
+        }
+
+        .cumul-annuel-label {
+            background-color: #4a77a8; /* Dark blue for label */
+            color: white;
+            font-weight: bold;
+        }
+        .cumul-annuel-value {
+            background-color: #5cb85c; /* Green background for annual total */
+            color: white;
+            font-weight: bold;
+            text-align: right; /* Ensure values are right-aligned */
+        }
+
+        .total-global-label {
+            background-color: #8A2BE2; /* Purple/Magenta for global label */
+            color: white;
+            font-weight: bold;
+        }
+        .total-global-value {
+            background-color: #d9534f; /* Red background for global total value */
+            color: white;
+            font-weight: bold;
+            text-align: right; /* Ensure values are right-aligned */
+        }
+
+        /* Highlight for specific values (mimicking yellow cells if applicable) */
+        .highlight-yellow {
+            background-color: #ffeb3b; /* Yellow background */
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Cell for "janv.-25" style */
+        .month-header {
+            background-color: #c6efce; /* Light green */
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="home-button">Accueil</a>
+    Synthèse par Jour / Mois / Année
+</header>
+
+<div class="container">
+    <div class="filters">
+        <label>Date :
+            <input type="date" id="dateInput">
+        </label>
+        <button onclick="loadSyntheseJour()">Voir Jour</button>
+
+        <label>Mois :
+            <input type="month" id="monthInput">
+        </label>
+        <button onclick="loadSyntheseMois()">Voir Mois</button>
+
+        <label>Année :
+            <input type="number" id="yearInput" min="2000" value="2025">
+        </label>
+        <button onclick="loadSyntheseAnnee()">Voir Année</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th colspan="2" class="month-header">janv.-25</th>
+        </tr>
+        <tr>
+            <th>Table</th>
+            <th>Total (NET)</th>
+        </tr>
+        </thead>
+        <tbody id="syntheseTable">
+        </tbody>
+        <tfoot>
+        <tr class="cumul-mensuel">
+            <td class="cumul-mensuel-label">Cumul Mensuel</td>
+            <td class="cumul-mensuel-value" id="cumulMensuelTotal">0.00</td>
+        </tr>
+        <tr class="cumul-annuel">
+            <td class="cumul-annuel-label">Cumul Annuel</td>
+            <td class="cumul-annuel-value" id="cumulAnnuelTotal">0.00</td>
+        </tr>
+        <tr class="total-global">
+            <td class="total-global-label">GLOBAL</td>
+            <td class="total-global-value" id="globalTotal">0.00</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    const order = [
+        'dsClassique', 'dsNord', 'chauxViveLafarge', 'cbulkArgentifere',
+        'chauxVive', 'controleBasculeHJDS', 'controleBasculeKA',
+        'expCuivreNord', 'expCuivreOncf', 'expPbCmgOnf',
+        'expZincOncf', 'expZincSafi'
+    ];
+
+    function displaySynthese(data) {
+        console.log("Réponse synthèse :", data);
+        const tbody = document.getElementById("syntheseTable");
+        tbody.innerHTML = '';
+
+        order.forEach(key => {
+            const row = document.createElement("tr");
+            const value = (data[key] || 0).toFixed(2);
+            row.innerHTML = `<td>${key}</td><td>${value}</td>`;
+            tbody.appendChild(row);
+        });
+
+        document.getElementById("cumulMensuelTotal").textContent = (data.cumulMensuel || 0).toFixed(2);
+        document.getElementById("cumulAnnuelTotal").textContent = (data.cumulAnnuel || 0).toFixed(2);
+        document.getElementById("globalTotal").textContent = (data.global || 0).toFixed(2);
+    }
+
+    function loadSyntheseJour() {
+        const date = document.getElementById("dateInput").value;
+        if (!date) return alert("Veuillez choisir une date !");
+        fetch(`/api/synthese-jour?jour=${date}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(displaySynthese)
+            .catch(err => {
+                console.error("Erreur lors du chargement de la synthèse du jour :", err);
+                alert("Erreur lors du chargement de la synthèse du jour : " + err.message);
+            });
+    }
+
+    function loadSyntheseMois() {
+        const mois = document.getElementById("monthInput").value;
+        if (!mois) return alert("Veuillez choisir un mois !");
+        fetch(`/api/synthese-mois?mois=${mois}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(displaySynthese)
+            .catch(err => {
+                console.error("Erreur lors du chargement de la synthèse du mois :", err);
+                alert("Erreur lors du chargement de la synthèse du mois : " + err.message);
+            });
+    }
+
+    function loadSyntheseAnnee() {
+        const annee = document.getElementById("yearInput").value;
+        if (!annee) return alert("Veuillez choisir une année !");
+        fetch(`/api/synthese-annuelle?annee=${annee}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(displaySynthese)
+            .catch(err => {
+                console.error("Erreur lors du chargement de la synthèse annuelle :", err);
+                alert("Erreur lors du chargement de la synthèse annuelle : " + err.message);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        displaySynthese({
+            dsClassique: 0, dsNord: 0, chauxViveLafarge: 0, cbulkArgentifere: 0,
+            chauxVive: 0, controleBasculeHJDS: 0, controleBasculeKA: 0,
+            expCuivreNord: 0, expCuivreOncf: 0, expPbCmgOnf: 0,
+            expZincOncf: 0, expZincSafi: 0,
+            cumulMensuel: 0,
+            cumulAnnuel: 0,
+            global: 0
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -38,4 +38,16 @@ public interface DsClassiqueRepository extends JpaRepository<DsClassique, Long> 
             @Param("lieuDeDecharge") String lieuDeDecharge,
             @Param("observation") String observation
     );
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsClassique e WHERE e.date = :jour")
+    double sumJour(@Param("jour") LocalDate jour);
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsClassique e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumForMonth(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsClassique e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+
+
+
+
+
+
 }

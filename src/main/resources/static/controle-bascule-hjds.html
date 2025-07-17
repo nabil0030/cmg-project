@@ -885,15 +885,20 @@
                 }
 
                 data.forEach(item => {
-                    const ecart = (item.netCMG - item.netDS).toFixed(2);
+                    const netDs  = item.netDs != null ? item.netDs.toFixed(2) : '';
+                    const netCmg = item.netCmg != null ? item.netCmg.toFixed(2) : '';
+                    const ecart  = (item.netCmg != null && item.netDs != null)
+                        ? (item.netCmg - item.netDs).toFixed(2)
+                        : '';
+
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${formatDate(item.date)}</td>
                         <td>${item.transporteur}</td>
                         <td>${item.numeroBL}</td>
                         <td>${item.immatricule}</td>
-                        <td>${item.netDS}</td>
-                        <td>${item.netCMG}</td>
+                        <td>${netDs}</td>
+                        <td>${netCmg}</td>
                         <td>${ecart}</td>
                         <td>${item.observation || '-'}</td>
                         <td>
@@ -936,8 +941,8 @@
                 document.getElementById('transporteur').value = item.transporteur;
                 document.getElementById('numeroBL').value = item.numeroBL;
                 document.getElementById('immatricule').value = item.immatricule;
-                document.getElementById('netDS').value = item.netDS;
-                document.getElementById('netCMG').value = item.netCMG;
+                document.getElementById('netDS').value = item.netDs;
+                document.getElementById('netCMG').value = item.netCmg;
                 document.getElementById('observation').value = item.observation || '';
 
                 currentEditId = item.id;
@@ -966,8 +971,8 @@
             transporteur: document.getElementById('transporteur').value,
             numeroBL: document.getElementById('numeroBL').value,
             immatricule: document.getElementById('immatricule').value,
-            netDS: parseFloat(document.getElementById('netDS').value),
-            netCMG: parseFloat(document.getElementById('netCMG').value),
+            netDs: parseFloat(document.getElementById('netDS').value),
+            netCmg: parseFloat(document.getElementById('netCMG').value),
             observation: document.getElementById('observation').value
         };
 
@@ -1034,9 +1039,10 @@
             icon.classList.toggle('fa-chevron-right');
         });
 
-        loadTable();
+        loadTable(); // charger les données au démarrage
     });
 </script>
+
 
 </body>
 </html>

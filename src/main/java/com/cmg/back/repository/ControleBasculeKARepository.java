@@ -35,4 +35,18 @@ public interface ControleBasculeKARepository extends JpaRepository<ControleBascu
             @Param("poste") Integer poste,
             @Param("lieuDeDecharge") String lieuDeDecharge
     );
+   /* @Query("SELECT COALESCE(SUM(e.net), 0) FROM ControleBasculeKA e WHERE FUNCTION('to_char', e.date, 'YYYY-MM') = FUNCTION('to_char', :mois, 'YYYY-MM')")
+    double sumForMonth(@Param("mois") LocalDate mois);*/
+   @Query("SELECT COALESCE(SUM(e.net), 0) FROM ControleBasculeKA e WHERE e.date = :jour")
+   double sumJour(@Param("jour") LocalDate jour);
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM ControleBasculeKA e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumForMonth(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM ControleBasculeKA e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+
+
+
+
+
+
 }

@@ -39,4 +39,14 @@ public interface ExpPbCmgOnfRepository extends JpaRepository<ExpPbCmgOnf, Long> 
             @Param("lieuDeDechargement") String lieuDeDechargement,
             @Param("observation") String observation
     );
+    @Query("SELECT COALESCE(SUM(e.tnH), 0) FROM ExpPbCmgOnf e WHERE e.date = :jour")
+    double sumJour(@Param("jour") LocalDate jour);
+    @Query("SELECT COALESCE(SUM(e.tnH), 0) FROM ExpPbCmgOnf e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumForMonth(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+    @Query("SELECT COALESCE(SUM(e.tnH), 0) FROM ExpPbCmgOnf e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+
+
+
+
 }

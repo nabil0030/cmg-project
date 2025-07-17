@@ -1,4 +1,4 @@
-package com.cmg.back.export; // ✅ CORRIGÉ
+package com.cmg.back.export;
 
 import com.cmg.back.model.ControleBasculeHJDS;
 import com.cmg.back.repository.ControleBasculeHJDSRepository;
@@ -14,44 +14,44 @@ import java.util.List;
 @Service
 public class ControleBasculeHJDSExportService {
 
-    private final ControleBasculeHJDSRepository repository;
+    private final ControleBasculeHJDSRepository repo;
+    public ControleBasculeHJDSExportService(ControleBasculeHJDSRepository r){ this.repo = r; }
 
-    public ControleBasculeHJDSExportService(ControleBasculeHJDSRepository repository) {
-        this.repository = repository;
-    }
+    public void exportToExcel(HttpServletResponse resp) throws IOException {
+        List<ControleBasculeHJDS> list = repo.findAll();
 
-    public void exportToExcel(HttpServletResponse response) throws IOException {
-        List<ControleBasculeHJDS> list = repository.findAll();
+        Workbook wb = new XSSFWorkbook();
+        Sheet    sh = wb.createSheet("Bascule HJ‑DS");
 
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Bascule HJ DS");
+        /* en‑tête ---------------------------------------------------- */
+        Row head = sh.createRow(0);
+        String[] cols = {"Date","Transporteur","N° BL","Immatricule",
+                "Net DS","Net CMG","Écart","Observation"};
+        for(int i=0;i<cols.length;i++) head.createCell(i).setCellValue(cols[i]);
 
-        Row header = sheet.createRow(0);
-        String[] columns = {"Date", "Transporteur", "N° BL", "Immatricule", "Net DS", "Net CMG", "Écart", "Observation"};
-
-        for (int i = 0; i < columns.length; i++) {
-            header.createCell(i).setCellValue(columns[i]);
+        /* lignes ----------------------------------------------------- */
+        int row = 1;
+        for (ControleBasculeHJDS e : list) {
+            Row r = sh.createRow(row++);
+            r.createCell(0).setCellValue(e.getDate().toString());
+            r.createCell(1).setCellValue(e.getTransporteur());
+            r.createCell(2).setCellValue(e.getNumeroBL());
+            r.createCell(3).setCellValue(e.getImmatricule());
+            r.createCell(4).setCellValue(e.getNetDs());
+            r.createCell(5).setCellValue(e.getNetCmg());
+            r.createCell(6).setCellValue(e.getEcart());
+            r.createCell(7).setCellValue(e.getObservation());
         }
 
-        int rowIdx = 1;
-        for (ControleBasculeHJDS entry : list) {
-            Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue(entry.getDate().toString());
-            row.createCell(1).setCellValue(entry.getTransporteur());
-            row.createCell(2).setCellValue(entry.getNumeroBL());
-            row.createCell(3).setCellValue(entry.getImmatricule());
-            row.createCell(4).setCellValue(entry.getNetDS());
-            row.createCell(5).setCellValue(entry.getNetCMG());
-            row.createCell(6).setCellValue(entry.getEcart());
-            row.createCell(7).setCellValue(entry.getObservation());
+        /* sortie ----------------------------------------------------- */
+        resp.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        resp.setHeader("Content-Disposition",
+                "attachment; filename=controle_bascule_hjds.xlsx");
+
+        try (ServletOutputStream out = resp.getOutputStream()) {
+            wb.write(out);
         }
-
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=controle_bascule_hjds.xlsx");
-
-        ServletOutputStream out = response.getOutputStream();
-        workbook.write(out);
-        workbook.close();
-        out.close();
+        wb.close();
     }
 }

@@ -2,6 +2,7 @@ package com.cmg.back.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +16,7 @@ public class DsNordRecord {
     private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     @Column(name = "h_entree")

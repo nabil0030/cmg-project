@@ -2,16 +2,13 @@ package com.cmg.back.controller;
 
 import com.cmg.back.model.ControleBasculeHJDS;
 import com.cmg.back.repository.ControleBasculeHJDSRepository;
+import com.cmg.back.export.ControleBasculeHJDSExportService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.cmg.back.export.ControleBasculeHJDSExportService;
-
-
-
 
 import java.io.IOException;
 import java.util.List;
@@ -22,40 +19,49 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class ControleBasculeHJDSController {
 
-    private final ControleBasculeHJDSRepository repository;
+    @Autowired
+    private ControleBasculeHJDSRepository repository;
 
-    public ControleBasculeHJDSController(ControleBasculeHJDSRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private ControleBasculeHJDSExportService exportService;
 
-    // GET all - triés par date DESC
+    // ✅ Récupérer toutes les lignes triées par date décroissante
     @GetMapping
     public List<ControleBasculeHJDS> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "date"));
     }
 
-    // GET by ID
+    // ✅ Récupérer une ligne par ID
     @GetMapping("/{id}")
     public ResponseEntity<ControleBasculeHJDS> getById(@PathVariable Long id) {
         Optional<ControleBasculeHJDS> record = repository.findById(id);
         return record.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // POST (ajout) avec vérification duplicata
+    // ✅ Ajouter une ligne (avec détection de duplicata)
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ControleBasculeHJDS record) {
-        if (repository.existsByDateAndTransporteurAndNumeroBLAndImmatriculeAndNetDSAndNetCMG(
-                record.getDate(), record.getTransporteur(), record.getNumeroBL(),
-                record.getImmatricule(), record.getNetDS(), record.getNetCMG())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicata détecté");
+        // Calcul automatique du champ écart
+        record.setEcart(record.getNetCmg() - record.getNetDs());
+
+        boolean exists = repository.existsByDateAndTransporteurAndNumeroBLAndImmatriculeAndNetDsAndNetCmg(
+                record.getDate(),
+                record.getTransporteur(),
+                record.getNumeroBL(),
+                record.getImmatricule(),
+                record.getNetDs(),
+                record.getNetCmg()
+        );
+
+        if (exists) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Doublon détecté");
         }
 
-        record.setEcart(record.getNetCMG() - record.getNetDS());
         repository.save(record);
         return ResponseEntity.ok("Ajouté");
     }
 
-    // PUT (modifier)
+    // ✅ Modifier une ligne
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ControleBasculeHJDS updated) {
         return repository.findById(id).map(record -> {
@@ -63,16 +69,17 @@ public class ControleBasculeHJDSController {
             record.setTransporteur(updated.getTransporteur());
             record.setNumeroBL(updated.getNumeroBL());
             record.setImmatricule(updated.getImmatricule());
-            record.setNetDS(updated.getNetDS());
-            record.setNetCMG(updated.getNetCMG());
+            record.setNetDs(updated.getNetDs());
+            record.setNetCmg(updated.getNetCmg());
             record.setObservation(updated.getObservation());
-            record.setEcart(updated.getNetCMG() - updated.getNetDS());
+            record.setEcart(updated.getNetCmg() - updated.getNetDs());
+
             repository.save(record);
             return ResponseEntity.ok("Modifié");
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // DELETE
+    // ✅ Supprimer une ligne
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         if (repository.existsById(id)) {
@@ -82,12 +89,10 @@ public class ControleBasculeHJDSController {
             return ResponseEntity.notFound().build();
         }
     }
-    @Autowired
-    private com.cmg.back.export.ControleBasculeHJDSExportService exportService;
 
+    // ✅ Exporter en Excel
     @GetMapping("/export")
-    public void export(HttpServletResponse response) throws IOException {
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         exportService.exportToExcel(response);
     }
-
 }

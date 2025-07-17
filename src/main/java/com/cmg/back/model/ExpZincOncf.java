@@ -1,10 +1,13 @@
 package com.cmg.back.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -16,8 +19,9 @@ public class ExpZincOncf {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String date;
+    private LocalDate date;
 
     @DateTimeFormat(pattern = "HH:mm")
 

@@ -41,4 +41,14 @@ public interface ChauxViveRepository extends JpaRepository<ChauxVive, Long> {
             @Param("lieuDechargement") String lieuDechargement,
             @Param("observation") String observation
     );
+    @Query("SELECT COALESCE(SUM(e.netCmg), 0) FROM ChauxVive e WHERE e.date = :jour")
+    double sumJour(@Param("jour") LocalDate jour);
+    @Query("SELECT COALESCE(SUM(e.netCmg), 0) FROM ChauxVive e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumForMonth(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+    @Query("SELECT COALESCE(SUM(e.netCmg), 0) FROM ChauxVive e WHERE e.date >= :debut AND e.date <= :fin")
+    double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+
+
+
+
 }
