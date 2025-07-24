@@ -1,691 +1,632 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Rapport Activités Hajjar</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@1,700&family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <style>
-        /* --- Base Styles --- */
-        body {
-            font-family: 'Arial', sans-serif; /* Default font for most text */
-            background-color: #F0F0F0; /* Light gray background from image */
-            padding: 20px;
-            margin: 0;
-            box-sizing: border-box;
-            color: #000; /* Default text color */
+        :root {
+            --primary-blue: #007bff;
+            --primary-dark-blue: #0056b3;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --border-color: #dee2e6;
+            --text-color: #343a40;
+            --header-bg: #ffffff;
+            --caption-tv: #e6ffe6; /* Light green */
+            --caption-chaux: #e6f7ff; /* Light blue */
+            --caption-expeditions: #fff0e6; /* Light orange */
+            --global-row-bg: #ffe0b3; /* Softer orange */
         }
 
-        /* --- Report Header --- */
-        .report-header-container {
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-gray);
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Times New Roman', serif; /* Changed font family */
+            font-style: italic; /* Added italic style */
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column; /* Stack on smaller screens */
+            justify-content: center; /* Center horizontally */
+            align-items: center;
+            background: var(--header-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center; /* Center text inside header */
+        }
+
+        .header #report-date {
+            font-weight: bold;
+            background: #ffeeba; /* Softer yellow */
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ffcd3a;
+            margin-bottom: 15px; /* Space between date and title */
+        }
+
+        @media (min-width: 768px) {
+            .header {
+                flex-direction: row; /* Side-by-side on larger screens */
+                justify-content: space-between;
+            }
+            .header #report-date {
+                margin-bottom: 0;
+            }
+        }
+
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .controls-container {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .date-input {
+            text-align: center;
+        }
+
+        .date-input label {
+            font-size: 16px;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .date-input input[type="date"] {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .date-input input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            display: table;
+        }
+
+        .table-container {
+            position: relative;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-header-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #000; /* Border around the entire header block */
-            background-color: #FFF; /* White background for the header container */
-            padding: 5px 10px; /* Padding inside the header block */
-            margin-bottom: 20px; /* Space below header */
+            padding: 15px 20px;
+            background-color: var(--medium-gray);
+            border-bottom: 1px solid var(--border-color);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
-        .report-header-date {
-            font-family: 'Arial', sans-serif;
-            font-size: 16px;
-            font-weight: 700; /* Bold */
-            color: #E60000; /* Red color from image */
-            padding: 5px 10px;
-            border: 1px solid #000; /* Border around date */
-            background-color: #FFFF99; /* Light yellow background from image */
+        .table-header-controls h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
         }
 
-        h1.report-title {
-            font-family: 'Times New Roman', serif; /* Font from image */
-            font-style: italic;
-            font-size: 24px;
-            font-weight: 700; /* Bold */
-            color: #000;
-            margin: 0 20px; /* Space between date/ref and title */
-            text-align: center;
-        }
-
-        .report-ref {
-            font-family: 'Arial', sans-serif;
+        .table-header-controls .graph-toggle-btn {
+            padding: 8px 15px;
             font-size: 14px;
-            color: #000;
-            padding: 5px 10px;
-            border: 1px solid #000; /* Border around ref */
-            background-color: #CCFFCC; /* Light green background from image */
-            white-space: nowrap; /* Prevent wrapping */
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        /* --- Date Selector Container --- */
-        .date-container {
+        .table-header-controls .graph-toggle-btn.active {
+            background: #dc3545;
+        }
+
+        .table-header-controls .graph-toggle-btn:hover {
+            background: #218838;
+        }
+        .table-header-controls .graph-toggle-btn.active:hover {
+            background: #c82333;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
             text-align: center;
-            margin-bottom: 20px; /* Space below date selector */
-            font-size: 16px;
-            color: #333;
+            font-size: 14px;
         }
 
-        .date-container label {
-            margin-right: 10px;
-        }
-
-        .date-container input[type="date"] {
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fff;
-        }
-
-        /* --- Table General Styles --- */
-        table {
-            width: 100%;
-            border-collapse: collapse; /* Ensure borders meet */
-            margin-bottom: 30px; /* Space between tables/sections */
-            background-color: #fff; /* White background for tables */
-            border: 1px solid #000; /* Main border around each table */
-        }
-
-        /* --- Table Caption (Section Title) --- */
-        .section-title {
-            font-family: 'Arial', sans-serif;
-            font-weight: 700; /* Bold */
-            font-size: 16px;
-            color: #000; /* Black text for section titles */
-            padding: 8px 10px;
-            text-align: left; /* Align text to left as in image */
-            border: 1px solid #000; /* Border around caption */
-            border-bottom: none; /* No bottom border as it connects to the table header */
-        }
-
-        /* Specific section background colors */
-        .section-color-arrivages-tv { background-color: #CCFFCC; } /* Light Green */
-        .section-color-arrivages-chaux { background-color: #CCFFFF; } /* Light Blue/Cyan */
-        .section-color-expeditions-cc { background-color: #FFCC99; } /* Light Orange */
-        .section-color-default { background-color: #F0F0F0; } /* Default light gray if no specific match */
-
-
-        /* --- Table Headers (TH) --- */
         th {
-            background-color: #E0E0E0; /* Gray background for header row */
-            font-weight: 700; /* Bold */
-            color: #000;
-            border: 1px solid #000; /* Black borders for cells */
-            padding: 6px 8px;
-            text-align: center;
-            font-size: 14px;
-            white-space: nowrap; /* Prevent wrapping */
+            background-color: var(--medium-gray);
+            font-weight: 600;
+            color: var(--dark-gray);
+            text-transform: uppercase;
         }
 
-        /* Specific Header for "Expéditions CC" table */
-        .expeditions-cc-th th {
-            background-color: #E0E0E0; /* Same as other headers */
+        td.designation {
+            text-align: left;
+            font-weight: 500;
+            color: var(--primary-blue);
         }
 
+        .section-arrivages-tv .table-header-controls { background-color: var(--caption-tv); }
+        .section-arrivages-chaux .table-header-controls { background-color: var(--caption-chaux); }
+        .section-expeditions-cc .table-header-controls { background-color: var(--caption-expeditions); }
 
-        /* --- Table Data Cells (TD) --- */
-        td {
-            border: 1px solid #000; /* Black borders for cells */
-            padding: 4px 6px; /* Slightly less padding for data cells */
-            text-align: center;
-            font-size: 12px; /* Smaller font for data */
-            color: #000;
-            white-space: nowrap; /* Prevent wrapping in data cells */
+        table tbody tr:last-child {
+            background-color: var(--global-row-bg);
+            font-weight: bold;
+            color: var(--text-color);
         }
 
-        /* Alignment for specific columns */
-        td.designation-cell {
-            text-align: left; /* Left align for Designation */
-            padding-left: 10px; /* Indent */
-        }
-
-        td.numeric-cell {
-            text-align: right; /* Right align for numbers */
-            padding-right: 10px; /* Indent */
-        }
-
-        /* Specific background colors for designation cells, if they are blank in the image */
-        td.empty-cell-light-yellow {
-            background-color: #FFFFCC; /* Light yellow background for empty cells */
-        }
-        td.empty-cell-light-orange {
-            background-color: #FFE0B2; /* Slightly darker orange for some empty cells */
-        }
-
-
-        /* --- Specific Row Styles --- */
-        .ligne-th {
-            background-color: #E0E0E0; /* Gray background for "TH" rows */
-            font-weight: 400; /* Normal weight, not bold for "TH" text */
-        }
-        .ligne-th td {
-            font-size: 12px; /* Font size for TH data cells */
-        }
-
-
-        .ligne-global {
-            background-color: #FFCC99; /* Light orange background for "Global" rows */
-            font-weight: 700; /* Bold for "Global" text */
-            color: #000;
-        }
-
-        /* --- Specific Cell Styling based on Image --- */
-
-        /* P1, P2, P3 cells for Arrivages TV - specific colors from image */
-        .arrivages-tv-data td:nth-child(2), /* P1 */
-        .arrivages-tv-data td:nth-child(3), /* P2 */
-        .arrivages-tv-data td:nth-child(4) /* P3 */ {
-            /* No specific background color for these in the image unless they are TH/Global */
-        }
-
-        /* "U" column with thick border on the right */
-        td.col-u-border {
-            border-right: 2px solid #FF9900 !important; /* Thicker orange border */
-        }
-
-        /* Total values (Jour, Mois, Année) */
-        td.total-value {
-            color: #E60000; /* Red color for totals */
-            font-weight: 700; /* Bold */
-        }
-
-        /* Poste values - darker gradient */
-        .poste-grade {
-            font-weight: 700; /* Bold as in image */
-            /* Color will be set by JS with getPosteGradientColor */
-        }
-
-        /* Specific background colors for "Arrivages Jour", "Cumul Arrivages Mois", "Cumul Arrivages Année" */
-        td:nth-child(7), /* Jour */
-        td:nth-child(8), /* Cumul Mois */
-        td:nth-child(9) { /* Cumul Année */
-            background-color: #FFFFCC; /* Light yellow for these columns */
-        }
-
-        /* Specific background colors for "Expédié Jour", "Cumul Expédié Mois", "Cumul Expédié Année" */
-        .expeditions-cc-data td:nth-child(6), /* Jour */
-        .expeditions-cc-data td:nth-child(7), /* Cumul Mois */
-        .expeditions-cc-data td:nth-child(8) { /* Cumul Année */
-            background-color: #FFCC99; /* Light orange for these columns */
-        }
-
-
-        /* Empty cells for P1, P2, P3 in Expeditions CC section */
-        .expeditions-cc-data td:nth-child(2), /* P1 */
-        .expeditions-cc-data td:nth-child(3), /* P2 */
-        .expeditions-cc-data td:nth-child(4) { /* P3 */
-            background-color: #FFFFCC; /* Light yellow for empty P cells in Expeditions CC */
-        }
-
-
-        /* Specific styling for the 'C Bulk (STUFFING LEAD)' row */
-        .row-c-bulk {
-            background-color: #FFFF99; /* Light yellow for this specific row */
-        }
-
-        /* Specific styling for designations */
-        .designation-ds { color: #E60000; font-weight: 700; } /* DS - red, bold */
-        .designation-ds-nord { color: #0000FF; font-weight: 700; } /* DS Nord - blue, bold */
-        .designation-ds-nord-polymetallique { color: #008000; font-weight: 700; } /* DS Nord Polymetallique - green, bold */
-        .designation-ds-nord-tas { color: #FF00FF; font-weight: 700; } /* DS Nord TAS - magenta, bold */
-        .designation-tv-carbomin { color: #800080; font-weight: 700; } /* TV Carbomin - purple, bold */
-        .designation-ka { color: #FF6600; font-weight: 700; } /* KA - orange, bold */
-        .designation-chaux-lafarge { color: #0000FF; font-weight: 700; } /* Chaux Lafarge - blue, bold */
-        .designation-chaux-cosumar { color: #27AE60; font-weight: 700; } /* Chaux Cosumar - green, bold */
-        .designation-scorie-blanche { color: #808080; font-weight: 700; } /* Scorie Blanche - gray, bold */
-        .designation-zn-tc-oncf { color: #E60000; font-weight: 700; } /* Zn TC ONCF - red, bold */
-        .designation-zn-vrac { color: #008000; font-weight: 700; } /* Zn Vrac p safi - green, bold */
-        .designation-c-bulk { color: #FF00FF; font-weight: 700; } /* C Bulk - magenta, bold */
-        .designation-pb-oncf { color: #800080; font-weight: 700; } /* Pb ONCF - purple, bold */
-        .designation-pb-port-casa { color: #FF6600; font-weight: 700; } /* Pb Port casa - orange, bold */
-        .designation-cu-oncf { color: #2980B9; font-weight: 700; } /* Cu ONCF - light blue, bold */
-        .designation-cu-nord-oncf { color: #1abc9c; font-weight: 700; } /* Cu Nord ONCF - teal, bold */
-        .designation-cu-casa { color: #c0392b; font-weight: 700; } /* Cu Casa - dark red, bold */
-
-
-        /* --- Loading/Error/No Data Messages --- */
-        .loading-message, .error-message, .no-data-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 16px;
-            color: #333;
-            background-color: #fff;
-            border: 1px solid #000;
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
+            margin-bottom: 40px;
         }
 
-        .error-message {
-            color: #E60000;
-            font-weight: bold;
+        .action-buttons button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .loading-message {
-            color: #0000FF;
-            font-weight: bold;
+        .action-buttons button.secondary {
+            background: #6c757d; /* A neutral gray for secondary action */
         }
 
-        .loading-message::before {
-            content: "⏳ ";
+        .action-buttons button:hover {
+            background: var(--primary-dark-blue);
+            transform: translateY(-2px);
+        }
+        .action-buttons button.secondary:hover {
+            background: #5a6268;
         }
 
-        .error-message::before {
-            content: "❌ ";
+        .action-buttons button:active {
+            transform: translateY(0);
         }
 
-        .no-data-message::before {
-            content: "ℹ️ ";
-        }
-
-        /* --- Responsive Adjustments (basic) --- */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .report-header-container {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 10px;
-            }
-            h1.report-title {
-                font-size: 20px;
-                margin: 10px 0;
-            }
-            .report-header-date, .report-ref {
-                margin-bottom: 5px;
-            }
-            table {
-                display: block;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            th, td {
-                min-width: 80px; /* Ensure columns don't get too squished */
-                font-size: 10px;
-                padding: 4px;
-            }
-            td.designation-cell {
-                min-width: 120px;
-            }
-            .section-title {
-                font-size: 14px;
-            }
+        .chart-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fcfcfc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+            min-height: 300px;
         }
     </style>
 </head>
 <body>
 
-<div class="report-header-container">
-    <div class="report-header-date" id="report-current-date"></div>
-    <h1 class="report-title">Rapport Activités Hajjar</h1>
-    <div class="report-ref">CMG/LOG/F/01.03/01</div>
+<div class="header">
+    <div id="report-date"></div>
+    <h1>Rapport Activités Hajjar</h1>
 </div>
 
-<div class="date-container">
-    <label for="date">📅 Sélectionnez une date :</label>
-    <input type="date" id="date" />
+<div class="controls-container">
+    <div class="date-input">
+        <label for="date">Sélectionnez une date :</label>
+        <input type="date" id="date">
+    </div>
+
+    <div class="action-buttons">
+        <button id="exportBtn">
+            <svg xmlns="index.html" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Exporter en Excel
+        </button>
+        <button id="indexBtn" class="secondary">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Retour à l'Index
+        </button>
+    </div>
 </div>
 
-<div id="rapport-container">
-    <p class="loading-message">Chargement du rapport pour aujourd'hui...</p>
-</div>
+<div id="rapport-container"></div>
 
 <script>
-    // --- Global Variables & Configuration ---
     const DOM = {
         dateInput: document.getElementById("date"),
-        reportCurrentDate: document.getElementById("report-current-date"),
-        rapportContainer: document.getElementById("rapport-container")
+        container: document.getElementById("rapport-container"),
+        reportDate: document.getElementById("report-date"),
+        exportBtn: document.getElementById("exportBtn"),
+        indexBtn: document.getElementById("indexBtn") // New DOM element for index button
     };
 
-    // Store assigned colors for designations to ensure consistency
-    // These are now pre-defined to match the image exactly
-    const designationColorClasses = {
-        "DS": "designation-ds",
-        "DS Nord": "designation-ds-nord",
-        "DS NORD POLYMETALLIQUE": "designation-ds-nord-polymetallique",
-        "DS Nord TAS L1/50": "designation-ds-nord-tas",
-        "TV Carbomin": "designation-tv-carbomin",
-        "KA": "designation-ka",
-        "Chaux Lafarge": "designation-chaux-lafarge",
-        "Chaux Cosumar": "designation-chaux-cosumar",
-        "SCORIE BLANCHE": "designation-scorie-blanche",
-        "Zn TC ONCF": "designation-zn-tc-oncf",
-        "Zn Vrac p safi": "designation-zn-vrac",
-        "C Bulk (STUFFING LEAD)": "designation-c-bulk",
-        "Pb ONCF": "designation-pb-oncf",
-        "Pb Port casa": "designation-pb-port-casa",
-        "Cu ONCF": "designation-cu-oncf",
-        "Cu nord oncf": "designation-cu-nord-oncf",
-        "Cu Casa": "designation-cu-casa"
-        // Add more if other designations appear in your data
-    };
+    let activeCharts = {};
 
-    // Configuration for poste gradient colors (adjust min/max based on your data)
-    // The image doesn't show a clear gradient, but we'll keep the bold text.
-    // We'll simplify the gradient to just a single color or a very subtle shade.
-    const MIN_POSTE_VALUE = 0;
-    const MAX_POSTE_VALUE = 100; // Assuming a range, adjust if known.
-
-    // --- Utility Functions ---
-
-    /**
-     * Returns a CSS class name for a given designation based on the image's colors.
-     * @param {string} designation - The text of the designation.
-     * @returns {string} - A CSS class string for coloring.
-     */
-    function getDesignationColorClass(designation) {
-        // Normalize designation for lookup (e.g., trim whitespace, consistent casing if needed)
-        const normalizedDesignation = designation.trim();
-        return designationColorClasses[normalizedDesignation] || ""; // Return empty string if no specific class
+    function formatNumber(n) {
+        return parseFloat(n || 0).toFixed(2);
     }
 
-    /**
-     * Returns a CSS class name for section titles based on content.
-     * @param {string} sectionName - The name of the report section.
-     * @returns {string} - A CSS class string.
-     */
-    function getSectionColorClassByName(sectionName) {
-        const lowerCaseName = sectionName.toLowerCase();
-        if (lowerCaseName.includes("arrivages tv")) return "section-color-arrivages-tv";
-        if (lowerCaseName.includes("arrivages chaux")) return "section-color-arrivages-chaux";
-        if (lowerCaseName.includes("expéditions cc")) return "section-color-expeditions-cc";
-        return "section-color-default"; // Fallback class
+    function updateReportDateLabel(dateStr) {
+        const [year, month, day] = dateStr.split("-");
+        DOM.reportDate.textContent = `Date du Rapport : ${parseInt(day)}/${parseInt(month)}/${year}`;
     }
 
-    /**
-     * Applies the fixed background style to the body.
-     */
-    function applyPageStyle() {
-        document.body.style.backgroundColor = '#F0F0F0'; // Fixed background from image
-    }
-
-    /**
-     * Calculates a gradient color for 'Poste' values.
-     * The image shows 'Poste' as black bold text, so we'll simplify this.
-     * @param {number} value - The numeric value of 'Poste'.
-     * @returns {string} - A hex color string.
-     */
-    function getPosteGradientColor(value) {
-        // In the image, 'Poste' values appear to be black and bold.
-        // If a gradient is truly desired, adjust this. For now, matching image.
-        return '#000'; // Black color as seen in the image for Poste values
-    }
-
-    /**
-     * Formats a date object into MM/DD/YYYY string.
-     * @param {Date} date - The date object.
-     * @returns {string} - Formatted date string.
-     */
-    function formatDateToMMDDYYYY(date) {
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const year = date.getFullYear();
-        return `${month}/${day}/${year}`;
-    }
-
-    /**
-     * Formats a number to a fixed two decimal places.
-     * @param {number|string} value - The number to format.
-     * @returns {string} - Formatted number string or empty string if invalid.
-     */
-    function formatNumber(value) {
-        const num = parseFloat(value);
-        // Match the image where 0.00 is displayed if value is 0 or less, or if it's NaN.
-        // Otherwise, format to two decimal places.
-        if (isNaN(num) || num <= 0) {
-            return "0.00";
-        }
-        return num.toFixed(2);
-    }
-
-    /**
-     * Updates the report date display in the header.
-     * @param {string} dateString - Date in YYYY-MM-DD format.
-     */
-    function updateReportHeaderDate(dateString) {
-        if (dateString) {
-            const [year, month, day] = dateString.split('-');
-            // Format as M/D/YYYY to match image: 1/31/2025
-            DOM.reportCurrentDate.textContent = `${parseInt(month)}/${parseInt(day)}/${year}`;
-        }
-    }
-
-    // --- Main Report Logic ---
-
-    /**
-     * Fetches report data for a specific date from the API.
-     * @param {string} date - Date in YYYY-MM-DD format.
-     * @returns {Promise<Array<Object>>} - The report data array.
-     */
-    async function fetchRapportData(date) {
-        DOM.rapportContainer.innerHTML = `<p class="loading-message">Chargement du rapport pour le ${formatDateToMMDDYYYY(new Date(date))}...</p>`;
+    async function fetchData(date) {
+        DOM.container.innerHTML = `<p style="text-align: center; color: var(--dark-gray);">Chargement en cours...</p>`;
         try {
-            // Simulate API call delay for demonstration if needed
-            // await new Promise(resolve => setTimeout(resolve, 500));
             const response = await fetch(`/api/rapport-hajjar?date=${date}`);
             if (!response.ok) {
-                const errorDetail = await response.text();
-                throw new Error(`Erreur HTTP: ${response.status} - ${errorDetail || response.statusText}`);
+                const errorData = await response.json().catch(() => ({ message: "Erreur serveur inconnue." }));
+                throw new Error(errorData.message || `Erreur serveur: ${response.status} ${response.statusText}`);
             }
             return await response.json();
-        } catch (error) {
-            console.error("Erreur lors du chargement du rapport:", error);
-            DOM.rapportContainer.innerHTML = `<p class="error-message">Une erreur est survenue lors du chargement du rapport. ${error.message}</p>`;
-            return []; // Return empty array on error
+        } catch (e) {
+            DOM.container.innerHTML = `<p style="color:red; text-align: center; font-weight: bold;">Erreur : ${e.message}</p>`;
+            return [];
         }
     }
 
-    /**
-     * Renders the report data into the HTML container.
-     * @param {Array<Object>} data - The report data fetched from the API.
-     */
-    function renderRapport(data) {
-        DOM.rapportContainer.innerHTML = ""; // Clear previous content
+    function groupBySection(data) {
+        const grouped = {};
+        for (const row of data) {
+            if (!grouped[row.section]) grouped[row.section] = [];
+            grouped[row.section].push(row);
+        }
+        return grouped;
+    }
 
+    function render(data) {
+        for (const chartId in activeCharts) {
+            if (activeCharts[chartId]) {
+                activeCharts[chartId].destroy();
+            }
+        }
+        activeCharts = {};
+
+        DOM.container.innerHTML = "";
         if (data.length === 0) {
-            DOM.rapportContainer.innerHTML = `<p class="no-data-message">Aucune donnée disponible pour la date sélectionnée.</p>`;
+            DOM.container.innerHTML = `<p style="text-align: center; color: var(--dark-gray);">Aucune donnée disponible pour cette date.</p>`;
             return;
         }
 
-        // Group data by section
-        const sections = data.reduce((acc, ligne) => {
-            const section = ligne.section || "Autres Activités"; // Default section name
-            if (!acc[section]) {
-                acc[section] = [];
-            }
-            acc[section].push(ligne);
-            return acc;
-        }, {});
+        const grouped = groupBySection(data);
 
-        for (const sectionName in sections) {
+        for (const section in grouped) {
+            const sectionId = section.replace(/\s+/g, '-').toLowerCase();
+
+            const tableContainer = document.createElement("div");
+            tableContainer.classList.add("table-container");
+            tableContainer.id = `container-${sectionId}`;
+
+            if (section.includes("TV")) tableContainer.classList.add("section-arrivages-tv");
+            else if (section.includes("Chaux")) tableContainer.classList.add("section-arrivages-chaux");
+            else if (section.includes("Expéditions")) tableContainer.classList.add("section-expeditions-cc");
+
+            const headerControls = document.createElement("div");
+            headerControls.classList.add("table-header-controls");
+            headerControls.innerHTML = `
+                <h2>${section}</h2>
+                <button class="graph-toggle-btn" data-section-id="${sectionId}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Voir le Graphique (Annuel)
+                </button>
+            `;
+            tableContainer.appendChild(headerControls);
+
             const table = document.createElement("table");
-            const caption = document.createElement("caption");
-            caption.textContent = sectionName;
-            caption.className = "section-title " + getSectionColorClassByName(sectionName);
-            table.appendChild(caption);
+            table.id = `table-${sectionId}`;
 
             const thead = document.createElement("thead");
-            let headerHtml = `<tr>`;
-
-            // Dynamic headers based on section (to match image columns)
-            if (sectionName.toLowerCase().includes("expéditions cc")) {
-                headerHtml += `
-                    <th>U</th>
+            thead.innerHTML = `
+                <tr>
+                    <th>Désignation</th>
                     <th>P1</th>
                     <th>P2</th>
                     <th>P3</th>
-                    <th>Désignation</th>
-                    <th>Expédié Jour</th>
-                    <th>Cumul Expédié mois</th>
-                    <th>Cumul Expédié Année</th>
-                `;
-            } else {
-                headerHtml += `
-                    <th>U</th>
-                    <th>P1</th>
-                    <th>P2</th>
-                    <th>P3</th>
-                    <th>Désignation</th>
-                    <th>Poste</th>
-                    <th>Arrivages Jour</th>
-                    <th>Cumul Arrivages mois</th>
-                    <th>Cumul Arrivages Année</th>
-                `;
-            }
-            headerHtml += `</tr>`;
-            thead.innerHTML = headerHtml;
+                    <th>Jour</th>
+                    <th>Mois</th>
+                    <th>Année</th>
+                </tr>`;
             table.appendChild(thead);
 
-            // Add class to thead for specific header background if needed
-            if (sectionName.toLowerCase().includes("expéditions cc")) {
-                thead.classList.add("expeditions-cc-th");
-            }
-
-
             const tbody = document.createElement("tbody");
-            // Add a class to tbody for specific row styling later
-            let tbodyClass = '';
-            if (sectionName.toLowerCase().includes("arrivages tv")) {
-                tbodyClass = 'arrivages-tv-data';
-            } else if (sectionName.toLowerCase().includes("expéditions cc")) {
-                tbodyClass = 'expeditions-cc-data';
-            }
-            if (tbodyClass) tbody.classList.add(tbodyClass);
 
+            let totalP1 = 0, totalP2 = 0, totalP3 = 0;
+            let totalJour = 0, totalMois = 0, totalAnnee = 0;
 
-            for (const ligne of sections[sectionName]) {
+            for (const row of grouped[section]) {
                 const tr = document.createElement("tr");
-
-                // Apply specific row styles like 'TH' or 'Global'
-                if (ligne.designation && ligne.designation.toUpperCase() === "TH") {
-                    tr.classList.add("ligne-th");
-                } else if (ligne.designation && ligne.designation.toUpperCase() === "GLOBAL") {
-                    tr.classList.add("ligne-global");
-                }
-
-                // Apply specific class for 'C Bulk' row
-                if (ligne.designation && ligne.designation.toUpperCase() === "C BULK (STUFFING LEAD)") {
-                    tr.classList.add("row-c-bulk");
-                }
-
-
-                // Cell U
-                const uCell = document.createElement("td");
-                uCell.textContent = ligne.u || '';
-                if (ligne.u && ligne.u.toUpperCase() === 'U') {
-                    uCell.classList.add('col-u-border');
-                }
-                tr.appendChild(uCell);
-
-                // P1, P2, P3 Cells
-                ['p1', 'p2', 'p3'].forEach(prop => {
-                    const cell = document.createElement("td");
-                    cell.classList.add("numeric-cell");
-                    const formattedValue = formatNumber(ligne[prop]);
-                    cell.textContent = formattedValue;
-                    // Add specific background color for empty P cells in Expeditions CC, if value is "0.00"
-                    if (sectionName.toLowerCase().includes("expéditions cc") && formattedValue === "0.00") {
-                        cell.classList.add("empty-cell-light-yellow");
-                    }
-                    tr.appendChild(cell);
-                });
-
-                // Designation Cell
-                const designationCell = document.createElement("td");
-                const designationText = ligne.designation ?? "";
-                designationCell.textContent = designationText;
-                designationCell.classList.add("designation-cell");
-                // Apply specific color class based on designation
-                const colorClass = getDesignationColorClass(designationText);
-                if (colorClass) {
-                    designationCell.classList.add(colorClass);
-                }
-                tr.appendChild(designationCell);
-
-                // Dynamically add Poste or skip based on section
-                if (!sectionName.toLowerCase().includes("expéditions cc")) {
-                    // Poste Cell (only for Arrivages sections)
-                    const posteCell = document.createElement("td");
-                    const posteValue = parseFloat(ligne.poste);
-                    if (!isNaN(posteValue) && ligne.poste !== null && ligne.poste !== undefined && ligne.poste !== "") {
-                        posteCell.textContent = ligne.poste;
-                        posteCell.classList.add("poste-grade", "numeric-cell");
-                        // As per image, Poste is just bold black, no gradient
-                        posteCell.style.color = getPosteGradientColor(posteValue);
-                    } else {
-                        posteCell.textContent = ''; // Keep empty if no value
-                        posteCell.classList.add("numeric-cell");
-                    }
-                    tr.appendChild(posteCell);
-                }
-
-
-                // Jour, Cumul Mois, Cumul Année Cells (indices shift if Poste is omitted)
-                const numProps = ['totalJour', 'totalMois', 'totalAnnee'];
-                if (sectionName.toLowerCase().includes("expéditions cc")) {
-                    // If Poste is omitted, these become 6th, 7th, 8th columns
-                    ['expedieJour', 'cumulExpedieMois', 'cumulExpedieAnnee'].forEach(prop => {
-                        const cell = document.createElement("td");
-                        cell.classList.add("numeric-cell");
-                        const formattedValue = formatNumber(ligne[prop]);
-                        cell.textContent = formattedValue;
-                        if (ligne.designation && (ligne.designation.toUpperCase() === "GLOBAL" || ligne.designation.toUpperCase() === "TH")) {
-                            cell.classList.add("total-value");
-                        }
-                        tr.appendChild(cell);
-                    });
-                } else {
-                    // Normal behavior with Poste column
-                    ['totalJour', 'totalMois', 'totalAnnee'].forEach(prop => {
-                        const cell = document.createElement("td");
-                        cell.classList.add("numeric-cell");
-                        const formattedValue = formatNumber(ligne[prop]);
-                        cell.textContent = formattedValue;
-                        if (ligne.designation && (ligne.designation.toUpperCase() === "GLOBAL" || ligne.designation.toUpperCase() === "TH")) {
-                            cell.classList.add("total-value");
-                        }
-                        tr.appendChild(cell);
-                    });
-                }
+                tr.innerHTML = `
+                    <td class="designation">${row.designation}</td>
+                    <td>${formatNumber(row.p1)}</td>
+                    <td>${formatNumber(row.p2)}</td>
+                    <td>${formatNumber(row.p3)}</td>
+                    <td>${formatNumber(row.totalJour)}</td>
+                    <td>${formatNumber(row.totalMois)}</td>
+                    <td>${formatNumber(row.totalAnnee)}</td>
+                `;
                 tbody.appendChild(tr);
+
+                if (section === "Arrivages TV Chantier") {
+                    totalP1 += parseFloat(row.p1 || 0);
+                    totalP2 += parseFloat(row.p2 || 0);
+                    totalP3 += parseFloat(row.p3 || 0);
+                    totalJour += parseFloat(row.totalJour || 0);
+                    totalMois += parseFloat(row.totalMois || 0);
+                    totalAnnee += parseFloat(row.totalAnnee || 0);
+                }
+            }
+
+            if (section === "Arrivages TV Chantier") {
+                const globalRow = document.createElement("tr");
+                globalRow.innerHTML = `
+                    <td class="designation">Global</td>
+                    <td>${formatNumber(totalP1)}</td>
+                    <td>${formatNumber(totalP2)}</td>
+                    <td>${formatNumber(totalP3)}</td>
+                    <td>${formatNumber(totalJour)}</td>
+                    <td>${formatNumber(totalMois)}</td>
+                    <td>${formatNumber(totalAnnee)}</td>
+                `;
+                tbody.appendChild(globalRow);
             }
 
             table.appendChild(tbody);
-            DOM.rapportContainer.appendChild(table);
+            tableContainer.appendChild(table);
+
+            const chartDiv = document.createElement('div');
+            chartDiv.classList.add('chart-container');
+            chartDiv.id = `chart-${sectionId}`;
+            const canvas = document.createElement('canvas');
+            canvas.id = `canvas-${sectionId}`;
+            chartDiv.appendChild(canvas);
+            tableContainer.appendChild(chartDiv);
+
+            DOM.container.appendChild(tableContainer);
+        }
+
+        document.querySelectorAll('.graph-toggle-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const sectionId = this.dataset.sectionId;
+                toggleGraph(sectionId, this);
+            });
+        });
+    }
+
+    function toggleGraph(sectionId, button) {
+        const table = document.getElementById(`table-${sectionId}`);
+        const chartContainer = document.getElementById(`chart-${sectionId}`);
+        const canvas = document.getElementById(`canvas-${sectionId}`);
+
+        if (table.style.display === 'none') {
+            table.style.display = 'table';
+            chartContainer.style.display = 'none';
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Voir le Graphique (Annuel)`;
+            button.classList.remove('active');
+            if (activeCharts[`chart-${sectionId}`]) {
+                activeCharts[`chart-${sectionId}`].destroy();
+                delete activeCharts[`chart-${sectionId}`];
+            }
+        } else {
+            table.style.display = 'none';
+            chartContainer.style.display = 'block';
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> Voir le Tableau`;
+            button.classList.add('active');
+            createGraph(sectionId, canvas, table);
         }
     }
 
-    // --- Event Listener ---
+    function createGraph(sectionId, canvasElement, tableElement) {
+        if (activeCharts[`chart-${sectionId}`]) {
+            activeCharts[`chart-${sectionId}`].destroy();
+        }
+
+        const dataByYear = {};
+        const rows = tableElement.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const designation = row.querySelector('.designation').textContent;
+            if (designation === 'Global') {
+                return;
+            }
+            const cells = row.querySelectorAll('td');
+            const year = cells[6].textContent.trim(); // Get the 'Année' value (index 6) and trim whitespace
+            if (!year) return; // Skip if year is empty
+
+            if (!dataByYear[year]) {
+                dataByYear[year] = { p1: 0, p2: 0, p3: 0 };
+            }
+            dataByYear[year].p1 += parseFloat(cells[1].textContent || 0);
+            dataByYear[year].p2 += parseFloat(cells[2].textContent || 0);
+            dataByYear[year].p3 += parseFloat(cells[3].textContent || 0);
+        });
+
+        const labels = Object.keys(dataByYear).sort();
+        const dataP1 = labels.map(year => dataByYear[year].p1);
+        const dataP2 = labels.map(year => dataByYear[year].p2);
+        const dataP3 = labels.map(year => dataByYear[year].p3);
+
+        const ctx = canvasElement.getContext('2d');
+        activeCharts[`chart-${sectionId}`] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Poste 1 (P1)',
+                        data: dataP1,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Poste 2 (P2)',
+                        data: dataP2,
+                        backgroundColor: 'rgba(153, 102, 255, 0.8)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Poste 3 (P3)',
+                        data: dataP3,
+                        backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `Comparaison Annuelle des Postes (P1, P2, P3) - ${tableElement.closest('.table-container').querySelector('h2').textContent}`,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valeur Annuelle Cumulée',
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(value);
+                            },
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Année',
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#343a40'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     DOM.dateInput.addEventListener("change", async () => {
-        const selectedDate = DOM.dateInput.value;
-        if (!selectedDate) {
-            DOM.rapportContainer.innerHTML = `<p class="no-data-message">Veuillez sélectionner une date pour afficher le rapport.</p>`;
-            updateReportHeaderDate(''); // Clear header date if input is empty
+        const date = DOM.dateInput.value;
+        if (!date) {
+            DOM.container.innerHTML = `<p style="text-align: center; color: var(--dark-gray);">Veuillez sélectionner une date.</p>`;
+            DOM.reportDate.textContent = '';
             return;
         }
-        updateReportHeaderDate(selectedDate);
-        const data = await fetchRapportData(selectedDate);
-        renderRapport(data);
-        applyPageStyle();
+        updateReportDateLabel(date);
+        const data = await fetchData(date);
+        render(data);
     });
 
-    // --- Initialization ---
-    document.addEventListener('DOMContentLoaded', () => {
-        applyPageStyle();
+    DOM.exportBtn.addEventListener("click", () => {
+        const date = DOM.dateInput.value;
+        if (date) {
+            window.open(`/api/rapport-hajjar/export?date=${date}`, "_blank");
+        } else {
+            alert("Veuillez sélectionner une date avant d'exporter.");
+        }
+    });
 
-        // Set the date input to today's date and trigger a report load
+    // Event listener for the new "Retour à l'Index" button
+    DOM.indexBtn.addEventListener("click", () => {
+        // !!! IMPORTANT: Replace 'your-index-page.html' with the actual path to your index page
+        window.location.href = 'index.html';
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        const todayFormatted = `${year}-${month}-${day}`;
-
-        DOM.dateInput.value = todayFormatted;
-        // Manually trigger the change event to load report for today's date
-        DOM.dateInput.dispatchEvent(new Event('change'));
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        DOM.dateInput.value = todayStr;
+        DOM.dateInput.dispatchEvent(new Event("change"));
     });
 </script>
-
 </body>
 </html>

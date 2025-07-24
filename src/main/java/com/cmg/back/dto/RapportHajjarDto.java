@@ -1,46 +1,39 @@
 package com.cmg.back.dto;
 
 public class RapportHajjarDto {
-
     private String section;
     private String designation;
-    private String poste;
-    private Double valeur;
-    private Double totalJour;
-    private Double totalMois;
-    private Double totalAnnee;
 
-    public RapportHajjarDto() {}
+    private double p1;
+    private double p2;
+    private double p3;
 
-    public RapportHajjarDto(String section, String designation, String poste,
-                            Double valeur, Double totalJour, Double totalMois, Double totalAnnee) {
-        this.section = section;
-        this.designation = designation;
-        this.poste = poste;
-        this.valeur = valeur;
-        this.totalJour = totalJour;
-        this.totalMois = totalMois;
-        this.totalAnnee = totalAnnee;
-    }
+    private double totalJour;
+    private double totalMois;
+    private double totalAnnee;
 
+    // Getters & Setters
     public String getSection() { return section; }
     public void setSection(String section) { this.section = section; }
 
     public String getDesignation() { return designation; }
     public void setDesignation(String designation) { this.designation = designation; }
 
-    public String getPoste() { return poste; }
-    public void setPoste(String poste) { this.poste = poste; }
+    public double getP1() { return p1; }
+    public void setP1(double p1) { this.p1 = p1; }
 
-    public Double getValeur() { return valeur; }
-    public void setValeur(Double valeur) { this.valeur = valeur; }
+    public double getP2() { return p2; }
+    public void setP2(double p2) { this.p2 = p2; }
 
-    public Double getTotalJour() { return totalJour; }
-    public void setTotalJour(Double totalJour) { this.totalJour = totalJour; }
+    public double getP3() { return p3; }
+    public void setP3(double p3) { this.p3 = p3; }
 
-    public Double getTotalMois() { return totalMois; }
-    public void setTotalMois(Double totalMois) { this.totalMois = totalMois; }
+    public double getTotalJour() { return totalJour; }
+    public void setTotalJour(double totalJour) { this.totalJour = totalJour; }
 
-    public Double getTotalAnnee() { return totalAnnee; }
-    public void setTotalAnnee(Double totalAnnee) { this.totalAnnee = totalAnnee; }
+    public double getTotalMois() { return totalMois; }
+    public void setTotalMois(double totalMois) { this.totalMois = totalMois; }
+
+    public double getTotalAnnee() { return totalAnnee; }
+    public void setTotalAnnee(double totalAnnee) { this.totalAnnee = totalAnnee; }
 }

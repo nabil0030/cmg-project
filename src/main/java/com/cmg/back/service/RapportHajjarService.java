@@ -16,10 +16,8 @@ public class RapportHajjarService {
     @Autowired DsClassiqueRepository dsClassiqueRepository;
     @Autowired DsNordRecordRepository dsNordRepository;
     @Autowired ControleBasculeKARepository controleBasculeKARepository;
-    @Autowired ControleBasculeHJDSRepository controleBasculeHJDSRepository;
     @Autowired ChauxViveLafargeRepository chauxViveLafargeRepository;
     @Autowired ChauxViveRepository chauxViveRepository;
-    @Autowired CBulkArgentifereRepository cBulkArgentifereRepository;
     @Autowired ExpZincOncfRepository expZincOncfRepository;
     @Autowired ExpZincSafiRepository expZincSafiRepository;
     @Autowired ExpPbCmgOnfRepository expPbCmgOnfRepository;
@@ -34,70 +32,78 @@ public class RapportHajjarService {
         LocalDate debutAnnee = date.withDayOfYear(1);
         LocalDate finAnnee = date.withMonth(12).withDayOfMonth(31);
 
-        for (int poste = 1; poste <= 3; poste++) {
-            rapport.add(line("Arrivages TV Chantier", "DS", poste,
-                    dsClassiqueRepository.sumByDateAndPoste(date, poste),
-                    dsClassiqueRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    dsClassiqueRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
+        // Section Arrivages TV
+        rapport.add(creerLigne("Arrivages TV Chantier", "DS", dsClassiqueRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Arrivages TV Chantier", "DS Nord", dsNordRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Arrivages TV Chantier", "KA", controleBasculeKARepository, date, debutMois, finMois, debutAnnee, finAnnee));
 
-            rapport.add(line("Arrivages TV Chantier", "DS Nord", poste,
-                    dsNordRepository.sumByDateAndPoste(date, poste),
-                    dsNordRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    dsNordRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
+        // Section Arrivages Chaux
+        rapport.add(creerLigne("Arrivages Chaux", "Chaux Lafarge", chauxViveLafargeRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Arrivages Chaux", "Chaux Cosumar", chauxViveRepository, date, debutMois, finMois, debutAnnee, finAnnee));
 
-            rapport.add(line("Arrivages TV Chantier", "KA", poste,
-                    controleBasculeKARepository.sumByDateAndPoste(date, poste),
-                    controleBasculeKARepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    controleBasculeKARepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Arrivages Chaux", "Chaux Lafarge", poste,
-                    chauxViveLafargeRepository.sumByDateAndPoste(date, poste),
-                    chauxViveLafargeRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    chauxViveLafargeRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Arrivages Chaux", "Chaux Cosumar", poste,
-                    chauxViveRepository.sumByDateAndPoste(date, poste),
-                    chauxViveRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    chauxViveRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Expéditions CC", "Zn TC ONCF", poste,
-                    expZincOncfRepository.sumByDateAndPoste(date, poste),
-                    expZincOncfRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    expZincOncfRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Expéditions CC", "Zn Vrac p Safi", poste,
-                    expZincSafiRepository.sumByDateAndPoste(date, poste),
-                    expZincSafiRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    expZincSafiRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Expéditions CC", "Pb ONCF", poste,
-                    expPbCmgOnfRepository.sumByDateAndPoste(date, poste),
-                    expPbCmgOnfRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    expPbCmgOnfRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Expéditions CC", "Cu Nord ONCF", poste,
-                    expCuivreNordRepository.sumByDateAndPoste(date, poste),
-                    expCuivreNordRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    expCuivreNordRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-
-            rapport.add(line("Expéditions CC", "Cu ONCF", poste,
-                    expCuivreOncfRepository.sumByDateAndPoste(date, poste),
-                    expCuivreOncfRepository.sumByDateBetweenAndPoste(debutMois, finMois, poste),
-                    expCuivreOncfRepository.sumByDateBetweenAndPoste(debutAnnee, finAnnee, poste)));
-        }
+        // Section Expéditions CC
+        rapport.add(creerLigne("Expéditions CC", "Zn TC ONCF", expZincOncfRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Expéditions CC", "Zn Vrac p Safi", expZincSafiRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Expéditions CC", "Pb ONCF", expPbCmgOnfRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Expéditions CC", "Cu Nord ONCF", expCuivreNordRepository, date, debutMois, finMois, debutAnnee, finAnnee));
+        rapport.add(creerLigne("Expéditions CC", "Cu ONCF", expCuivreOncfRepository, date, debutMois, finMois, debutAnnee, finAnnee));
 
         return rapport;
     }
 
-    private RapportHajjarDto line(String section, String designation, int poste, double jour, double mois, double annee) {
-        return new RapportHajjarDto(
-                section,
-                designation,
-                "P" + poste,
-                jour,
-                jour,
-                mois,
-                annee
-        );
+    private RapportHajjarDto creerLigne(
+            String section,
+            String designation,
+            Object repo,
+            LocalDate date,
+            LocalDate debutMois,
+            LocalDate finMois,
+            LocalDate debutAnnee,
+            LocalDate finAnnee
+    ) {
+        double p1 = getSumByPoste(repo, date, 1);
+        double p2 = getSumByPoste(repo, date, 2);
+        double p3 = getSumByPoste(repo, date, 3);
+
+        double totalJour = p1 + p2 + p3;
+        double totalMois = getSumByDateRange(repo, debutMois, finMois);
+        double totalAnnee = getSumByDateRange(repo, debutAnnee, finAnnee);
+
+        RapportHajjarDto dto = new RapportHajjarDto();
+        dto.setSection(section);
+        dto.setDesignation(designation);
+        dto.setP1(p1);
+        dto.setP2(p2);
+        dto.setP3(p3);
+        dto.setTotalJour(totalJour);
+        dto.setTotalMois(totalMois);
+        dto.setTotalAnnee(totalAnnee);
+        return dto;
+    }
+
+    private double getSumByPoste(Object repo, LocalDate date, int poste) {
+        try {
+            return (double) repo.getClass()
+                    .getMethod("sumByDateAndPoste", LocalDate.class, int.class)
+                    .invoke(repo, date, poste);
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
+    private double getSumByDateRange(Object repo, LocalDate debut, LocalDate fin) {
+        try {
+            return (double) repo.getClass()
+                    .getMethod("sumByDateBetweenAndPoste", LocalDate.class, LocalDate.class, int.class)
+                    .invoke(repo, debut, fin, 1)
+                    + (double) repo.getClass()
+                    .getMethod("sumByDateBetweenAndPoste", LocalDate.class, LocalDate.class, int.class)
+                    .invoke(repo, debut, fin, 2)
+                    + (double) repo.getClass()
+                    .getMethod("sumByDateBetweenAndPoste", LocalDate.class, LocalDate.class, int.class)
+                    .invoke(repo, debut, fin, 3);
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 }

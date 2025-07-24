@@ -1,11 +1,16 @@
 package com.cmg.back.controller;
 
 import com.cmg.back.repository.*;
+import com.cmg.back.service.SyntheseExportService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -116,4 +121,51 @@ public class SyntheseController {
         map.put(label, value);
         return value;
     }
+    @GetMapping("/synthese-mensuelle")
+    public Map<String, List<Double>> getSyntheseMensuelle() {
+        Map<String, List<Double>> result = new LinkedHashMap<>();
+
+        for (int mois = 1; mois <= 12; mois++) {
+            YearMonth ym = YearMonth.of(LocalDate.now().getYear(), mois);
+            LocalDate debut = ym.atDay(1);
+            LocalDate fin = ym.atEndOfMonth();
+
+            List<Double> ligne = new ArrayList<>();
+
+            // LES ENTRÉES (6 colonnes)
+            ligne.add(dsClassiqueRepository.sumForMonth(debut, fin)); // DRAA SFAR
+            ligne.add(dsNordRepository.sumForMonth(debut, fin));      // DRAA NORD
+            ligne.add(controleBasculeKARepository.sumForMonth(debut, fin)); // KOUDIAT AÏCHA
+            ligne.add(chauxViveRepository.sumForMonth(debut, fin));   // CHAUX COSUMAR
+            ligne.add(chauxViveLafargeRepository.sumForMonth(debut, fin)); // CHAUX LAFARGE
+            ligne.add(ligne.get(0) + ligne.get(1) + ligne.get(2) + ligne.get(3) + ligne.get(4)); // Total Entrée
+
+            // LES EXPÉDITIONS (9 colonnes)
+            ligne.add(expCuivreOncfRepository.sumForMonth(debut, fin));     // CUIVRE ONCF MRK
+            ligne.add(expCuivreNordRepository.sumForMonth(debut, fin));     // CUIVRE NORD
+            ligne.add(expPbCmgOnfRepository.sumForMonth(debut, fin));       // PLOMB ONCF MRK
+            ligne.add(cBulkArgentifereRepository.sumForMonth(debut, fin));  // PLOMB PORT CASA
+            ligne.add(expZincOncfRepository.sumForMonth(debut, fin));       // ZINC ONCF
+            ligne.add(0.0);                                                 // ZINC PORT CASA (non utilisé)
+            ligne.add(0.0);                                                 // ZINC EN VRAC (non utilisé)
+            ligne.add(expZincSafiRepository.sumForMonth(debut, fin));       // ZINC CBULK
+            double totalExp = 0;
+            for (int i = 6; i <= 13; i++) totalExp += ligne.get(i);
+            ligne.add(totalExp); // Total Expéditions
+
+            // Ajouter au résultat
+            String nomMois = ym.getMonth().name(); // "JANUARY"
+            String nomFormate = nomMois.charAt(0) + nomMois.substring(1).toLowerCase(); // January
+            result.put(nomFormate.toUpperCase(), ligne); // "JANVIER" etc.
+        }
+
+        return result;
+    }
+    @GetMapping("/synthese/export")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        Map<String, List<Double>> data = getSyntheseMensuelle();
+        new SyntheseExportService().exportSyntheseExcel(response, data);
+    }
+
+
 }

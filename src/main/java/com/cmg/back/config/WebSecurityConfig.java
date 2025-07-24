@@ -24,13 +24,13 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                // 🎯 Pages HTML autorisées sans login
+                                // ✅ Pages HTML accessibles sans login
                                 "/", "/home", "/home.html",
                                 "/signup", "/login",
                                 "/index.html", "/favicon.ico",
                                 "/css/**", "/js/**", "/images/**",
 
-                                // Pages spécifiques de ton projet
+                                // ✅ Pages spécifiques projet
                                 "/synthese.html",
                                 "/rapportHajjar.html",
                                 "/cbulkArgentifere.html",
@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                                 "/expZincSafi.html",
                                 "/chauxViveLafarge.html",
                                 "/controleBasculeHJDS.html",
-                                "/controle-bascule-hjds.html",  // 🧠 important si le fichier est en minuscules
+                                "/controle-bascule-hjds.html",
                                 "/controle-bascule-ka.html",
                                 "/dsClassique.html",
                                 "/dsNord.html",
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                         ).permitAll()
 
                         .requestMatchers(
-                                // 🎯 Tous les endpoints REST publics
+                                // ✅ Endpoints API autorisés sans login
                                 "/api/cbulkargentifere/**",
                                 "/api/chauxVive/**",
                                 "/api/chaux-vive/**",
@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                                 "/api/bascule-hj-ds/**",
                                 "/api/ka/**",
                                 "/api/ds-classique/**",
-                                "/api/ds-classique/bl/**",     // ✅ recherche BL autorisée
+                                "/api/ds-classique/bl/**",
                                 "/api/dsnord/**",
                                 "/api/expzinconcf/**",
                                 "/api/exp-zinc-safi/**",
@@ -67,10 +67,12 @@ public class WebSecurityConfig {
                                 "/api/synthese-jour",
                                 "/api/synthese-mois",
                                 "/api/synthese-annuelle",
-                                "/api/rapport-hajjar"
+                                "/api/rapport-hajjar",
+                                "/api/rapport-hajjar/export"
                         ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/rapport-hajjar").permitAll()
+                        // (optionnel) autoriser GET explicitement pour l’export
+                        .requestMatchers(HttpMethod.GET, "/api/rapport-hajjar/export").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
