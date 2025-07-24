@@ -30,6 +30,7 @@ public class DsClassique {
     private LocalTime hSortie;
 
     private String transporteur;
+    @Column(unique = true)
     private String numeroBL;
     private String immatricule;
     private Double tb;

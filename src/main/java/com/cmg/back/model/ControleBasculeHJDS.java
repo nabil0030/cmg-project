@@ -17,6 +17,7 @@ public class ControleBasculeHJDS {
     private LocalDate date;
 
     private String transporteur;
+    @Column(unique = true)
     private String numeroBL;
     private String immatricule;
 

@@ -1,1048 +1,1615 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrôle Bascule HJ & DS - Enhanced</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <title>Contrôle Bascule HJ & DS - Système Avancé</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <style>
-        /* --- Root Variables for a Modern Theme --- */
+        /* --- Base Styles --- */
         :root {
-            --primary-color: #4A90E2; /* Modern Blue */
-            --secondary-color: #2C3E50; /* Darker Blue-Gray for sidebar */
-            --accent-color: #2ECC71; /* Green for success/highlights */
-            --text-dark: #333333;
-            --text-light: #666666;
-            --bg-light: #F8F9FA; /* Off-white background */
-            --card-bg: #FFFFFF;
-            --border-color: #E0E0E0;
-            --input-border-focus: #4A90E2;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --border-radius: 10px;
-            --sidebar-width: 260px; /* Define sidebar width for easy toggling */
-            --sidebar-width-collapsed: 75px;
+            --primary-color: #005A9C; /* Deep Blue - Institutionnel */
+            --secondary-color: #00A1E1; /* Sky Blue - Accent */
+            --danger-color: #E63946; /* Red */
+            --warning-color: #FFC107; /* Amber - for edit */
+            --success-color: #28A745; /* Green - for success */
+            --info-color: #17A2B8; /* Cyan - for info */
+            --neutral-color: #6C757D; /* Grey for zero écart */
+
+            --light-bg: #F8F9FA; /* Off-white background */
+            --dark-text: #343A40; /* Dark gray for text */
+            --light-text: #6C757D; /* Medium gray for secondary text */
+            --border-color: #DEE2E6; /* Light gray border */
+
+            --white: #FFFFFF;
+            --black: #000000;
+            --sidebar-width: 250px; /* New: Define sidebar width */
+
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+
+            --transition-speed: 0.3s ease;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
-            background-color: var(--bg-light);
-            display: flex;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            padding: 0; /* Remove body padding as sidebar takes left space */
+            display: flex; /* Use flexbox to align sidebar and main content */
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            color: var(--text-dark);
         }
 
-        /* --- Animated Background Gradient (Subtle) --- */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--bg-light) 0%, #E6EBF2 50%, #DDE5F0 100%);
-            background-size: 200% 200%;
-            animation: gradientAnimation 15s ease infinite alternate;
-            z-index: -2; /* Below everything */
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-
-        /* --- Sidebar Styling --- */
+        /* --- Sidebar Styles --- */
         .sidebar {
             width: var(--sidebar-width);
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 30px 0; /* More padding */
-            height: 100vh;
-            position: sticky;
+            height: 100vh; /* Full viewport height */
+            position: fixed; /* Stays in place when scrolling */
             top: 0;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-light);
-            transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
-            border-top-right-radius: var(--border-radius);
-            border-bottom-right-radius: var(--border-radius);
+            left: 0;
+            background-color: var(--black); /* Black background */
+            color: var(--white); /* White text */
+            padding: 20px 0;
+            box-shadow: var(--shadow-medium);
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Push footer to bottom */
-            z-index: 10; /* Ensure sidebar is above main content */
+            overflow-y: auto; /* Enable scrolling for long menus */
+            transition: width var(--transition-speed); /* For dynamic width changes if needed later */
+            z-index: 20; /* Ensure sidebar is above other content */
         }
 
-        .sidebar.collapsed { /* Class added by JS for collapsed state */
-            width: var(--sidebar-width-collapsed);
-        }
-
-        .sidebar-header {
-            padding: 0 30px 30px; /* More padding */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More prominent divider */
-            text-align: center;
-            display: flex; /* For alignment of title/icon */
-            justify-content: center;
-            align-items: center;
-        }
-        .sidebar.collapsed .sidebar-header {
-            padding: 0 10px 20px; /* Adjust padding when collapsed */
-        }
-
-        .sidebar-title {
-            font-size: 1.8rem; /* Larger title */
-            font-weight: 700; /* Bolder */
-            margin: 0;
-            color: white;
-            letter-spacing: 0.5px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            animation: fadeInScale 0.8s ease-out forwards; /* Initial animation */
-            transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition for hiding text */
-        }
-        .sidebar.collapsed .sidebar-title {
-            opacity: 0;
-            transform: translateX(-20px);
-            pointer-events: none; /* Make text unclickable when hidden */
-            width: 0; /* Collapse width */
-            overflow: hidden; /* Hide overflow */
-        }
-
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .nav-menu {
+        .sidebar .nav-menu {
             list-style: none;
             padding: 0;
-            margin: 30px 0 0 0;
-            flex-grow: 1; /* Allows menu to take available space */
-        }
-
-        .nav-item {
-            padding: 15px 30px; /* More padding */
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, border-left-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            border-left: 5px solid transparent; /* For active state */
-        }
-        .sidebar.collapsed .nav-item {
-            padding: 15px 0; /* Center icons when collapsed */
-            justify-content: center;
-            border-left: none; /* Remove border when collapsed */
-        }
-
-        .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.15); /* Slightly stronger hover */
-            transform: translateX(8px); /* More pronounced slide */
-            border-left-color: var(--primary-color); /* Highlight on hover */
-        }
-        .sidebar.collapsed .nav-item:hover {
-            transform: none; /* No translate when collapsed */
-        }
-
-        .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.3); /* Lighter active background */
-            border-left: 5px solid var(--accent-color); /* Stronger highlight for active */
-            font-weight: 600;
-        }
-        .sidebar.collapsed .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
-            border-radius: var(--border-radius); /* Rounded background */
-            margin: 0 10px; /* Some margin to show background */
-            border-left: none; /* No border when collapsed, use background */
-        }
-
-        .nav-item i {
-            margin-right: 15px; /* More space for icon */
-            font-size: 1.2rem; /* Larger icons */
-            color: rgba(255, 255, 255, 0.8);
-            transition: color 0.3s ease, margin-right 0.3s ease;
-        }
-        .sidebar.collapsed .nav-item i {
-            margin-right: 0; /* No margin when text is hidden */
-        }
-
-        .nav-item:hover i, .nav-item.active i {
-            color: white; /* Icons become white on hover/active */
-        }
-
-        .nav-item a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            font-size: 1.05rem; /* Slightly larger text */
-            white-space: nowrap; /* Prevent wrapping */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: opacity 0.3s ease; /* Smooth transition for hiding text */
-        }
-        .sidebar.collapsed .nav-item a {
-            opacity: 0;
-            width: 0; /* Collapse width */
-            pointer-events: none; /* Make text unclickable when hidden */
-        }
-
-        .sidebar-footer {
-            padding: 20px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            transition: opacity 0.3s ease; /* Smooth transition for hiding footer */
-        }
-        .sidebar.collapsed .sidebar-footer {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* --- Toggle Button --- */
-        .sidebar-toggle {
-            position: absolute;
-            top: 20px;
-            right: -15px; /* Half outside sidebar */
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            z-index: 11; /* Above sidebar */
-        }
-        .sidebar-toggle:hover {
-            background-color: #397BC7;
-            transform: scale(1.1);
-        }
-        .sidebar.collapsed .sidebar-toggle .fas {
-            transform: rotate(180deg); /* Rotate arrow when collapsed */
-        }
-        .sidebar-toggle .fas {
-            transition: transform 0.3s ease; /* Smooth rotation */
-        }
-
-        /* --- Main Content Styling --- */
-        .main-content {
-            flex: 1;
-            padding: 40px; /* More padding for content */
+            margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 30px; /* Space between sections */
-            position: relative;
-            z-index: 1;
-            transition: margin-left 0.3s ease; /* To account for sidebar collapse */
+            gap: 5px; /* Space between menu items */
         }
 
-        .page-title {
-            font-size: 2.5rem; /* Larger and bolder title */
-            color: var(--text-dark);
-            margin-bottom: 20px;
-            font-weight: 800; /* Extra bold */
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.05);
-            animation: slideInLeft 0.7s ease-out forwards;
-        }
-
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* --- Section Cards (Form and Table) --- */
-        .form-section, .table-section {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 30px; /* More internal padding */
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative; /* For overflow mask */
-            overflow: hidden; /* For inner animations */
-        }
-
-        .form-section:hover, .table-section:hover {
-            transform: translateY(-5px); /* Lift effect on hover */
-            box-shadow: var(--shadow-hover);
-        }
-
-        .section-header {
+        .sidebar .nav-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        .section-header h2 {
-            font-size: 1.6rem; /* Section titles */
-            color: var(--primary-color);
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .section-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .section-actions button {
-            background: none;
-            border: none;
-            color: var(--primary-color);
+            padding: 12px 20px; /* Padding for each item */
             cursor: pointer;
-            font-size: 1rem;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            display: inline-flex; /* Align icon and text */
-            align-items: center;
-            gap: 5px;
-        }
-        .section-actions button:hover {
-            background-color: rgba(74, 144, 226, 0.1);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
-        /* --- Form Styling --- */
-        #hjds-form {
+        .sidebar .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+        }
+
+        .sidebar .nav-item.active {
+            background-color: var(--primary-color); /* Active item highlight */
+            color: var(--white);
+        }
+
+        .sidebar .nav-item i {
+            font-size: 1.1rem;
+            margin-right: 15px; /* Space between icon and text */
+            color: var(--white); /* Ensure icons are white */
+        }
+
+        .sidebar .nav-item a {
+            text-decoration: none;
+            color: var(--white); /* White link text */
+            font-weight: 500;
+            font-size: 0.95rem;
+            flex-grow: 1; /* Allows text to take available space */
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .nav-item a span {
+            transition: color var(--transition-speed);
+        }
+
+        /* Main Content Adjustment */
+        main {
+            flex-grow: 1; /* Allow main content to take remaining space */
+            margin-left: var(--sidebar-width); /* Push main content to the right of the sidebar */
+            padding: 2.5rem 1.5rem; /* Original main padding */
+            width: 100%; /* Ensure main takes full width after margin */
+            max-width: calc(100% - var(--sidebar-width)); /* Adjust max-width */
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            font-size: 2.4rem; /* Larger heading */
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius-sm);
+        }
+
+        /* --- Card / Section Styling --- */
+        .card {
+            background: var(--white);
+            padding: 2.5rem; /* Consistent padding */
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-medium);
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-3px); /* Subtle hover effect */
+        }
+
+        /* --- Form Styles --- */
+        form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
-            gap: 20px; /* Space between inputs */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+            gap: 1.5rem 2rem; /* More space */
+            align-items: center;
+            margin-top: 1rem;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
+            gap: 0.6rem;
         }
 
         .form-group label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        input, textarea {
-            width: 100%; /* Ensure they fill their grid column */
-            padding: 12px 15px;
-            border-radius: 8px; /* Slightly larger radius */
-            border: 1px solid var(--border-color);
-            font-size: 1rem;
-            color: var(--text-dark);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: var(--bg-light); /* Light background for inputs */
-        }
-
-        input:focus, textarea:focus {
-            border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Subtle glow effect */
-            outline: none;
-            background-color: white;
-        }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical; /* Allow vertical resizing */
-            grid-column: 1 / -1; /* Make textarea span all columns */
-        }
-
-        #hjds-form .form-buttons { /* Container for form submission and other buttons */
-            grid-column: 1 / -1; /* Span all columns */
-            display: flex;
-            justify-content: flex-end; /* Align buttons to the right */
-            gap: 15px; /* Space between buttons */
-            margin-top: 15px;
-        }
-
-        #hjds-form button[type="submit"] {
-            padding: 14px 25px; /* Larger button */
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1rem;
             font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3); /* Button shadow */
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .search-container input {
+            width: 100%;
+            padding: 0.85rem 1rem; /* Larger padding */
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--dark-text);
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .form-group input:focus,
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.15);
+        }
+
+        .form-group input[readonly] {
+            background-color: #E9ECEF;
+            cursor: not-allowed;
+            color: var(--light-text);
+        }
+
+        .form-actions {
+            grid-column: 1 / -1; /* Spans all columns */
             display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        /* --- Button Styles --- */
+        button {
+            padding: 0.9rem 2rem; /* Larger buttons */
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: background-color var(--transition-speed), transform 0.2s, box-shadow var(--transition-speed);
+            outline: none;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background-color: var(--light-text);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-primary:hover:not(:disabled) { background-color: #004A80; }
+
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-danger:hover:not(:disabled) { background-color: #C2313D; }
+
+        .btn-warning { background-color: var(--warning-color); color: var(--dark-text); }
+        .btn-warning:hover:not(:disabled) { background-color: #DDA300; }
+
+        .btn-success { background-color: var(--success-color); }
+        .btn-success:hover:not(:disabled) { background-color: #218838; }
+
+        .btn-info { background-color: var(--info-color); }
+        .btn-info:hover:not(:disabled) { background-color: #138496; }
+
+        .btn-secondary { background-color: var(--light-text); }
+        .btn-secondary:hover:not(:disabled) { background-color: #5A6268; }
+
+        /* Icon Buttons in Table */
+        .icon-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem; /* Reduced padding for icons */
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1.1rem; /* Slightly larger icon size */
+            transition: background-color 0.2s, transform 0.2s;
+            color: var(--dark-text); /* Default icon color */
+        }
+
+        .icon-btn.edit-btn { color: var(--warning-color); }
+        .icon-btn.delete-btn { color: var(--danger-color); }
+
+        .icon-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        /* --- Table and Controls --- */
+        .table-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .table-controls {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            width: fit-content; /* Ensure button only takes content width */
+            gap: 1rem; /* Space between controls */
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        #hjds-form button[type="submit"]:hover {
-            background-color: #397BC7; /* Darker blue on hover */
-            transform: translateY(-2px); /* Slight lift */
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+        .search-container {
+            flex-grow: 1; /* Allows search bar to take more space */
+            max-width: 350px;
+            position: relative;
         }
 
-        /* --- Table Styling --- */
+        .search-container input {
+            padding-left: 2.5rem; /* Space for icon */
+        }
+
+        .search-container::before {
+            content: "🔍"; /* Search icon */
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        /* Table Responsive Wrapper */
         .table-responsive {
-            overflow-x: auto; /* Enable horizontal scrolling for tables on small screens */
-            -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
-            border-radius: var(--border-radius); /* Apply radius to container */
-            border: 1px solid var(--border-color); /* Subtle border for the table container */
+            overflow-x: auto; /* Horizontal scroll for small screens */
+            width: 100%;
         }
 
         table {
             width: 100%;
-            border-collapse: separate; /* Allows border-radius on cells */
-            border-spacing: 0; /* Remove default spacing */
-            min-width: 900px; /* Ensure table doesn't get too squished */
+            border-collapse: separate; /* For rounded corners on rows */
+            border-spacing: 0;
+            margin-top: 0.5rem; /* Slight space from controls */
+            min-width: 800px; /* Ensures table is not too narrow on small screens */
         }
 
         th, td {
-            padding: 15px 20px; /* More padding in cells */
+            padding: 1.1rem 1rem; /* More padding */
             text-align: left;
-            border-bottom: 1px solid var(--border-color); /* Only bottom border */
-            border-right: 1px solid var(--border-color); /* Right border for columns */
-        }
-
-        th:last-child, td:last-child {
-            border-right: none; /* No right border on last column */
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle; /* Center content vertically */
+            white-space: nowrap; /* Prevent wrapping in cells */
         }
 
         th {
             background-color: var(--primary-color);
-            color: white;
+            color: var(--white);
             font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            position: sticky;
-            top: 0; /* Sticky header for long tables */
-            z-index: 1; /* Keep header above scrolling content */
+            text-align: center;
+            position: sticky; /* Sticky header for scrollable table */
+            top: 0;
+            z-index: 10;
+            cursor: pointer; /* Indicate sortable */
+            transition: background-color 0.2s;
         }
 
-        /* Rounded corners for table header */
-        th:first-child { border-top-left-radius: var(--border-radius); }
-        th:last-child { border-top-right-radius: var(--border-radius); }
+        th:hover {
+            background-color: #004A80;
+        }
+
+        th.sorted-asc::after {
+            content: " ▲"; /* Up arrow for ascending */
+        }
+
+        th.sorted-desc::after {
+            content: " ▼"; /* Down arrow for descending */
+        }
 
         tbody tr {
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            background-color: var(--white);
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #FDFDFD; /* Subtle zebra striping */
         }
 
         tbody tr:hover {
-            background-color: #EBF2FA; /* Light highlight on row hover */
-            transform: translateY(-2px); /* Subtle lift */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            cursor: pointer;
+            background-color: #F1F7FC; /* Light blue on hover */
         }
 
-        tbody tr:last-child td {
-            border-bottom: none; /* No bottom border on last row */
+        td:last-child {
+            display: flex;
+            gap: 0.6rem; /* Space between action buttons */
+            justify-content: center;
+            align-items: center;
+            padding-right: 1.5rem; /* More space on right for buttons */
         }
 
-        /* Action buttons in table */
-        .table-actions {
-            white-space: nowrap; /* Prevent buttons from wrapping */
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+            color: var(--light-text);
+            grid-column: 1 / -1; /* Spans full table width */
+        }
+
+        /* --- Pagination --- */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.8rem 0 1rem; /* More vertical padding */
+            gap: 1rem;
+            flex-wrap: wrap; /* Allow wrapping */
+        }
+
+        .pagination-controls button {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            min-width: 100px;
+        }
+
+        #page-info {
+            font-weight: 500;
+            color: var(--light-text);
+            min-width: 120px;
             text-align: center;
         }
-        .table-actions button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin: 0 3px; /* Smaller margin for multiple buttons */
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: inline-flex;
+
+        /* Chart Container */
+        .chart-container {
+            width: 100%;
+            height: 400px; /* Fixed height for the chart */
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
+            position: relative;
+        }
+        .chart-container canvas {
+            max-width: 100%;
+            max-height: 100%;
         }
 
-        .table-actions button:hover {
-            background-color: #397BC7;
-            transform: translateY(-1px);
+
+        /* --- Confirmation Modal (Basic Styling) --- */
+        #confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+            min-width: 300px;
+            font-family: 'Poppins', sans-serif;
+        }
+        #confirm-dialog p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+        }
+        #confirm-dialog > div {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        #confirm-dialog button {
+            padding: 10px 25px;
         }
 
-        .table-actions button.delete-btn {
-            background-color: #E74C3C; /* Red for delete */
-        }
-        .table-actions button.delete-btn:hover {
-            background-color: #C0392B;
-        }
-
-        /* Excel Export Button Styling */
-        .export-button-container {
-            text-align: right; /* Align button to the right */
-            margin-bottom: 20px; /* Space below button */
-        }
-
-        .export-button-container button {
-            padding: 10px 20px;
-            background-color: #2ECC71; /* Accent green */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .export-button-container button:hover {
-            background-color: #28B463;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
         }
 
 
         /* --- Responsive Design --- */
-        @media (max-width: 1200px) {
-            .main-content {
-                padding: 30px;
-            }
-            .page-title {
-                font-size: 2.2rem;
-            }
-            .form-section, .table-section {
-                padding: 25px;
-            }
-            .section-header h2 {
-                font-size: 1.4rem;
-            }
-        }
-
         @media (max-width: 992px) {
-            .sidebar {
-                width: var(--sidebar-width-collapsed); /* Collapsed sidebar for tablets */
-                padding: 20px 0;
-            }
-            .sidebar .sidebar-header {
-                padding: 0 10px 20px;
-            }
-            .sidebar .sidebar-title {
-                font-size: 1.2rem;
-                white-space: nowrap; /* Prevent wrapping */
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: none; /* Hide text, only icon visible */
-            }
-            .sidebar .sidebar-title i {
-                margin-right: 0;
-            }
-            .nav-item {
-                padding: 15px 0; /* Center icons when collapsed */
-                justify-content: center;
-                border-left: none; /* Remove border when collapsed */
-            }
-            .nav-item i {
-                margin-right: 0; /* No margin when text is hidden */
-            }
-            .nav-item a {
-                display: none; /* Hide link text */
-            }
-            .nav-item.active {
-                background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
-                border-radius: var(--border-radius); /* Rounded background */
-                margin: 0 10px; /* Some margin to show background */
-                border-left: none; /* No border when collapsed, use background */
-            }
-            .sidebar-footer {
-                display: none; /* Hide footer when collapsed */
-            }
-            .sidebar-toggle {
-                right: -15px; /* Keep toggle position relative to collapsed sidebar */
+            :root {
+                --sidebar-width: 80px; /* Smaller sidebar on tablet */
             }
 
-            .main-content {
-                padding: 20px;
+            .sidebar .nav-item {
+                flex-direction: column; /* Stack icon and text */
+                padding: 10px 5px;
             }
-            .page-title {
-                font-size: 2rem;
+            .sidebar .nav-item i {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            .sidebar .nav-item a span {
+                font-size: 0.75rem; /* Smaller text */
                 text-align: center;
-                margin-bottom: 30px;
             }
-            .section-header {
+            .sidebar .nav-item a {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+                justify-content: center;
             }
-            .section-header h2 {
-                width: 100%;
-                text-align: center;
+
+
+            main {
+                margin-left: var(--sidebar-width);
+                padding: 1.5rem 1rem;
+                max-width: calc(100% - var(--sidebar-width));
             }
-            .section-actions {
+
+            h2 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .card {
+                padding: 1.8rem;
+            }
+
+            form {
+                grid-template-columns: 1fr; /* Stack inputs on smaller screens */
+                gap: 1.2rem;
+            }
+
+            .form-actions {
+                flex-direction: column; /* Stack buttons */
+                gap: 0.8rem;
+            }
+
+            .form-actions button {
                 width: 100%;
-                text-align: center;
+            }
+
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%; /* Full width on small screens */
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: center; /* Center action buttons */
+            }
+
+            th, td {
+                padding: 0.8rem 0.7rem;
+            }
+
+            .chart-container {
+                height: 300px; /* Adjust height for smaller screens */
             }
         }
 
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: static;
-                border-radius: 0;
-                padding: 15px 0;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            }
-            .sidebar-toggle {
-                display: none; /* Hide toggle button on very small screens, sidebar is always full width then */
-            }
-            .sidebar-header {
-                padding: 0 15px 15px;
-                border-bottom: none;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .sidebar-title {
-                display: block; /* Show title again on very small screens */
-                font-size: 1.5rem;
-                opacity: 1;
-                transform: translateX(0);
-                width: auto;
-            }
-            .sidebar-title i {
-                margin-right: 10px;
-            }
-            .nav-menu {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                margin-top: 10px;
-            }
-            .nav-item {
-                flex-basis: auto;
-                padding: 10px 15px;
-                margin: 5px;
-                border-radius: 8px;
-                display: flex; /* Ensure flex for icon/text alignment */
-                align-items: center;
-            }
-            .nav-item a {
-                display: block; /* Show link text again */
-                margin-left: 5px;
-                opacity: 1;
-                width: auto;
-            }
-            .nav-item i {
-                margin-right: 8px;
-            }
-            .nav-item.active {
-                border-left: 5px solid var(--accent-color); /* Bring back border for active */
-                background-color: rgba(74, 144, 226, 0.2);
-            }
-            .sidebar.collapsed { /* Remove collapsed state on small screens */
-                width: 100%;
-            }
-            .sidebar.collapsed .sidebar-header {
-                padding: 0 15px 15px;
-            }
-            .sidebar.collapsed .sidebar-title {
-                display: block;
-            }
-            .sidebar.collapsed .nav-item {
-                padding: 10px 15px;
-                justify-content: flex-start;
-            }
-            .sidebar.collapsed .nav-item a {
-                display: block;
-                opacity: 1;
-                width: auto;
-            }
-            .sidebar.collapsed .nav-item i {
-                margin-right: 8px;
+        @media (max-width: 576px) {
+            :root {
+                --sidebar-width: 60px; /* Even smaller sidebar on mobile */
             }
 
-            .main-content {
-                padding: 15px;
-                gap: 20px;
+            .sidebar .nav-item {
+                padding: 8px 3px;
             }
-            .page-title {
+            .sidebar .nav-item i {
+                font-size: 1rem;
+            }
+            .sidebar .nav-item a span {
+                display: none; /* Hide text on very small screens, show only icons */
+            }
+
+
+            body {
+                padding: 0;
+            }
+
+            main {
+                margin-left: var(--sidebar-width);
+                padding: 1rem 0.5rem;
+                max-width: calc(100% - var(--sidebar-width));
+            }
+
+            h2 {
                 font-size: 1.8rem;
-                margin-bottom: 20px;
             }
-            .form-section, .table-section {
-                padding: 20px;
+
+            .card {
+                padding: 1rem;
             }
-            #hjds-form { /* Changed from .form-row */
-                grid-template-columns: 1fr; /* Single column layout for forms */
+
+            button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
             }
-            #hjds-form .form-buttons button[type="submit"] { /* Targeted specific button */
-                width: 100%; /* Full width button */
+
+            .pagination-controls {
+                flex-direction: column;
+                gap: 0.8rem;
             }
-            .table-responsive {
-                border-radius: 0; /* No border radius for full width */
-                border-left: none;
-                border-right: none;
-            }
-            .export-button-container {
-                text-align: center; /* Center export button on small screens */
-            }
-            .export-button-container button {
-                width: 100%; /* Full width for export button */
+
+            .chart-container {
+                height: 250px; /* Further adjust height */
             }
         }
     </style>
 </head>
 <body>
-<div class="sidebar" id="sidebar">
-    <button class="sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-    <div>
-        <div class="sidebar-header">
-            <h1 class="sidebar-title">
-                <i class="fas fa-cubes"></i>
-                CMG App
-            </h1>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item active">
-                <i class="fas fa-home"></i>
-                <a href="index.html"><span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight"></i>
-                <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight"></i>
-                <a href="dsClassique.html"><span>DS classique</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-weight-hanging"></i>
-                <a href="dsNord.html"><span>DS NORD</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="controle-bascule-ka.html"><span>C. Bascule KA</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="chauxVive.html"><span>Chaux Vive</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
 
-            </li>
+<aside class="sidebar">
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <i class="fas fa-home"></i>
+            <a href="index.html"><span>Dashboard</span></a>
+        </li>
+        <li class="nav-item active"> <i class="fas fa-weight"></i>
+            <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="dsClassique.html"><span>DS classique</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight-hanging"></i>
+            <a href="dsNord.html"><span>DS NORD</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="controle-bascule-ka.html"><span>C. Bascule KA</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="chauxVive.html"><span>Chaux Vive</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="synthese.html"><span> synthese lmli777777a </span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-cog"></i>
+            <a href="#"><span>Settings</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <a href="#"><span>Help</span></a>
+        </li>
+    </ul>
+</aside>
 
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
+<main>
+    <h2>Contrôle Bascule HJ & DS</h2>
 
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
-
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
-
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="hm.html"><span> lmli7 jay </span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-cog"></i>
-                <a href="#"><span>Settings</span></a>
-            </li>
-            <li class="nav-item">
-                <i class="fas fa-question-circle"></i>
-                <a href="#"><span>Help</span></a>
-            </li>
-        </ul>
-    </div>
-    <div class="sidebar-footer">
-        <p>&copy; 2025 CMG Operations</p>
-    </div>
-</div>
-
-<div class="main-content">
-    <h1 class="page-title">Contrôle Bascule HJ & DS</h1>
-
-    <div class="form-section">
-        <div class="section-header">
-            <h2 id="form-section-title">Ajouter une entrée</h2>
-        </div>
-        <form id="hjds-form">
+    <div class="card">
+        <form id="controle-form">
             <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" required>
+                <label for="numeroBL">🔍 N° BL :</label>
+                <input type="text" id="numeroBL" name="numeroBL" list="blList" required />
+                <datalist id="blList"></datalist>
             </div>
+
             <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" id="transporteur" placeholder="Nom du Transporteur" required>
+                <label for="date">Date :</label>
+                <input type="date" id="date" readonly />
             </div>
+
             <div class="form-group">
-                <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
+                <label for="transporteur">Transporteur :</label>
+                <input type="text" id="transporteur" readonly />
             </div>
+
             <div class="form-group">
-                <label for="immatricule">Matricule</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+                <label for="immatricule">Immatricule :</label>
+                <input type="text" id="immatricule" readonly />
             </div>
+
             <div class="form-group">
-                <label for="netDS">Net DS</label>
-                <input type="number" step="0.01" id="netDS" placeholder="Poids Net DS" required>
+                <label for="netDs">NET DS :</label>
+                <input type="number" id="netDs" step="0.01" readonly />
             </div>
+
             <div class="form-group">
-                <label for="netCMG">Net CMG</label>
-                <input type="number" step="0.01" id="netCMG" placeholder="Poids Net CMG" required>
+                <label for="netCmg">NET CMG :</label>
+                <input type="number" id="netCmg" step="0.01" required placeholder="Saisir le NET CMG" />
             </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="observation">Observation</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+
+            <div class="form-group">
+                <label for="ecart">Écart :</label>
+                <input type="number" id="ecart" readonly />
             </div>
-            <div class="form-buttons">
-                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
+
+            <div class="form-group">
+                <label for="observation">Observation :</label>
+                <input type="text" id="observation" placeholder="Ajouter une observation (optionnel)" />
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="submit-btn" class="btn-primary">Ajouter</button>
+                <button type="button" id="cancel-edit-btn" class="btn-secondary" style="display: none;">Annuler Modification</button>
             </div>
         </form>
     </div>
 
-    <div class="table-section">
-        <div class="section-header">
-            <h2>Historique</h2>
+    <div class="card">
+        <h3>Visualisation des Écarts (NET DS - NET CMG)</h3>
+        <div class="chart-container">
+            <canvas id="ecartChart"></canvas>
         </div>
-        <div class="export-button-container">
-            <button onclick="window.location.href='/api/bascule-hj-ds/export'"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+    </div>
+
+    <div class="card table-section">
+        <div class="table-controls">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Rechercher..." aria-label="Rechercher dans le tableau">
+            </div>
+            <div class="action-buttons">
+                <button id="export-csv-btn" class="btn-info">Exporter CSV</button>
+            </div>
         </div>
 
         <div class="table-responsive">
             <table>
                 <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Transporteur</th>
-                    <th>N° BL</th>
-                    <th>Immatricule</th>
-                    <th>Net DS</th>
-                    <th>Net CMG</th>
-                    <th>Écart CMG</th>
-                    <th>Observation</th>
+                    <th data-sort="date">Date</th>
+                    <th data-sort="transporteur">Transporteur</th>
+                    <th data-sort="numeroBL">N° BL</th>
+                    <th data-sort="immatricule">Immatricule</th>
+                    <th data-sort="netDs">NET DS</th>
+                    <th data-sort="netCmg">NET CMG</th>
+                    <th data-sort="ecart">Écart</th>
+                    <th data-sort="observation">Observation</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody id="data-body">
+                <tr><td colspan="9" class="no-results">Chargement des données...</td></tr>
                 </tbody>
             </table>
         </div>
+
+        <div id="pagination-controls" class="pagination-controls"></div>
+    </div>
+</main>
+
+<div id="confirm-dialog">
+    <p>Êtes-vous sûr de vouloir supprimer cette entrée ?</p>
+    <div>
+        <button id="confirm-yes" class="btn-danger">Oui, Supprimer</button>
+        <button id="confirm-no" class="btn-secondary">Annuler</button>
     </div>
 </div>
+<div id="overlay"></div>
+
 
 <script>
-    let currentEditId = null;
+    // =================================================================================
+    // JavaScript Logic for Bascule HJ & DS Control Page
+    // This script manages form interactions, data display, CRUD operations,
+    // pagination, searching, sorting, data export, and dynamic charting.
+    // =================================================================================
 
-    // Format ISO → DD/MM/YYYY
-    function formatDate(isoDate) {
-        if (!isoDate) return '';
-        const [year, month, day] = isoDate.split('-');
-        return `${day}/${month}/${year}`;
-    }
+    // --- Global Variables & Configuration ---
+    // =================================================================================
+    let currentEditId = null; // Stores the ID of the record being edited, null if adding
+    let allRecords = [];    // Stores all data fetched from the API
+    let filteredRecords = []; // Stores records after search/filter is applied
+    let currentPage = 1;
+    const recordsPerPage = 10; // Number of records to display per page
+    let currentSortColumn = 'date'; // Default sort column
+    let currentSortDirection = 'asc'; // Default sort direction
+    let ecartChartInstance = null; // Chart.js instance
 
-    // Charger tableau
-    function loadTable() {
-        fetch('/api/bascule-hj-ds')
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = '';
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // --- DOM Elements Cache ---
+    // =================================================================================
+    const DOM = {
+        form: document.getElementById("controle-form"),
+        numeroBLInput: document.getElementById("numeroBL"),
+        dateInput: document.getElementById("date"),
+        transporteurInput: document.getElementById("transporteur"),
+        immatriculeInput: document.getElementById("immatricule"),
+        netDsInput: document.getElementById("netDs"),
+        netCmgInput: document.getElementById("netCmg"),
+        ecartInput: document.getElementById("ecart"),
+        observationInput: document.getElementById("observation"),
+        submitBtn: document.getElementById("submit-btn"),
+        cancelEditBtn: document.getElementById("cancel-edit-btn"),
+        dataBody: document.getElementById("data-body"),
+        blList: document.getElementById("blList"),
+        paginationControls: document.getElementById("pagination-controls"),
+        searchInput: document.getElementById("search-input"),
+        exportCsvBtn: document.getElementById("export-csv-btn"),
+        tableHeaders: document.querySelectorAll("th[data-sort]"),
+        ecartChartCanvas: document.getElementById("ecartChart"),
+        // Confirmation Modal Elements
+        confirmDialog: document.getElementById("confirm-dialog"),
+        confirmYesBtn: document.getElementById("confirm-yes"),
+        confirmNoBtn: document.getElementById("confirm-no"),
+        overlay: document.getElementById("overlay")
+    };
 
-                if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">Aucune donnée trouvée.</td></tr>`;
-                    return;
+
+    // --- API Service Functions (Simulated) ---
+    // In a real application, these would interact with a backend server.
+    // For this example, we're assuming `/api/ds-classique` and `/api/bascule-hj-ds`
+    // are accessible endpoints.
+    // =================================================================================
+    const ApiService = {
+        /**
+         * Fetches all unique BL numbers for the datalist autocompletion.
+         * @returns {Promise<Array<Object>>} - An array of objects with 'numeroBL' property.
+         */
+        async fetchBLList() {
+            try {
+                // Simulate API call delay for demonstration
+                // await new Promise(resolve => setTimeout(resolve, 300));
+                const response = await fetch("/api/ds-classique");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                return await response.json();
+            } catch (error) {
+                console.error("Error fetching BL list:", error);
+                // In a real app, provide user feedback here
+                return [];
+            }
+        },
 
-                data.forEach(item => {
-                    const netDs  = item.netDs != null ? item.netDs.toFixed(2) : '';
-                    const netCmg = item.netCmg != null ? item.netCmg.toFixed(2) : '';
-                    const ecart  = (item.netCmg != null && item.netDs != null)
-                        ? (item.netCmg - item.netDs).toFixed(2)
-                        : '';
+        /**
+         * Fetches detailed data for a specific BL number.
+         * @param {string} blNumber - The BL number to fetch.
+         * @returns {Promise<Object|null>} - Data object if found, null otherwise.
+         */
+        async fetchBLDetails(blNumber) {
+            try {
+                // Simulate API call delay for demonstration
+                // await new Promise(resolve => setTimeout(resolve, 300));
+                const response = await fetch(`/api/ds-classique/bl/${blNumber}`);
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        return null; // BL not found
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching details for BL ${blNumber}:`, error);
+                // In a real app, provide user feedback here
+                return null;
+            }
+        },
 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${formatDate(item.date)}</td>
-                        <td>${item.transporteur}</td>
-                        <td>${item.numeroBL}</td>
-                        <td>${item.immatricule}</td>
-                        <td>${netDs}</td>
-                        <td>${netCmg}</td>
-                        <td>${ecart}</td>
-                        <td>${item.observation || '-'}</td>
-                        <td>
-                            <button onclick="editEntry(${item.id})"><i class="fas fa-edit"></i> Modifier</button>
-                            <button onclick="deleteEntry(${item.id})" class="delete-btn"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
+        /**
+         * Fetches all records from the bascule-hj-ds system.
+         * @returns {Promise<Array<Object>>} - An array of all bascule records.
+         */
+        async fetchAllBasculeRecords() {
+            try {
+                // Simulate API call delay for demonstration
+                // await new Promise(resolve => setTimeout(resolve, 500));
+                const response = await fetch("/api/bascule-hj-ds");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error("Error fetching all bascule records:", error);
+                // In a real app, provide user feedback here
+                return [];
+            }
+        },
+
+        /**
+         * Fetches a single bascule record by its ID.
+         * @param {number} id - The ID of the record.
+         * @returns {Promise<Object|null>} - The record object if found, null otherwise.
+         */
+        async fetchBasculeRecordById(id) {
+            try {
+                // await new Promise(resolve => setTimeout(resolve, 200));
+                const response = await fetch(`/api/bascule-hj-ds/${id}`);
+                if (!response.ok) {
+                    if (response.status === 404) return null;
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching bascule record with ID ${id}:`, error);
+                return null;
+            }
+        },
+
+        /**
+         * Adds a new bascule record.
+         * @param {Object} record - The record data to add.
+         * @returns {Promise<Object>} - The newly created record.
+         */
+        async addBasculeRecord(record) {
+            try {
+                // await new Promise(resolve => setTimeout(resolve, 400));
+                const response = await fetch("/api/bascule-hj-ds", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(record)
                 });
-            })
-            .catch(error => {
-                console.error("Erreur chargement:", error);
-                document.getElementById('data-body').innerHTML =
-                    `<tr><td colspan="9" style="text-align:center;color:red;">Erreur chargement données.</td></tr>`;
-            });
-    }
+                if (!response.ok) {
+                    // Try to parse error message if available, otherwise use status text
+                    const errorText = await response.text();
+                    throw new Error(`Failed to add record: ${errorText || response.statusText}`);
+                }
+                // Check if the response actually has content before parsing as JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    return await response.json();
+                } else {
+                    // If not JSON, it might be a simple success message, or no content.
+                    // For this case, we just return a success indicator or an empty object.
+                    return { success: true, message: await response.text() }; // Or just { success: true }
+                }
+            } catch (error) {
+                console.error("Error adding record:", error);
+                throw error; // Re-throw to be caught by calling function
+            }
+        },
 
-    // Supprimer
-    function deleteEntry(id) {
-        if (confirm("❗ Supprimer cette ligne ?")) {
-            fetch(`/api/bascule-hj-ds/${id}`, { method: 'DELETE' })
-                .then(res => res.ok ? res.text() : res.text().then(msg => Promise.reject(msg)))
-                .then(() => {
-                    alert("✅ Supprimé.");
-                    loadTable();
-                })
-                .catch(err => {
-                    console.error("Erreur suppression:", err);
-                    alert(`❌ Suppression échouée: ${err}`);
+        /**
+         * Updates an existing bascule record.
+         * @param {number} id - The ID of the record to update.
+         * @param {Object} record - The updated record data.
+         * @returns {Promise<void>}
+         */
+        async updateBasculeRecord(id, record) {
+            try {
+                // await new Promise(resolve => setTimeout(resolve, 400));
+                const response = await fetch(`/api/bascule-hj-ds/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(record)
                 });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to update record: ${errorText || response.statusText}`);
+                }
+                // No need to parse JSON for a successful PUT if backend sends no content or plain text.
+                // If your PUT endpoint returns the updated object, you'd add: return await response.json();
+            } catch (error) {
+                console.error(`Error updating record with ID ${id}:`, error);
+                throw error;
+            }
+        },
+
+        /**
+         * Deletes a bascule record.
+         * @param {number} id - The ID of the record to delete.
+         * @returns {Promise<void>}
+         */
+        async deleteBasculeRecord(id) {
+            try {
+                // await new Promise(resolve => setTimeout(resolve, 400));
+                const response = await fetch(`/api/bascule-hj-ds/${id}`, {
+                    method: "DELETE"
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to delete record: ${errorText || response.statusText}`);
+                }
+            } catch (error) {
+                console.error(`Error deleting record with ID ${id}:`, error);
+                throw error;
+            }
         }
+    };
+
+    // --- UI Utility Functions ---
+    // =================================================================================
+    const UI = {
+        /**
+         * Displays a temporary message to the user.
+         * @param {string} message - The message to display.
+         * @param {string} type - 'success', 'error', 'warning', or 'info'.
+         */
+        showMessage(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.textContent = message;
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: var(--border-radius-sm);
+                color: white;
+                font-weight: 500;
+                z-index: 1001;
+                box-shadow: var(--shadow-medium);
+                opacity: 0;
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+                transform: translateX(100%);
+            `;
+
+            const rootStyles = getComputedStyle(document.documentElement);
+            switch (type) {
+                case 'success':
+                    alertDiv.style.backgroundColor = rootStyles.getPropertyValue('--success-color');
+                    break;
+                case 'error':
+                    alertDiv.style.backgroundColor = rootStyles.getPropertyValue('--danger-color');
+                    break;
+                case 'warning':
+                    alertDiv.style.backgroundColor = rootStyles.getPropertyValue('--warning-color');
+                    alertDiv.style.color = rootStyles.getPropertyValue('--dark-text');
+                    break;
+                default: // info
+                    alertDiv.style.backgroundColor = rootStyles.getPropertyValue('--info-color');
+            }
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.style.opacity = 1;
+                alertDiv.style.transform = 'translateX(0)';
+            }, 50); // Small delay to trigger transition
+
+            setTimeout(() => {
+                alertDiv.style.opacity = 0;
+                alertDiv.style.transform = 'translateX(100%)';
+                alertDiv.addEventListener('transitionend', () => alertDiv.remove());
+            }, 3000); // Message disappears after 3 seconds
+        },
+
+        /**
+         * Resets the form to its initial "add new record" state.
+         */
+        resetForm() {
+            DOM.form.reset();
+            currentEditId = null;
+            DOM.submitBtn.textContent = "Ajouter";
+            DOM.submitBtn.classList.remove("btn-warning");
+            DOM.submitBtn.classList.add("btn-primary");
+            DOM.cancelEditBtn.style.display = 'none';
+            DOM.numeroBLInput.focus();
+            DOM.netDsInput.value = ''; // Ensure calculated fields are empty
+            DOM.ecartInput.value = '';
+        },
+
+        /**
+         * Shows the confirmation dialog.
+         * @param {function} onConfirm - Callback to execute if 'Yes' is clicked.
+         */
+        showConfirmDialog(onConfirm) {
+            DOM.confirmDialog.style.display = 'block';
+            DOM.overlay.style.display = 'block';
+
+            // Define handlers (named functions for easy removal)
+            const handleYes = () => {
+                onConfirm();
+                UI.hideConfirmDialog();
+                // Crucial: Remove event listeners to prevent multiple executions if dialog is reused
+                DOM.confirmYesBtn.removeEventListener('click', handleYes);
+                DOM.confirmNoBtn.removeEventListener('click', handleNo);
+            };
+
+            const handleNo = () => {
+                UI.hideConfirmDialog();
+                // Crucial: Remove event listeners
+                DOM.confirmYesBtn.removeEventListener('click', handleYes);
+                DOM.confirmNoBtn.removeEventListener('click', handleNo);
+            };
+
+            // Add event listeners
+            DOM.confirmYesBtn.addEventListener('click', handleYes);
+            DOM.confirmNoBtn.addEventListener('click', handleNo);
+        },
+
+        /**
+         * Hides the confirmation dialog.
+         */
+        hideConfirmDialog() {
+            DOM.confirmDialog.style.display = 'none';
+            DOM.overlay.style.display = 'none';
+        }
+    };
+
+    // --- Data Loading & Display ---
+    // =================================================================================
+
+    /**
+     * Populates the BL datalist for autocompletion.
+     */
+    async function populateBLDatalist() {
+        const bls = await ApiService.fetchBLList();
+        DOM.blList.innerHTML = ''; // Clear previous options
+        bls.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.numeroBL;
+            DOM.blList.appendChild(option);
+        });
     }
 
-    // Modifier
-    function editEntry(id) {
-        fetch(`/api/bascule-hj-ds/${id}`)
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(item => {
-                document.getElementById('date').value = item.date;
-                document.getElementById('transporteur').value = item.transporteur;
-                document.getElementById('numeroBL').value = item.numeroBL;
-                document.getElementById('immatricule').value = item.immatricule;
-                document.getElementById('netDS').value = item.netDs;
-                document.getElementById('netCMG').value = item.netCmg;
-                document.getElementById('observation').value = item.observation || '';
+    /**
+     * Loads all bascule records, filters/sorts them, displays the first page, and updates the chart.
+     */
+    async function loadAndDisplayRecords() {
+        DOM.dataBody.innerHTML = '<tr><td colspan="9" class="no-results">Chargement des données...</td></tr>';
+        allRecords = await ApiService.fetchAllBasculeRecords();
+        applyFiltersAndSort(); // This will also call displayPage and setupPagination
+        updateEcartChart(); // Update the chart after data changes
+        UI.showMessage("Données chargées !", 'success');
+    }
 
-                currentEditId = item.id;
+    /**
+     * Applies current search filter and sort order to allRecords, then updates filteredRecords.
+     */
+    function applyFiltersAndSort() {
+        let recordsToProcess = [...allRecords]; // Create a mutable copy
 
-                document.getElementById('form-section-title').textContent = "Modifier une entrée";
-                const submitButton = document.getElementById('submit-button');
-                submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-                submitButton.style.backgroundColor = '#FFA500';
-                submitButton.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
-                submitButton.onmouseover = () => submitButton.style.backgroundColor = '#E69500';
-                submitButton.onmouseout = () => submitButton.style.backgroundColor = '#FFA500';
+        // 1. Apply Search Filter
+        const searchTerm = DOM.searchInput.value.toLowerCase().trim();
+        if (searchTerm) {
+            recordsToProcess = recordsToProcess.filter(record =>
+                Object.values(record).some(value =>
+                    String(value).toLowerCase().includes(searchTerm)
+                )
+            );
+        }
 
-                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch(error => {
-                console.error("Erreur récupération pour modification:", error);
-                alert("❌ Échec chargement de l'entrée.");
+        // 2. Apply Sorting
+        if (currentSortColumn) {
+            recordsToProcess.sort((a, b) => {
+                const valA = a[currentSortColumn];
+                const valB = b[currentSortColumn];
+
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    // Handle dates if necessary, assuming 'YYYY-MM-DD' format for direct comparison
+                    if (currentSortColumn === 'date') {
+                        return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    }
+                    return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                } else {
+                    // Numeric comparison for numbers, fallback for others
+                    const numA = parseFloat(valA);
+                    const numB = parseFloat(valB);
+                    if (isNaN(numA) || isNaN(numB)) { // Handle non-numeric values gracefully
+                        return 0;
+                    }
+                    return currentSortDirection === 'asc' ? numA - numB : numB - numA;
+                }
             });
+        }
+
+        filteredRecords = recordsToProcess;
+        currentPage = 1; // Reset to first page after filter/sort change
+        displayPage(currentPage);
+        setupPagination();
     }
 
-    // Ajout / Mise à jour
-    document.getElementById('hjds-form').addEventListener('submit', function (e) {
+
+    /**
+     * Displays records for a specific page number.
+     * @param {number} page - The page number to display.
+     */
+    function displayPage(page) {
+        DOM.dataBody.innerHTML = "";
+        currentPage = page;
+
+        const start = (page - 1) * recordsPerPage;
+        const end = start + recordsPerPage;
+        const paginatedItems = filteredRecords.slice(start, end);
+
+        if (paginatedItems.length === 0) {
+            DOM.dataBody.innerHTML = '<tr><td colspan="9" class="no-results">Aucun résultat trouvé.</td></tr>';
+            return;
+        }
+
+        paginatedItems.forEach((record) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td data-label="Date">${record.date || ''}</td>
+                <td data-label="Transporteur">${record.transporteur || ''}</td>
+                <td data-label="N° BL">${record.numeroBL || ''}</td>
+                <td data-label="Immatricule">${record.immatricule || ''}</td>
+                <td data-label="NET DS">${(record.netDs !== undefined && record.netDs !== null) ? record.netDs.toFixed(2) : '0.00'}</td>
+                <td data-label="NET CMG">${(record.netCmg !== undefined && record.netCmg !== null) ? record.netCmg.toFixed(2) : '0.00'}</td>
+                <td data-label="Écart">${(record.ecart !== undefined && record.ecart !== null) ? record.ecart.toFixed(2) : '0.00'}</td>
+                <td data-label="Observation">${record.observation || ""}</td>
+                <td>
+                    <button class="icon-btn edit-btn" onclick="editRecord(${record.id})" title="Modifier"><i class="fas fa-edit"></i></button>
+                    <button class="icon-btn delete-btn" onclick="confirmDelete(${record.id})" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+            DOM.dataBody.appendChild(tr);
+        });
+        updatePaginationButtons(); // Update button states after rendering page
+    }
+
+    /**
+     * Sets up pagination controls (Previous, Next buttons, page info).
+     */
+    function setupPagination() {
+        DOM.paginationControls.innerHTML = "";
+        const pageCount = Math.ceil(filteredRecords.length / recordsPerPage);
+
+        if (pageCount <= 1 && filteredRecords.length > 0) { // Still show page info if only one page with results
+            const pageInfo = document.createElement("span");
+            pageInfo.id = "page-info";
+            pageInfo.textContent = `Page 1 sur 1`;
+            DOM.paginationControls.appendChild(pageInfo);
+            return;
+        } else if (pageCount === 0) { // No results at all
+            return;
+        }
+
+        // Previous Button
+        const prevButton = document.createElement("button");
+        prevButton.textContent = "Précédent";
+        prevButton.classList.add("btn-secondary");
+        prevButton.addEventListener("click", () => {
+            if (currentPage > 1) {
+                displayPage(currentPage - 1);
+            }
+        });
+        DOM.paginationControls.appendChild(prevButton);
+
+        // Page Info
+        const pageInfo = document.createElement("span");
+        pageInfo.id = "page-info";
+        pageInfo.textContent = `Page ${currentPage} sur ${pageCount}`;
+        DOM.paginationControls.appendChild(pageInfo);
+
+        // Next Button
+        const nextButton = document.createElement("button");
+        nextButton.textContent = "Suivant";
+        nextButton.classList.add("btn-secondary");
+        nextButton.addEventListener("click", () => {
+            if (currentPage < pageCount) {
+                displayPage(currentPage + 1);
+            }
+        });
+        DOM.paginationControls.appendChild(nextButton);
+
+        updatePaginationButtons(); // Initial state
+    }
+
+    /**
+     * Updates the disabled state of pagination buttons and page info.
+     */
+    function updatePaginationButtons() {
+        const pageCount = Math.ceil(filteredRecords.length / recordsPerPage);
+        const prevButton = DOM.paginationControls.querySelector(".btn-secondary:first-of-type");
+        const nextButton = DOM.paginationControls.querySelector(".btn-secondary:last-of-type");
+        const pageInfo = document.getElementById("page-info");
+
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === pageCount;
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} sur ${pageCount}`;
+    }
+
+
+    // --- Event Handlers & Core Logic ---
+    // =================================================================================
+
+    // Handle BL number input change for auto-filling form
+    DOM.numeroBLInput.addEventListener("change", async () => {
+        const bl = DOM.numeroBLInput.value.trim();
+        if (!bl) {
+            UI.resetForm(); // Reset form if BL is cleared
+            return;
+        }
+
+        const data = await ApiService.fetchBLDetails(bl);
+        if (data) {
+            DOM.dateInput.value = data.date || '';
+            DOM.transporteurInput.value = data.transporteur || '';
+            DOM.immatriculeInput.value = data.immatricule || '';
+            DOM.netDsInput.value = data.net !== undefined ? data.net : '';
+            DOM.submitBtn.disabled = false;
+            DOM.netCmgInput.focus();
+        } else {
+            UI.showMessage("N° BL introuvable dans DS CLASSIQUE.", 'error');
+            // Only clear relevant fields, keep BL input for correction
+            DOM.dateInput.value = '';
+            DOM.transporteurInput.value = '';
+            DOM.immatriculeInput.value = '';
+            DOM.netDsInput.value = '';
+            DOM.netCmgInput.value = ''; // Also clear CMG if BL is invalid
+            DOM.ecartInput.value = '';
+            DOM.submitBtn.disabled = true;
+        }
+    });
+
+    // Calculate Écart (Difference) when NET CMG changes
+    DOM.netCmgInput.addEventListener("input", () => {
+        const ds = parseFloat(DOM.netDsInput.value);
+        const cmg = parseFloat(DOM.netCmgInput.value);
+        DOM.ecartInput.value = (!isNaN(ds) && !isNaN(cmg)) ? (ds - cmg).toFixed(2) : "";
+    });
+
+    // Form Submission Handler (Add/Edit)
+    DOM.form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const formData = {
-            date: document.getElementById('date').value,
-            transporteur: document.getElementById('transporteur').value,
-            numeroBL: document.getElementById('numeroBL').value,
-            immatricule: document.getElementById('immatricule').value,
-            netDs: parseFloat(document.getElementById('netDS').value),
-            netCmg: parseFloat(document.getElementById('netCMG').value),
-            observation: document.getElementById('observation').value
+
+        // Basic Client-Side Validation
+        if (!DOM.numeroBLInput.value.trim() || !DOM.netCmgInput.value.trim()) {
+            UI.showMessage("Veuillez remplir les champs obligatoires (N° BL, NET CMG).", 'warning');
+            return;
+        }
+        if (isNaN(parseFloat(DOM.netCmgInput.value))) {
+            UI.showMessage("NET CMG doit être un nombre valide.", 'warning');
+            return;
+        }
+
+        const recordData = {
+            date: DOM.dateInput.value,
+            transporteur: DOM.transporteurInput.value,
+            numeroBL: DOM.numeroBLInput.value,
+            immatricule: DOM.immatriculeInput.value,
+            netDs: parseFloat(DOM.netDsInput.value || 0), // Default to 0 if empty
+            netCmg: parseFloat(DOM.netCmgInput.value),
+            ecart: parseFloat(DOM.ecartInput.value || 0), // Default to 0 if empty
+            observation: DOM.observationInput.value || ""
         };
 
-        const url = currentEditId
-            ? `/api/bascule-hj-ds/${currentEditId}`
-            : '/api/bascule-hj-ds';
-
-        const method = currentEditId ? 'PUT' : 'POST';
-
-        fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        })
-            .then(async res => {
-                if (res.status === 409) {
-                    const msg = await res.text();
-                    throw new Error(msg || "Entrée dupliquée.");
+        try {
+            if (currentEditId) {
+                await ApiService.updateBasculeRecord(currentEditId, recordData);
+                UI.showMessage("Enregistrement modifié avec succès !", 'success');
+            } else {
+                const result = await ApiService.addBasculeRecord(recordData);
+                // If backend sent a specific success message, use it
+                if (result && result.message) {
+                    UI.showMessage(result.message, 'success');
+                } else {
+                    UI.showMessage("Nouvel enregistrement ajouté avec succès !", 'success');
                 }
-                if (!res.ok) {
-                    const msg = await res.text();
-                    throw new Error(msg || `Erreur HTTP ${res.status}`);
-                }
-                return res.text();
-            })
-            .then(msg => {
-                alert(`✅ ${msg}`);
-                this.reset();
-                currentEditId = null;
-
-                document.getElementById('form-section-title').textContent = "Ajouter une entrée";
-                const submitButton = document.getElementById('submit-button');
-                submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter';
-                submitButton.style.backgroundColor = '';
-                submitButton.style.boxShadow = '';
-                submitButton.onmouseover = null;
-                submitButton.onmouseout = null;
-
-                loadTable();
-            })
-            .catch(error => {
-                console.error("Erreur soumission:", error);
-                alert(`❌ ${error.message}`);
-            });
+            }
+            UI.resetForm();
+            loadAndDisplayRecords(); // Reload and re-render the table and chart
+        } catch (error) {
+            // More specific error message for the user
+            let userMessage = "Erreur lors de l'opération. Veuillez réessayer.";
+            if (error.message.includes("Ce N° BL existe déjà")) {
+                userMessage = "⚠️ Ce N° BL existe déjà. Veuillez utiliser un numéro unique.";
+            } else if (error.message.includes("Failed to add record")) {
+                userMessage = error.message.replace("Failed to add record: ", ""); // Display the specific message from backend
+            } else if (error.message.includes("SyntaxError")) {
+                userMessage = "Erreur de communication avec le serveur. Vérifiez la console pour plus de détails.";
+            }
+            UI.showMessage(userMessage, 'error');
+            console.error("Full error details:", error);
+        }
     });
 
-    // Sidebar toggle avec sauvegarde état
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const icon = sidebarToggle.querySelector('.fas');
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    // Function to populate form for editing
+    async function editRecord(id) {
+        currentEditId = id;
+        const record = await ApiService.fetchBasculeRecordById(id);
 
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
-            icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        if (record) {
+            DOM.numeroBLInput.value = record.numeroBL;
+            DOM.dateInput.value = record.date;
+            DOM.transporteurInput.value = record.transporteur;
+            DOM.immatriculeInput.value = record.immatricule;
+            DOM.netDsInput.value = record.netDs;
+            DOM.netCmgInput.value = record.netCmg;
+            DOM.ecartInput.value = record.ecart.toFixed(2);
+            DOM.observationInput.value = record.observation || "";
+
+            DOM.submitBtn.textContent = "Modifier";
+            DOM.submitBtn.classList.remove("btn-primary");
+            DOM.submitBtn.classList.add("btn-warning");
+            DOM.cancelEditBtn.style.display = 'inline-block'; // Show cancel button
+
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+            DOM.numeroBLInput.focus();
+        } else {
+            UI.showMessage("Impossible de charger l'enregistrement pour modification.", 'error');
+            UI.resetForm();
         }
+    }
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const collapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', collapsed);
-            icon.classList.toggle('fa-chevron-left');
-            icon.classList.toggle('fa-chevron-right');
+    // Cancel Edit Button Handler
+    DOM.cancelEditBtn.addEventListener("click", () => {
+        UI.resetForm();
+        UI.showMessage("Modification annulée.", 'info');
+    });
+
+    // Function to confirm and then delete a record
+    function confirmDelete(id) {
+        UI.showConfirmDialog(() => deleteRecord(id));
+    }
+
+    async function deleteRecord(id) {
+        try {
+            await ApiService.deleteBasculeRecord(id);
+            UI.showMessage("Enregistrement supprimé avec succès !", 'success');
+            loadAndDisplayRecords(); // Reload and re-render table and chart
+        } catch (error) {
+            UI.showMessage("Erreur lors de la suppression : " + error.message, 'error');
+        }
+    }
+
+
+    // --- Search & Sort Functionality ---
+    // =================================================================================
+
+    // Search input event listener
+    DOM.searchInput.addEventListener("input", () => {
+        applyFiltersAndSort();
+    });
+
+    // Table header click for sorting
+    DOM.tableHeaders.forEach(header => {
+        header.addEventListener("click", () => {
+            const column = header.dataset.sort;
+            if (column) {
+                // Remove sort classes from all headers
+                DOM.tableHeaders.forEach(th => {
+                    th.classList.remove('sorted-asc', 'sorted-desc');
+                });
+
+                if (currentSortColumn === column) {
+                    currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortColumn = column;
+                    currentSortDirection = 'asc'; // Default to ascending for new column
+                }
+
+                // Add sort class to the clicked header
+                header.classList.add(`sorted-${currentSortDirection}`);
+                applyFiltersAndSort();
+            }
+        });
+    });
+
+    // --- Charting Functionality ---
+    // =================================================================================
+
+    /**
+     * Initializes the Écart chart or updates it with new data.
+     */
+    function updateEcartChart() {
+        // We will use allRecords for the chart to show overall trend, not just current page
+        const labels = allRecords.map(record => record.numeroBL || 'N/A');
+        const data = allRecords.map(record => record.ecart || 0);
+        const rootStyles = getComputedStyle(document.documentElement);
+
+        const backgroundColors = data.map(ecart => {
+            if (ecart > 0) return rootStyles.getPropertyValue('--success-color') + 'B3'; // 70% opacity
+            if (ecart < 0) return rootStyles.getPropertyValue('--danger-color') + 'B3'; // 70% opacity
+            return rootStyles.getPropertyValue('--neutral-color') + 'B3'; // 70% opacity
+        });
+        const borderColors = data.map(ecart => {
+            if (ecart > 0) return rootStyles.getPropertyValue('--success-color');
+            if (ecart < 0) return rootStyles.getPropertyValue('--danger-color');
+            return rootStyles.getPropertyValue('--neutral-color');
         });
 
-        loadTable(); // charger les données au démarrage
-    });
-</script>
 
+        if (ecartChartInstance) {
+            ecartChartInstance.data.labels = labels;
+            ecartChartInstance.data.datasets[0].data = data;
+            ecartChartInstance.data.datasets[0].backgroundColor = backgroundColors;
+            ecartChartInstance.data.datasets[0].borderColor = borderColors;
+            ecartChartInstance.update();
+        } else {
+            ecartChartInstance = new Chart(DOM.ecartChartCanvas, {
+                type: 'bar', // Bar chart for individual écarts
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Écart (NET DS - NET CMG)',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Allows the chart to resize based on container
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Écart (Différence)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Numéro de BL',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // No need for legend as colors are semantic
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('fr-FR', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    // --- Export to CSV ---
+    // =================================================================================
+
+    DOM.exportCsvBtn.addEventListener("click", () => {
+        if (filteredRecords.length === 0) {
+            UI.showMessage("Aucune donnée à exporter.", 'warning');
+            return;
+        }
+
+        // Define CSV headers (matching table columns for clarity)
+        const headers = [
+            "Date", "Transporteur", "N° BL", "Immatricule",
+            "NET DS", "NET CMG", "Écart", "Observation"
+        ];
+        const rows = filteredRecords.map(record => [
+            `"${record.date || ''}"`,
+            `"${record.transporteur || ''}"`,
+            `"${record.numeroBL || ''}"`,
+            `"${record.immatricule || ''}"`,
+            `"${(record.netDs !== undefined && record.netDs !== null) ? record.netDs.toFixed(2) : '0.00'}"`,
+            `"${(record.netCmg !== undefined && record.netCmg !== null) ? record.netCmg.toFixed(2) : '0.00'}"`,
+            `"${(record.ecart !== undefined && record.ecart !== null) ? record.ecart.toFixed(2) : '0.00'}"`,
+            `"${(record.observation || "").replace(/"/g, '""')}"` // Escape double quotes
+        ].join(','));
+
+        const csvContent = [
+            headers.join(','), // Join headers with comma
+            ...rows // Spread the rows
+        ].join('\n'); // Join all lines with newline
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "bascule_hj_ds_export.csv");
+        document.body.appendChild(link); // Required for Firefox
+        link.click();
+        document.body.removeChild(link); // Clean up
+        URL.revokeObjectURL(url); // Free up memory
+        UI.showMessage("Données exportées au format CSV !", 'info');
+    });
+
+
+    // --- Initialization ---
+    // =================================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        populateBLDatalist();
+        loadAndDisplayRecords(); // Initial load of all data, table, and chart
+    });
+
+    // Make functions globally accessible for inline onclick (alternative is to use event delegation)
+    window.editRecord = editRecord;
+    window.confirmDelete = confirmDelete;
+</script>
 
 </body>
 </html>

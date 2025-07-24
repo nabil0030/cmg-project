@@ -46,7 +46,11 @@ public interface DsNordRecordRepository extends JpaRepository<DsNordRecord, Long
     double sumForMonth(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
     @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsNordRecord e WHERE e.date >= :debut AND e.date <= :fin")
     double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsNordRecord e WHERE e.date = :date AND e.poste = :poste")
+    double sumByDateAndPoste(@Param("date") LocalDate date, @Param("poste") int poste);
 
+    @Query("SELECT COALESCE(SUM(e.net), 0) FROM DsNordRecord e WHERE e.date >= :start AND e.date <= :end AND e.poste = :poste")
+    double sumByDateBetweenAndPoste(@Param("start") LocalDate start, @Param("end") LocalDate end, @Param("poste") int poste);
 
 
 

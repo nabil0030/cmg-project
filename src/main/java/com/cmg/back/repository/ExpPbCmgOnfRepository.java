@@ -47,6 +47,10 @@ public interface ExpPbCmgOnfRepository extends JpaRepository<ExpPbCmgOnf, Long> 
     double sumAnnee(@Param("debut") LocalDate debut, @Param("fin") LocalDate fin);
 
 
+    @Query("SELECT COALESCE(SUM(e.tnH), 0) FROM ExpPbCmgOnf e WHERE e.date = :date AND e.poste = :poste")
+    double sumByDateAndPoste(@Param("date") LocalDate date, @Param("poste") int poste);
 
+    @Query("SELECT COALESCE(SUM(e.tnH), 0) FROM ExpPbCmgOnf e WHERE e.date >= :start AND e.date <= :end AND e.poste = :poste")
+    double sumByDateBetweenAndPoste(@Param("start") LocalDate start, @Param("end") LocalDate end, @Param("poste") int poste);
 
 }
