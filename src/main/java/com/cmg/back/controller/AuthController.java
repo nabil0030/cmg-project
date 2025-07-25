@@ -2,33 +2,16 @@ package com.cmg.back.controller;
 
 import com.cmg.back.model.User;
 import com.cmg.back.service.UserService;
-import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model; // ✅ Spring's Model, not logback
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
 
     @Autowired
     private UserService userService;
-
-
-    @Controller
-    public class StaticRedirectController {
-
-        @GetMapping("/home")
-        public String redirectToStaticHome() {
-            return "redirect:/home.html"; // ✅ va chercher /static/home.html
-        }
-    }
-
-
 
     @GetMapping("/signup")
     public String signupForm(Model model) {
@@ -43,20 +26,9 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model) {
-        model.addAttribute("user", new User());
+    public String loginForm() {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String processLogin(@ModelAttribute User user, HttpSession session, Model model) {
-        User found = userService.login(user.getEmail(), user.getPassword());
-        if (found != null) {
-            session.setAttribute("user", found);
-            return "redirect:/index.html";  // ✅ exact name of static file
-        }
-        model.addAttribute("error", "Email or password invalid");
-        return "login";
-    }
 
 }

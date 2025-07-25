@@ -1,10 +1,14 @@
 package com.cmg.back.config;
 
+import com.cmg.back.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,82 +17,75 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for API endpoints (common for REST APIs)
+        http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                // ✅ Pages HTML accessibles sans login
                                 "/", "/home", "/home.html",
                                 "/signup", "/login",
                                 "/index.html", "/favicon.ico",
                                 "/css/**", "/js/**", "/images/**",
-
-                                // ✅ Pages spécifiques projet
-                                "/synthese.html",
-                                "/rapportHajjar.html",
-                                "/cbulkArgentifere.html",
-                                "/chauxVive.html",
-                                "/expZincSafi.html",
-                                "/chauxViveLafarge.html",
-                                "/controleBasculeHJDS.html",
-                                "/controle-bascule-hjds.html",
-                                "/controle-bascule-ka.html",
-                                "/dsClassique.html",
-                                "/dsNord.html",
-                                "/expZincOncf.html",
-                                "/expCuivreOncf.html",
-                                "/expCuivreNord.html",
-                                "/expPbCmgOnf.html"
+                                "/synthese.html", "/rapportHajjar.html",
+                                "/cbulkArgentifere.html", "/chauxVive.html",
+                                "/expZincSafi.html", "/chauxViveLafarge.html",
+                                "/controleBasculeHJDS.html", "/controle-bascule-hjds.html",
+                                "/controle-bascule-ka.html", "/dsClassique.html",
+                                "/dsNord.html", "/expZincOncf.html", "/expCuivreOncf.html",
+                                "/expCuivreNord.html", "/expPbCmgOnf.html"
                         ).permitAll()
-
                         .requestMatchers(
-                                // ✅ Endpoints API autorisés sans login
                                 "/api/cbulkargentifere/**",
                                 "/api/synthese-cumul-annuel-groupes",
-                                "/api/chauxVive/**",
-                                "/api/chaux-vive/**",
-                                "/api/chauxViveLafarge/**",
-                                "/api/bascule-hj-ds/**",
-                                "/api/ka/**",
-                                "/api/ds-classique/**",
-                                "/api/ds-classique/bl/**",
-                                "/api/dsnord/**",
-                                "/api/expzinconcf/**",
-                                "/api/exp-zinc-safi/**",
-                                "/api/exp-cuivre-oncf/**",
-                                "/api/exp-cuivre-nord/**",
+                                "/api/chauxVive/**", "/api/chaux-vive/**",
+                                "/api/chauxViveLafarge/**", "/api/bascule-hj-ds/**",
+                                "/api/ka/**", "/api/ds-classique/**",
+                                "/api/ds-classique/bl/**", "/api/dsnord/**",
+                                "/api/expzinconcf/**", "/api/exp-zinc-safi/**",
+                                "/api/exp-cuivre-oncf/**", "/api/exp-cuivre-nord/**",
                                 "/api/exp-pb-cmg-onf/**",
-                                "/api/synthese-jour",
-                                "/api/synthese-mois",
-                                "/api/synthese-annuelle",
-                                "/api/synthese-mensuelle", // <-- ADDED THIS LINE
-                                "/api/synthese/export",     // <-- ADDED THIS LINE
-                                "/api/rapport-hajjar",
+                                "/api/synthese-jour", "/api/synthese-mois",
+                                "/api/synthese-annuelle", "/api/synthese-mensuelle",
+                                "/api/synthese/export", "/api/rapport-hajjar",
                                 "/api/rapport-hajjar/export"
                         ).permitAll()
-
-                        // (optionnel) autoriser GET explicitement pour l’export
-                        // This line is redundant if "/api/synthese/export" is already permitted above.
-                        // You can keep it for clarity if you wish, but it's not strictly necessary now.
                         .requestMatchers(HttpMethod.GET, "/api/rapport-hajjar/export").permitAll()
-                        .anyRequest().authenticated() // All other requests require authentication
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home.html", true)
+                        .defaultSuccessUrl("/index.html", true) // ✅ OK !
+
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/home")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                .build();
+                .userDetailsService(customUserDetailsService); // 🔐 Lien avec ton CustomUserDetailsService
+
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsService;
     }
 }
