@@ -4,112 +4,205 @@
     <meta charset="UTF-8">
     <title>Connexion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Background animé */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Formulaire stylé */
         .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             width: 100%;
             max-width: 400px;
+            color: white;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animation de secousse pour erreur */
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
         }
 
         h2 {
             text-align: center;
-            color: #333;
             margin-bottom: 24px;
+            font-weight: 600;
+            color: #fff;
         }
 
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
             font-size: 16px;
             box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
         input:focus {
             outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 2px #6a11cb;
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #4a90e2;
-            color: white;
+            padding: 14px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            color: white;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         button:hover {
-            background-color: #3a7bc8;
+            transform: scale(1.03);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .signup-link {
             text-align: center;
-            margin-top: 16px;
-            color: #666;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .signup-link a {
-            color: #4a90e2;
+            color: #6a11cb;
             text-decoration: none;
+            font-weight: 600;
         }
 
         .signup-link a:hover {
             text-decoration: underline;
         }
 
+        /* Message d'erreur stylé */
         .error-message {
-            color: red;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 12px;
+            background: rgba(255, 77, 77, 0.2);
+            border: 1px solid #ff4d4d;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+
+        .error-icon {
+            color: #ff4d4d;
+            font-size: 18px;
+        }
+
+        .error-text {
+            color: #ff9999;
+            font-weight: 500;
+        }
+
+        /* Message de succès */
+        .success-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-icon {
+            color: #2ecc71;
+            font-size: 18px;
+        }
+
+        .success-text {
+            color: #a8f0c4;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-<div class="form-container">
+
+<div class="form-container" id="formContainer">
     <h2>Connexion</h2>
 
-    <!-- 🔴 Affiche l'erreur si identifiants invalides -->
-    <div class="error-message" th:if="${param.error}">
-        Identifiants incorrects.
-    </div>
-    <div class="error-message" th:if="${param.logout}">
-        Déconnecté avec succès.
+    <!-- Messages d'erreur ou de succès -->
+    <div class="error-message" th:if="${param.error}" id="errorMessage">
+        <i class="fas fa-exclamation-circle error-icon"></i>
+        <span class="error-text">Identifiants incorrects. Veuillez réessayer.</span>
     </div>
 
-    <!-- ✅ Formulaire Spring Security -->
-    <form method="POST" action="/login">
+    <div class="success-message" th:if="${param.logout}" id="successMessage">
+        <i class="fas fa-check-circle success-icon"></i>
+        <span class="success-text">Déconnecté avec succès.</span>
+    </div>
+
+    <!-- Formulaire Spring Security -->
+    <form method="POST" action="/login" id="loginForm">
         <div class="form-group">
             <label for="username">Email</label>
             <input type="text" id="username" name="username" placeholder="Votre email" required>
@@ -127,5 +220,43 @@
         Pas encore de compte ? <a href="/signup">Créer un compte</a>
     </div>
 </div>
+
+<script>
+    // Effet glow sur focus
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('focused');
+        });
+        input.addEventListener('blur', () => {
+            input.parentElement.classList.remove('focused');
+        });
+    });
+
+    // Animation de secousse si erreur de login
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorMessage = document.getElementById('errorMessage');
+        const formContainer = document.getElementById('formContainer');
+
+        if (errorMessage) {
+            formContainer.classList.add('shake');
+
+            // Retirer l'animation après qu'elle soit terminée
+            setTimeout(() => {
+                formContainer.classList.remove('shake');
+            }, 500);
+
+            // Focus automatique sur le champ email
+            document.getElementById('username').focus();
+        }
+    });
+
+    // Optionnel: Animation sur soumission du formulaire
+    document.getElementById('loginForm').addEventListener('submit', function() {
+        const button = this.querySelector('button');
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+        button.disabled = true;
+    });
+</script>
+
 </body>
 </html>
