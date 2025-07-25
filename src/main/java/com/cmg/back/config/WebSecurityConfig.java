@@ -21,7 +21,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for API endpoints (common for REST APIs)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 // ✅ Pages HTML accessibles sans login
@@ -51,6 +51,7 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 // ✅ Endpoints API autorisés sans login
                                 "/api/cbulkargentifere/**",
+                                "/api/synthese-cumul-annuel-groupes",
                                 "/api/chauxVive/**",
                                 "/api/chaux-vive/**",
                                 "/api/chauxViveLafarge/**",
@@ -67,13 +68,17 @@ public class WebSecurityConfig {
                                 "/api/synthese-jour",
                                 "/api/synthese-mois",
                                 "/api/synthese-annuelle",
+                                "/api/synthese-mensuelle", // <-- ADDED THIS LINE
+                                "/api/synthese/export",     // <-- ADDED THIS LINE
                                 "/api/rapport-hajjar",
                                 "/api/rapport-hajjar/export"
                         ).permitAll()
 
                         // (optionnel) autoriser GET explicitement pour l’export
+                        // This line is redundant if "/api/synthese/export" is already permitted above.
+                        // You can keep it for clarity if you wish, but it's not strictly necessary now.
                         .requestMatchers(HttpMethod.GET, "/api/rapport-hajjar/export").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

@@ -1,193 +1,947 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Synthèse Globale</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global CMG Synthesis - Dynamic Dashboard</title>
+    <!-- Google Fonts: Montserrat for headings, Inter for body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        :root {
+            /* Color Palette */
+            --primary-color: #6a0572; /* Deep Plum - for main actions/branding */
+            --secondary-color: #ab091e; /* Rich Crimson - for accents/danger */
+            --accent-color: #fdc500; /* Vibrant Gold - for highlights/interactive elements */
+            --text-dark: #2d3748; /* Dark Grey - for main text */
+            --text-light: #f7fafc; /* Off-white - for text on dark backgrounds */
+            --bg-light: #f8f9fa; /* Light Grey - general background */
+            --bg-medium: #e2e8f0; /* Medium Grey - section backgrounds */
+            --border-light: #cbd5e0; /* Light border */
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+
+            /* Entrées Colors (Warm Palette) */
+            --entrees-header-bg: #e65100; /* Deep Orange */
+            --entrees-cell-bg: #ffe0b2; /* Light Peach */
+
+            /* Expéditions Colors (Cool Palette) */
+            --expeditions-header-bg: #00838f; /* Dark Cyan */
+            --expeditions-cell-bg: #b2ebf2; /* Light Aqua */
+
+            /* Total & Global Colors */
+            --total-header-bg: #2e7d32; /* Forest Green */
+            --total-cell-bg: #c8e6c9; /* Light Mint */
+            --global-header-bg: #512da8; /* Deep Purple */
+            --global-cell-bg: #ede7f6; /* Lavender Mist */
+
+            /* Cumulative & Grouped Rows */
+            --cumulative-row-bg: #e3f2fd; /* Light Blue */
+            --grouped-annual-row-bg: #fffde7; /* Light Yellow */
+
+            /* Sidebar Colors */
+            --sidebar-bg: #34495e; /* Dark Slate Grey */
+            --sidebar-text: #ecf0f1; /* Light Grey */
+            --sidebar-hover-bg: #2c3e50; /* Slightly darker */
+            --sidebar-active-bg: #4a637d; /* Medium Blue-Grey */
+            --sidebar-active-text: var(--accent-color);
+        }
+
         body {
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #e0e0e0;
-            color: #333;
-            padding: 20px;
+            padding: 0; /* Remove body padding as layout shifts to flex */
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: background-color 0.3s ease;
+            display: flex; /* Use flexbox for main layout */
+            min-height: 100vh; /* Ensure body takes full viewport height */
         }
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            border: 1px solid black;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .home-button {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #5cb85c;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .home-button:hover {
-            background-color: #4cae4c;
-        }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            background-color: white;
-            border: 1px solid black;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .filters {
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
             display: flex;
-            gap: 15px;
-            padding: 15px;
-            background-color: #f0f0f0;
-            border-bottom: 1px solid black;
+            flex-direction: column;
+            position: sticky; /* Make sidebar sticky */
+            top: 0;
+            height: 100vh; /* Full viewport height */
+            overflow-y: auto; /* Enable scrolling for long menus */
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 0 20px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--sidebar-active-text);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-size: 1.05em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 0 25px 25px 0; /* Rounded right edge */
+            margin-right: 15px; /* Space from right edge of sidebar */
+        }
+
+        .nav-item a:hover {
+            background-color: var(--sidebar-hover-bg);
+            color: var(--accent-color);
+        }
+
+        .nav-item.active a {
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            font-weight: 600;
+            box-shadow: inset 3px 0 0 var(--accent-color); /* Highlight active item */
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.2em;
+            width: 25px; /* Fixed width for icon alignment */
+            text-align: center;
+        }
+
+        .main-content {
+            flex-grow: 1; /* Allows main content to take remaining space */
+            padding: 30px 20px;
+            overflow-x: hidden; /* Prevent horizontal scroll from main content */
+        }
+
+
+        h1, h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--border-light);
+            display: inline-block;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .container {
+            max-width: 1400px; /* Slightly wider container */
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px var(--shadow-medium);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .section {
+            background-color: var(--bg-medium);
+            padding: 30px;
+            margin-bottom: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px var(--shadow-medium);
+        }
+
+        .controls {
+            display: flex;
             flex-wrap: wrap;
+            align-items: center;
+            gap: 20px; /* Increased gap */
+            margin-bottom: 25px;
+            justify-content: center; /* Center controls */
         }
-        .filters label {
-            font-weight: bold;
+
+        label {
+            font-weight: 600;
+            color: var(--text-dark);
+            flex-shrink: 0;
+            font-size: 1.1em;
         }
-        .filters input, .filters button {
-            padding: 8px;
-            font-size: 0.9em;
-            border: 1px solid #a0a0a0;
-            border-radius: 3px;
-        }
-        .filters button {
-            background-color: #3a8ee6;
-            color: white;
+
+        input[type="date"],
+        input[type="number"],
+        button {
+            padding: 12px 22px; /* Increased padding */
+            border: 1px solid var(--border-light);
+            border-radius: 10px; /* More rounded corners */
+            font-size: 1.05em;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease-in-out;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            outline: none;
         }
-        .filters button:hover {
-            background-color: #2a7bd3;
+
+        input[type="date"]:focus,
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(106, 5, 114, 0.2); /* Soft focus ring */
         }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            box-shadow: 0 4px 15px rgba(106, 5, 114, 0.3);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            box-shadow: 0 6px 20px rgba(171, 9, 30, 0.4);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .export-button {
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(253, 197, 0, 0.3);
+        }
+
+        .export-button:hover {
+            background-color: #e6b300; /* Slightly darker gold */
+            box-shadow: 0 6px 20px rgba(253, 197, 0, 0.4);
+        }
+
+        .result-box { /* Not used in final HTML, but keeping for reference if needed */
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dcdcdc;
+        }
+
+        .table-container {
+            overflow-x: auto; /* Allows horizontal scrolling for large tables */
+            margin-top: 25px;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.03);
+        }
+
         table {
             width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px 12px;
-            text-align: left;
+            border-collapse: separate; /* Use separate to allow border-radius on cells */
+            border-spacing: 0;
             font-size: 0.9em;
+            min-width: 1200px; /* Ensure table doesn't shrink too much on smaller screens */
         }
-        th {
-            background-color: #4a77a8;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-        }
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .cumul-mensuel-label, .cumul-annuel-label, .total-global-label {
-            font-weight: bold;
-            color: white;
-            text-align: center;
-        }
-        .cumul-mensuel-label { background-color: #4a77a8; }
-        .cumul-annuel-label { background-color: #4a77a8; }
-        .total-global-label { background-color: #8A2BE2; }
 
-        .cumul-mensuel-value { background-color: #6a9bd6; text-align: right; color: white; font-weight: bold; }
-        .cumul-annuel-value { background-color: #5cb85c; text-align: right; color: white; font-weight: bold; }
-        .total-global-value { background-color: #d9534f; text-align: right; color: white; font-weight: bold; }
+        th, td {
+            border: 1px solid #e0f2f7; /* Very light blue border for subtle separation */
+            padding: 12px 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95em;
+        }
+
+        /* Specific header colors */
+        .entrees-header { background-color: var(--entrees-header-bg); }
+        .expeditions-header { background-color: var(--expeditions-header-bg); }
+
+        /* Table cell styles */
+        .entrees-cell { background-color: var(--entrees-cell-bg); font-weight: 500; }
+        .expeditions-cell { background-color: var(--expeditions-cell-bg); font-weight: 500; }
+        .total-cell { background-color: var(--total-cell-bg); font-weight: 700; color: var(--text-dark); }
+        .global-value-cell { background-color: var(--global-cell-bg); font-weight: 700; color: var(--primary-color); }
+
+        /* Row styles */
+        .monthly-row:nth-child(even) { background-color: #fcfdfe; } /* Lighter for even rows */
+        .monthly-row:nth-child(odd) { background-color: #ffffff; } /* White for odd rows */
+        .monthly-row:hover {
+            background-color: #f0f7ff; /* Light blue on hover */
+            transform: scale(1.005);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .cumulative-row {
+            background-color: var(--cumulative-row-bg);
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .cumulative-row td { border-top: 2px solid var(--primary-color); }
+
+
+        .grouped-annual-row {
+            background-color: var(--grouped-annual-row-bg);
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        .grouped-annual-row td { border-top: 2px solid var(--secondary-color); }
+
+
+        .error-message {
+            color: var(--secondary-color);
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid var(--secondary-color);
+            display: none; /* Hidden by default */
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        #loadingIndicator, #dailyLoadingIndicator {
+            padding: 15px;
+            background-color: #e0f7fa; /* Light cyan */
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--expeditions-header-bg);
+            font-weight: 600;
+            font-size: 1.1em;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Loading dots animation */
+        .loading-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--expeditions-header-bg);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px; /* Slightly narrower sidebar */
+                padding: 15px 0;
+            }
+            .sidebar-header {
+                font-size: 1.4em;
+            }
+            .nav-item a {
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+            .nav-item i {
+                margin-right: 10px;
+                font-size: 1.1em;
+            }
+            .container {
+                padding: 30px;
+            }
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 1.9em; }
+            table { font-size: 0.8em; min-width: 900px; }
+            th, td { padding: 10px 8px; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Stack sidebar and content vertically */
+            }
+            .sidebar {
+                width: 100%; /* Full width for sidebar */
+                height: auto; /* Auto height for content */
+                position: static; /* Remove sticky position */
+                padding: 15px 0;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+            .sidebar-header {
+                display: none; /* Hide header on small screens if desired, or make smaller */
+            }
+            .nav-menu {
+                display: flex; /* Arrange menu items horizontally */
+                flex-wrap: wrap; /* Allow wrapping */
+                justify-content: center; /* Center items */
+                gap: 5px; /* Add gap between items */
+            }
+            .nav-item {
+                margin-bottom: 0;
+            }
+            .nav-item a {
+                padding: 8px 12px;
+                font-size: 0.9em;
+                border-radius: 8px; /* More standard rounding */
+                margin-right: 0;
+            }
+            .nav-item i {
+                margin-right: 8px;
+                font-size: 1em;
+            }
+            .main-content {
+                padding: 15px;
+            }
+            .container { padding: 25px; border-radius: 12px; }
+            .section { padding: 20px; margin-bottom: 25px; border-radius: 10px; }
+            h1 { font-size: 2.2em; margin-bottom: 25px; }
+            h2 { font-size: 1.6em; margin-bottom: 15px; }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            input[type="date"],
+            input[type="number"],
+            button {
+                max-width: 100%;
+                width: 100%;
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+            label { text-align: left; width: 100%; font-size: 1em; }
+            table { min-width: 700px; } /* Allow more shrinking but still provide scroll */
+            th, td { padding: 8px 6px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.4em; }
+            .container { padding: 15px; }
+            .section { padding: 15px; }
+            table { font-size: 0.75em; min-width: 550px; }
+            .nav-item a span {
+                display: none; /* Hide text, show only icons on very small screens for compact menu */
+            }
+            .nav-item i {
+                margin-right: 0; /* No margin if text is hidden */
+            }
+            .nav-menu {
+                gap: 2px;
+            }
+        }
     </style>
 </head>
 <body>
-<header>
-    <a href="index.html" class="home-button">Accueil</a>
-    Synthèse par Jour / Mois / Année
-</header>
-<div class="container">
-    <div class="filters">
-        <label>Date :
-            <input type="date" id="dateInput">
-        </label>
-        <button onclick="loadSyntheseJour()">Voir Jour</button>
-        <label>Mois :
-            <input type="month" id="monthInput">
-        </label>
-        <button onclick="loadSyntheseMois()">Voir Mois</button>
-        <label>Année :
-            <input type="number" id="yearInput" min="2000" value="2025">
-        </label>
-        <button onclick="loadSyntheseAnnee()">Voir Année</button>
+<aside class="sidebar">
+    <div class="sidebar-header">CMG Dashboard</div>
+    <ul class="nav-menu">
+        <li class="nav-item active">
+            <i class="fas fa-home"></i>
+            <a href="index.html"><span>Dashboard</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight"></i>
+            <a href="dsClassique.html"><span>DS classique</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-weight-hanging"></i>
+            <a href="dsNord.html"><span>DS NORD</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="controle-bascule-ka.html"><span>C. Bascule KA</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="chauxVive.html"><span>Chaux Vive</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
+
+        </li>
+
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
+
+        </li>
+
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
+
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
+
+        </li>
+
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="synthese.html"><span> synthese  </span></a>
+
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-truck-loading"></i>
+            <a href="rapportHajjar.html"><span> rapport Hajjar</span></a>
+
+        </li>
+
+
+        <li class="nav-item">
+            <i class="fas fa-cog"></i>
+            <a href="#"><span>Settings</span></a>
+        </li>
+        <li class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <a href="#"><span>Help</span></a>
+        </li>
+    </ul>
+</aside>
+
+<div class="main-content">
+    <div class="container">
+        <h1>Synthèse Globale CMG</h1>
+
+        <div class="section">
+            <h2>Synthèse Journalière</h2>
+            <div class="controls">
+                <label for="jourInput">Sélectionner une date :</label>
+                <input type="date" id="jourInput">
+                <button onclick="getSyntheseJour()">Afficher Journalier</button>
+            </div>
+            <div id="dailyLoadingIndicator" style="display: none;">
+                Chargement des données <span class="loading-dots"><span></span><span></span><span></span></span>
+            </div>
+            <div id="dailyErrorMessage" class="error-message"></div>
+            <div class="table-container">
+                <table id="dailySyntheseTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Date</th>
+                        <th colspan="5" class="entrees-header">LES ENTRÉES</th>
+                        <th colspan="7" class="expeditions-header">LES EXPÉDITIONS</th>
+                    </tr>
+                    <tr>
+                        <th>DRAA SFAR</th>
+                        <th>DRAA NORD</th>
+                        <th>KOUDIAT AICHA</th>
+                        <th>COSUMAR</th>
+                        <th>LAFARGE</th>
+                        <th>C.CUIVRE ONCF MRK</th>
+                        <th>C.CUIVRE NORD</th>
+                        <th>C.PLOMB ONCF MRK</th>
+                        <th>C.BULK</th>
+                        <th>C.ZINC ONCF</th>
+                        <th>C.ZINC PORT EN VRAC</th>
+                        <th>C.ZINC Safi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Daily data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Synthèse Annuelle Détaillée et Cumuls</h2>
+            <div class="controls">
+                <label for="anneeTableInput">Sélectionner l'année :</label>
+                <input type="number" id="anneeTableInput" min="1900" max="2100">
+                <button onclick="loadAllSyntheseData()">Afficher la Synthèse du Tableau</button>
+                <button class="export-button" onclick="exportExcel()">Exporter en Excel</button>
+            </div>
+
+            <div id="loadingIndicator" style="display: none;">
+                Chargement des données <span class="loading-dots"><span></span><span></span><span></span></span>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+
+            <div class="table-container">
+                <table id="syntheseTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Mois</th>
+                        <th colspan="5" class="entrees-header">LES ENTRÉES (Tout venant externe & chaux)</th>
+                        <th colspan="8" class="expeditions-header">LES EXPÉDITIONS</th>
+                    </tr>
+                    <tr>
+                        <th>DRAA SFAR</th>
+                        <th>DRAA NORD</th>
+                        <th>KOUDIAT AÏCHA</th>
+                        <th>COSUMAR</th>
+                        <th>LAFARGE</th>
+                        <th>CU MRK</th>
+                        <th>CU NORD</th>
+                        <th>PB MRK</th>
+                        <th>C.BULK</th>
+                        <th>ZN ONCF</th>
+                        <th>ZN PORT</th>
+                        <th>ZN VRAC</th>
+                        <th>ZN Safi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <table>
-        <thead>
-        <tr>
-            <th>Table</th>
-            <th>Total (NET)</th>
-        </tr>
-        </thead>
-        <tbody id="syntheseTable"></tbody>
-        <tfoot>
-        <tr><td class="cumul-mensuel-label">Cumul Mensuel</td><td class="cumul-mensuel-value" id="cumulMensuelTotal">0.00</td></tr>
-        <tr><td class="cumul-annuel-label">Cumul Annuel</td><td class="cumul-annuel-value" id="cumulAnnuelTotal">0.00</td></tr>
-        <tr><td class="total-global-label">GLOBAL</td><td class="total-global-value" id="globalTotal">0.00</td></tr>
-        </tfoot>
-    </table>
 </div>
+
 <script>
-    const order = [
-        'dsClassique', 'dsNord', 'chauxViveLafarge', 'cbulkArgentifere',
-        'chauxVive', 'controleBasculeHJDS', 'controleBasculeKA',
-        'expCuivreNord', 'expCuivreOncf', 'expPbCmgOnf',
-        'expZincOncf', 'expZincSafi'
+    const API_BASE_URL = 'http://localhost:8080/api'; // <--- IMPORTANT: Update if your backend URL is different
+
+    const MONTH_NAMES = [
+        "JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN",
+        "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DÉCEMBRE"
     ];
-    function displaySynthese(data) {
-        const tbody = document.getElementById("syntheseTable");
-        tbody.innerHTML = '';
-        order.forEach(key => {
-            const value = (data[key] || 0).toFixed(2);
-            const row = `<tr><td>${key}</td><td>${value}</td></tr>`;
-            tbody.insertAdjacentHTML('beforeend', row);
+
+    /**
+     * Fetches data from a given URL, handles loading and error messages.
+     * @param {string} url - The API endpoint URL.
+     * @param {string} loadingElementId - ID of the loading indicator element.
+     * @param {string} errorElementId - ID of the error message element.
+     * @returns {Promise<Object|null>} - The fetched data or null if an error occurred.
+     */
+    async function fetchData(url, loadingElementId = 'loadingIndicator', errorElementId = 'errorMessage') {
+        const loadingIndicator = document.getElementById(loadingElementId);
+        const errorMessage = document.getElementById(errorElementId);
+        loadingIndicator.style.display = 'flex'; // Use flex for loading dots
+        errorMessage.style.display = 'none';
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP Error! Status: ${response.status}, Message: ${errorText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            let userMessage = `Error: ${error.message || error}.`;
+            if (error.message && error.message.includes('Failed to fetch')) {
+                userMessage += " Please check that your Spring Boot backend server is running and accessible at the specified address (API_BASE_URL).";
+                userMessage += " Also ensure your CORS configuration on the backend allows requests from this page.";
+            } else if (error.message && error.message.includes('Unexpected token')) {
+                userMessage += " The server returned an unexpected format (likely HTML instead of JSON). Check server logs and security configuration (Spring Security).";
+            }
+            errorMessage.textContent = userMessage;
+            errorMessage.style.display = 'block';
+            return null;
+        } finally {
+            loadingIndicator.style.display = 'none';
+        }
+    }
+
+    /**
+     * Fetches and displays daily synthesis data.
+     */
+    async function getSyntheseJour() {
+        const jour = document.getElementById('jourInput').value;
+        if (!jour) {
+            alert('Please select a date for the daily synthesis.');
+            return;
+        }
+
+        const dailyTableBody = document.querySelector('#dailySyntheseTable tbody');
+        dailyTableBody.innerHTML = ''; // Clear previous data
+
+        const data = await fetchData(`${API_BASE_URL}/synthese-jour?jour=${jour}`, 'dailyLoadingIndicator', 'dailyErrorMessage');
+        if (!data) {
+            return; // Error already displayed
+        }
+
+        const row = dailyTableBody.insertRow();
+        row.insertCell().textContent = jour; // Date column
+
+        // LES ENTREES (Apply specific cell classes)
+        row.insertCell().classList.add('entrees-cell'); row.cells[1].textContent = data.dsClassique !== undefined ? data.dsClassique.toFixed(2) : '0.00';
+        row.insertCell().classList.add('entrees-cell'); row.cells[2].textContent = data.dsNord !== undefined ? data.dsNord.toFixed(2) : '0.00';
+        row.insertCell().classList.add('entrees-cell'); row.cells[3].textContent = data.controleBasculeKA !== undefined ? data.controleBasculeKA.toFixed(2) : '0.00';
+        row.insertCell().classList.add('entrees-cell'); row.cells[4].textContent = data.chauxVive !== undefined ? data.chauxVive.toFixed(2) : '0.00';
+        row.insertCell().classList.add('entrees-cell'); row.cells[5].textContent = data.chauxViveLafarge !== undefined ? data.chauxViveLafarge.toFixed(2) : '0.00';
+
+        // LES EXPEDITION (Apply specific cell classes)
+        row.insertCell().classList.add('expeditions-cell'); row.cells[6].textContent = data.expCuivreOncf !== undefined ? data.expCuivreOncf.toFixed(2) : '0.00';
+        row.insertCell().classList.add('expeditions-cell'); row.cells[7].textContent = data.expCuivreNord !== undefined ? data.expCuivreNord.toFixed(2) : '0.00';
+        row.insertCell().classList.add('expeditions-cell'); row.cells[8].textContent = data.expPbCmgOnf !== undefined ? data.expPbCmgOnf.toFixed(2) : '0.00';
+        row.insertCell().classList.add('expeditions-cell'); row.cells[9].textContent = data.cbulkArgentifere !== undefined ? data.cbulkArgentifere.toFixed(2) : '0.00';
+        row.insertCell().classList.add('expeditions-cell'); row.cells[10].textContent = data.expZincOncf !== undefined ? data.expZincOncf.toFixed(2) : '0.00';
+        row.insertCell().classList.add('expeditions-cell'); row.cells[11].textContent = '0.00'; // C.ZINC PORT EN VRAC (assuming 0 as per previous logic)
+        row.insertCell().classList.add('expeditions-cell'); row.cells[12].textContent = data.expZincSafi !== undefined ? data.expZincSafi.toFixed(2) : '0.00';
+    }
+
+    /**
+     * Loads and renders all annual synthesis data (monthly, cumulative, grouped).
+     */
+    async function loadAllSyntheseData() {
+        const annee = document.getElementById('anneeTableInput').value;
+        if (!annee) {
+            alert('Please select a year for the synthesis table.');
+            return;
+        }
+
+        const tableBody = document.querySelector('#syntheseTable tbody');
+        tableBody.innerHTML = ''; // Clear previous data
+
+        // Fetch monthly and annual data concurrently
+        const [monthlyData, annualDto] = await Promise.all([
+            fetchData(`${API_BASE_URL}/synthese-mensuelle?annee=${annee}`),
+            fetchData(`${API_BASE_URL}/synthese-annuelle?annee=${annee}`)
+        ]);
+
+        if (!monthlyData || !annualDto) {
+            tableBody.innerHTML = ''; // Ensure table is empty on error
+            return;
+        }
+
+        renderSyntheseTable(monthlyData, annualDto, annee);
+    }
+
+    /**
+     * Renders the synthesis table with monthly, annual, and grouped data.
+     * @param {Object} monthlyData - Monthly synthesis data.
+     * @param {Object} annualDto - Annual synthesis DTO.
+     * @param {string} annee - The selected year.
+     */
+    function renderSyntheseTable(monthlyData, annualDto, annee) {
+        const tableBody = document.querySelector('#syntheseTable tbody');
+        tableBody.innerHTML = ''; // Clear previous data
+
+        // --- Monthly Rows (JANVIER - DÉCEMBRE) ---
+        MONTH_NAMES.forEach((monthName, index) => {
+            const row = tableBody.insertRow();
+            row.classList.add('monthly-row');
+            row.insertCell().textContent = monthName; // Mois
+
+            const monthValues = monthlyData[monthName.toUpperCase()];
+
+            // Data mapping based on backend array structure
+            const mapData = (data, defaultVal = 0.00) => (data !== undefined && data !== null) ? data.toFixed(2) : defaultVal.toFixed(2);
+
+            if (monthValues && Array.isArray(monthValues) && monthValues.length >= 14) { // Backend provides 14 values (indices 0-13)
+                // Entrées (5 individual values) - indices 0-4 from backend list
+                row.insertCell().classList.add('entrees-cell'); row.cells[1].textContent = mapData(monthValues[0]); // DRAA SFAR (dsClassique)
+                row.insertCell().classList.add('entrees-cell'); row.cells[2].textContent = mapData(monthValues[1]); // DRAA NORD (dsNord)
+                row.insertCell().classList.add('entrees-cell'); row.cells[3].textContent = mapData(monthValues[2]); // KOUDIAT AÏCHA (controleBasculeKA)
+                row.insertCell().classList.add('entrees-cell'); row.cells[4].textContent = mapData(monthValues[3]); // COSUMAR (chauxVive)
+                row.insertCell().classList.add('entrees-cell'); row.cells[5].textContent = mapData(monthValues[4]); // LAFARGE (chauxViveLafarge)
+
+                // Expéditions (8 individual values) - indices 6-13 from backend list (Note: your original code skipped index 5)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[6].textContent = mapData(monthValues[6]); // CU MRK (expCuivreOncf)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[7].textContent = mapData(monthValues[7]); // CU NORD (expCuivreNord)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[8].textContent = mapData(monthValues[8]); // PB MRK (expPbCmgOnf)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[9].textContent = mapData(monthValues[9]); // C.BULK (cbulkArgentifere)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[10].textContent = mapData(monthValues[10]); // ZN ONCF (expZincOncf)
+                row.insertCell().classList.add('expeditions-cell'); row.cells[11].textContent = mapData(monthValues[11]); // ZN PORT (expZincPortEnVrac) - assuming this is at index 11
+                row.insertCell().classList.add('expeditions-cell'); row.cells[12].textContent = mapData(monthValues[12]); // ZN VRAC (expZincVrac) - assuming this is at index 12
+                row.insertCell().classList.add('expeditions-cell'); row.cells[13].textContent = mapData(monthValues[13]); // ZN Safi (expZincSafi) - assuming this is at index 13
+
+            } else {
+                // If no data for month or unexpected format, fill with zeros
+                for (let i = 0; i < 13; i++) { // 13 data columns (5 entrees + 8 expeditions)
+                    row.insertCell().textContent = '0.00';
+                }
+            }
         });
-        document.getElementById("cumulMensuelTotal").textContent = (data.cumulMensuel || 0).toFixed(2);
-        document.getElementById("cumulAnnuelTotal").textContent = (data.cumulAnnuel || 0).toFixed(2);
-        document.getElementById("globalTotal").textContent = (data.global || 0).toFixed(2);
+
+        // --- Cumul Annuel Row ---
+        const annualRow = tableBody.insertRow();
+        annualRow.classList.add('cumulative-row');
+        annualRow.insertCell().textContent = `CUMUL ANNUEL ${annee}`;
+
+        // Helper to safely get annual DTO values
+        const getAnnualValue = (key) => (annualDto[key] || 0).toFixed(2);
+
+        // Entrées (5 individual values from annualDto)
+        annualRow.insertCell().classList.add('entrees-cell'); annualRow.cells[1].textContent = getAnnualValue('dsClassique');
+        annualRow.insertCell().classList.add('entrees-cell'); annualRow.cells[2].textContent = getAnnualValue('dsNord');
+        annualRow.insertCell().classList.add('entrees-cell'); annualRow.cells[3].textContent = getAnnualValue('controleBasculeKA');
+        annualRow.insertCell().classList.add('entrees-cell'); annualRow.cells[4].textContent = getAnnualValue('chauxVive');
+        annualRow.insertCell().classList.add('entrees-cell'); annualRow.cells[5].textContent = getAnnualValue('chauxViveLafarge');
+
+        // Expéditions (8 individual values from annualDto)
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[6].textContent = getAnnualValue('expCuivreOncf');
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[7].textContent = getAnnualValue('expCuivreNord');
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[8].textContent = getAnnualValue('expPbCmgOnf');
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[9].textContent = getAnnualValue('cbulkArgentifere');
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[10].textContent = getAnnualValue('expZincOncf');
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[11].textContent = getAnnualValue('expZincPortEnVrac'); // Use actual field if it exists
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[12].textContent = getAnnualValue('expZincVrac'); // Use actual field if it exists
+        annualRow.insertCell().classList.add('expeditions-cell'); annualRow.cells[13].textContent = getAnnualValue('expZincSafi');
+
+
+        // --- Grouped Annual Cumulative Row (Calculated in JS) ---
+        const groupedAnnualRow = tableBody.insertRow();
+        groupedAnnualRow.classList.add('grouped-annual-row');
+        groupedAnnualRow.insertCell().textContent = `CUMULS ANNUELS REGROUPÉS ${annee}`; // Label in first column
+
+        // Calculate grouped values
+        const cumulDsNordKa = (annualDto.dsClassique || 0) + (annualDto.dsNord || 0) + (annualDto.controleBasculeKA || 0);
+        const cumulChaux = (annualDto.chauxVive || 0) + (annualDto.chauxViveLafarge || 0);
+        const cumulAutres = (annualDto.expCuivreOncf || 0) + (annualDto.expCuivreNord || 0) +
+            (annualDto.expPbCmgOnf || 0) + (annualDto.cbulkArgentifere || 0) +
+            (annualDto.expZincOncf || 0) + (annualDto.expZincSafi || 0) +
+            (annualDto.expZincPortEnVrac || 0) + (annualDto.expZincVrac || 0) + // Include new ZN fields
+            (annualDto.controleBasculeHJDS || 0);
+
+        // Create cells for grouped values and apply specific class for visual distinction
+        const cell1 = groupedAnnualRow.insertCell();
+        cell1.textContent = `DS/NORD/KA: ${cumulDsNordKa.toFixed(2)}`;
+        cell1.classList.add('global-value-cell');
+
+        const cell2 = groupedAnnualRow.insertCell();
+        cell2.textContent = `CHAUX: ${cumulChaux.toFixed(2)}`;
+        cell2.classList.add('global-value-cell');
+
+        const cell3 = groupedAnnualRow.insertCell();
+        cell3.textContent = `AUTRES: ${cumulAutres.toFixed(2)}`;
+        cell3.classList.add('global-value-cell');
+
+        // Merge cells to span the remaining columns to keep the table structure
+        // Total data columns (13) + 1 for month name = 14 columns
+        // We used 1 for label and 3 for grouped values = 4 cells
+        // Remaining 14 - 4 = 10 empty cells needed.
+        for (let i = 0; i < 10; i++) {
+            groupedAnnualRow.insertCell().textContent = '';
+        }
     }
-    function loadSyntheseJour() {
-        const date = document.getElementById("dateInput").value;
-        if (!date) return alert("Veuillez choisir une date !");
-        fetch(`/api/synthese-jour?jour=${date}`)
-            .then(r => r.json()).then(displaySynthese)
-            .catch(err => alert("Erreur synthèse jour : " + err));
+
+    /**
+     * Triggers the Excel export from the backend.
+     */
+    async function exportExcel() {
+        const annee = document.getElementById('anneeTableInput').value;
+        if (!annee) {
+            alert('Please select a year before exporting.');
+            return;
+        }
+        try {
+            // Initiate download by redirecting to the export endpoint
+            window.location.href = `${API_BASE_URL}/synthese/export?annee=${annee}`;
+        } catch (error) {
+            console.error('Error during Excel export:', error);
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = `Error during Excel export: ${error.message || error}. Please ensure the backend is running and the export endpoint is accessible.`;
+            errorMessage.style.display = 'block';
+        }
     }
-    function loadSyntheseMois() {
-        const mois = document.getElementById("monthInput").value;
-        if (!mois) return alert("Veuillez choisir un mois !");
-        fetch(`/api/synthese-mois?mois=${mois}`)
-            .then(r => r.json()).then(displaySynthese)
-            .catch(err => alert("Erreur synthèse mois : " + err));
-    }
-    function loadSyntheseAnnee() {
-        const annee = document.getElementById("yearInput").value;
-        if (!annee) return alert("Veuillez choisir une année !");
-        fetch(`/api/synthese-annuelle?annee=${annee}`)
-            .then(r => r.json()).then(displaySynthese)
-            .catch(err => alert("Erreur synthèse annuelle : " + err));
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-        const today = new Date().toISOString().slice(0, 10);
-        document.getElementById("dateInput").value = today;
-        loadSyntheseJour();
+
+    // Set default date and year, and load data on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+
+        document.getElementById('jourInput').value = `${year}-${month}-${day}`;
+        document.getElementById('anneeTableInput').value = year;
+
+        // Load data on initial page load
+        loadAllSyntheseData();
+        getSyntheseJour();
+
+        // Highlight the active navigation item based on the current page URL
+        const currentPath = window.location.pathname.split('/').pop();
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            const link = item.querySelector('a');
+            if (link && link.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
     });
 </script>
 </body>

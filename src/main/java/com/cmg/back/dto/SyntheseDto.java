@@ -16,7 +16,7 @@ public class SyntheseDto {
     private double chauxViveLafarge;
     private double cbulkArgentifere;
     private double chauxVive;
-    private double controleBasculeHJDS;
+    private double controleBasculeHJDS; // Nouveau champ
     private double controleBasculeKA;
     private double expCuivreNord;
     private double expCuivreOncf;
@@ -24,5 +24,5 @@ public class SyntheseDto {
     private double expZincOncf;
     private double expZincSafi;
 
-    private BigDecimal global;
+    private BigDecimal global; // Changé de double à BigDecimal
 }
