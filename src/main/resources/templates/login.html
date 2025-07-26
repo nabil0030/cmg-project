@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <title>Connexion au compte</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -162,7 +162,7 @@
             font-weight: 500;
         }
 
-        /* Message de succès */
+        /* Message de succès (pour la déconnexion par exemple) */
         .success-message {
             background: rgba(46, 204, 113, 0.2);
             border: 1px solid #2ecc71;
@@ -188,24 +188,22 @@
 <body>
 
 <div class="form-container" id="formContainer">
-    <h2>Connexion</h2>
+    <h2>Se connecter</h2>
 
-    <!-- Messages d'erreur ou de succès -->
     <div class="error-message" th:if="${param.error}" id="errorMessage">
         <i class="fas fa-exclamation-circle error-icon"></i>
-        <span class="error-text">Identifiants incorrects. Veuillez réessayer.</span>
+        <span class="error-text">Email ou mot de passe incorrect.</span>
     </div>
 
     <div class="success-message" th:if="${param.logout}" id="successMessage">
         <i class="fas fa-check-circle success-icon"></i>
-        <span class="success-text">Déconnecté avec succès.</span>
+        <span class="success-text">Vous êtes déconnecté avec succès.</span>
     </div>
 
-    <!-- Formulaire Spring Security -->
-    <form method="POST" action="/login" id="loginForm">
+    <form th:action="@{/login}" method="POST" id="loginForm">
         <div class="form-group">
-            <label for="username">Email</label>
-            <input type="text" id="username" name="username" placeholder="Votre email" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="username" placeholder="Votre email" required autofocus>
         </div>
 
         <div class="form-group">
@@ -213,11 +211,13 @@
             <input type="password" id="password" name="password" placeholder="Votre mot de passe" required>
         </div>
 
-        <button type="submit">Se connecter</button>
+        <button type="submit">
+            <i class="fas fa-sign-in-alt"></i> Se connecter
+        </button>
     </form>
 
     <div class="signup-link">
-        Pas encore de compte ? <a href="/signup">Créer un compte</a>
+        Pas encore de compte ? <a href="/signup">S'inscrire</a>
     </div>
 </div>
 
@@ -232,30 +232,34 @@
         });
     });
 
-    // Animation de secousse si erreur de login
+    // Animation de secousse si erreur ou message de succès
     document.addEventListener('DOMContentLoaded', function() {
         const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
         const formContainer = document.getElementById('formContainer');
 
         if (errorMessage) {
             formContainer.classList.add('shake');
-
-            // Retirer l'animation après qu'elle soit terminée
             setTimeout(() => {
                 formContainer.classList.remove('shake');
-            }, 500);
-
-            // Focus automatique sur le champ email
-            document.getElementById('username').focus();
+            }, 500); // Durée de l'animation de secousse
         }
+        // Pas de secousse pour le succès, juste l'apparition
     });
 
-    // Optionnel: Animation sur soumission du formulaire
+    // Animation sur soumission du formulaire
     document.getElementById('loginForm').addEventListener('submit', function() {
         const button = this.querySelector('button');
         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
         button.disabled = true;
     });
+    const params = new URLSearchParams(window.location.search);
+    const msgDiv = document.getElementById('msg');
+    if (params.has('error')) {
+        msgDiv.textContent = 'Email ou mot de passe incorrect';
+        msgDiv.classList.add('error');
+        msgDiv.style.display = 'block';
+    }
 </script>
 
 </body>

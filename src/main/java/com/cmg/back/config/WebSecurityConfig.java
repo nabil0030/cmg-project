@@ -70,16 +70,18 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/index.html", true) // ✅ OK !
-
+                        .loginPage("/login")                 // page de login personnalisée
+                        .loginProcessingUrl("/login")        // endpoint utilisé par le formulaire
+                        .defaultSuccessUrl("/index.html", true)
+                        .failureUrl("/login?error=true")     // gestion erreur login
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")  // gestion message de déconnexion
                         .permitAll()
                 )
-                .userDetailsService(customUserDetailsService); // 🔐 Lien avec ton CustomUserDetailsService
+                .userDetailsService(customUserDetailsService);
 
         return http.build();
     }
