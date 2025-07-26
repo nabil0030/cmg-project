@@ -20,8 +20,8 @@
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
             --border-radius: 10px;
-            --sidebar-width: 240px; /* Slightly reduced sidebar width */
-            --sidebar-width-collapsed: 65px; /* Slightly reduced collapsed width */
+            --sidebar-width: 220px; /* Slightly reduced sidebar width for more main content space */
+            --sidebar-width-collapsed: 60px; /* Slightly reduced collapsed width */
         }
 
         body {
@@ -33,6 +33,8 @@
             overflow-x: hidden;
             position: relative;
             color: var(--text-dark);
+            font-size: 15px; /* Slightly reduced base font size */
+            line-height: 1.5; /* Slightly reduced line spacing */
         }
 
         /* --- Animated Background Gradient (Subtle) --- */
@@ -59,7 +61,7 @@
             width: var(--sidebar-width);
             background-color: var(--secondary-color);
             color: white;
-            padding: 25px 0; /* Reduced padding */
+            padding: 20px 0; /* Reduced padding */
             height: 100vh;
             position: sticky;
             top: 0;
@@ -79,7 +81,7 @@
         }
 
         .sidebar-header {
-            padding: 0 25px 25px; /* Reduced padding */
+            padding: 0 20px 20px; /* Reduced padding */
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             text-align: center;
             display: flex;
@@ -88,11 +90,11 @@
         }
 
         .sidebar.collapsed .sidebar-header {
-            padding: 0 8px 15px; /* Reduced padding */
+            padding: 0 5px 10px; /* Further reduced padding */
         }
 
         .sidebar-title {
-            font-size: 1.6rem; /* Slightly smaller title */
+            font-size: 1.5rem; /* Slightly smaller title */
             font-weight: 700;
             margin: 0;
             color: white;
@@ -118,12 +120,12 @@
         .nav-menu {
             list-style: none;
             padding: 0;
-            margin: 25px 0 0 0; /* Reduced margin */
+            margin: 20px 0 0 0; /* Reduced margin */
             flex-grow: 1;
         }
 
         .nav-item {
-            padding: 12px 25px; /* Reduced padding */
+            padding: 10px 20px; /* Reduced padding */
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, border-left-color 0.3s ease;
             display: flex;
@@ -132,14 +134,14 @@
         }
 
         .sidebar.collapsed .nav-item {
-            padding: 12px 0; /* Center icons when collapsed */
+            padding: 10px 0; /* Center icons when collapsed */
             justify-content: center;
             border-left: none;
         }
 
         .nav-item:hover {
             background-color: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px); /* Reduced slide */
+            transform: translateX(3px); /* Further reduced slide */
             border-left-color: var(--primary-color);
         }
 
@@ -156,13 +158,13 @@
         .sidebar.collapsed .nav-item.active {
             background-color: rgba(255, 165, 0, 0.5);
             border-radius: var(--border-radius);
-            margin: 0 8px; /* Reduced margin */
+            margin: 0 6px; /* Reduced margin */
             border-left: none;
         }
 
         .nav-item i {
-            margin-right: 12px; /* Reduced space for icon */
-            font-size: 1.1rem; /* Slightly smaller icons */
+            margin-right: 10px; /* Reduced space for icon */
+            font-size: 1rem; /* Slightly smaller icons */
             color: rgba(255, 255, 255, 0.8);
             transition: color 0.3s ease, margin-right 0.3s ease;
         }
@@ -181,7 +183,7 @@
             display: flex;
             align-items: center;
             width: 100%;
-            font-size: 1rem; /* Slightly smaller text */
+            font-size: 0.95rem; /* Slightly smaller text */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -195,9 +197,9 @@
         }
 
         .sidebar-footer {
-            padding: 15px; /* Reduced padding */
+            padding: 10px; /* Reduced padding */
             text-align: center;
-            font-size: 0.75rem; /* Slightly smaller font */
+            font-size: 0.7rem; /* Slightly smaller font */
             color: rgba(255, 255, 255, 0.5);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             transition: opacity 0.3s ease;
@@ -210,14 +212,14 @@
         /* --- Toggle Button --- */
         .sidebar-toggle {
             position: absolute;
-            top: 15px; /* Adjusted position */
-            right: -12px; /* Adjusted position */
+            top: 10px; /* Adjusted position */
+            right: -10px; /* Adjusted position */
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 25px; /* Smaller button */
-            height: 25px; /* Smaller button */
+            width: 20px; /* Smaller button */
+            height: 20px; /* Smaller button */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -228,32 +230,32 @@
         }
         .sidebar-toggle:hover {
             background-color: #E69500;
-            transform: scale(1.05); /* Smaller scale effect */
+            transform: scale(1.1);
         }
         .sidebar.collapsed .sidebar-toggle .fas {
             transform: rotate(180deg);
         }
         .sidebar-toggle .fas {
-            font-size: 0.8rem; /* Smaller icon */
+            font-size: 0.7rem; /* Smaller icon */
             transition: transform 0.3s ease;
         }
 
         /* --- Main Content Styling --- */
         .main-content {
             flex: 1;
-            padding: 30px; /* Reduced main content padding */
+            padding: 20px; /* Reduced main content padding */
             display: flex;
             flex-direction: column;
-            gap: 25px; /* Reduced gap between sections */
+            gap: 20px; /* Reduced gap between sections */
             position: relative;
             z-index: 1;
             transition: margin-left 0.3s ease;
         }
 
         .page-title {
-            font-size: 2.3rem; /* Slightly smaller page title */
+            font-size: 2rem; /* Slightly smaller page title */
             color: var(--text-dark);
-            margin-bottom: 15px; /* Reduced margin */
+            margin-bottom: 10px; /* Reduced margin */
             font-weight: 800;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.05);
             animation: slideInLeft 0.7s ease-out forwards;
@@ -268,7 +270,7 @@
         .form-section, .table-section {
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 25px; /* Reduced internal padding */
+            padding: 20px; /* Reduced internal padding */
             box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
@@ -276,7 +278,7 @@
         }
 
         .form-section:hover, .table-section:hover {
-            transform: translateY(-3px); /* Slightly reduced lift effect on hover */
+            transform: translateY(-2px); /* Slightly reduced lift effect on hover */
             box-shadow: var(--shadow-hover);
         }
 
@@ -284,13 +286,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px; /* Reduced margin */
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px; /* Reduced padding */
+            margin-bottom: 15px; /* Reduced margin */
+            border-bottom: 1px solid var(--border-color); /* Thinner border */
+            padding-bottom: 10px; /* Reduced padding */
         }
 
         .section-header h2 {
-            font-size: 1.5rem; /* Slightly smaller section titles */
+            font-size: 1.4rem; /* Slightly smaller section titles */
             color: var(--primary-color);
             margin: 0;
             font-weight: 700;
@@ -298,7 +300,9 @@
 
         .section-actions {
             display: flex;
-            gap: 8px; /* Reduced gap */
+            gap: 6px; /* Reduced gap */
+            align-items: center; /* Align filter with button */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
 
         .section-actions button, .section-actions input[type="text"] {
@@ -306,8 +310,8 @@
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            font-size: 0.9rem; /* Smaller font */
-            padding: 7px 10px; /* Reduced padding */
+            font-size: 0.85rem; /* Smaller font */
+            padding: 6px 9px; /* Reduced padding */
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
@@ -318,8 +322,8 @@
         /* --- Form Styling --- */
         #chauxViveForm {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Slightly smaller min-width */
-            gap: 15px; /* Reduced gap between inputs */
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); /* Further reduced min-width for more compact layout */
+            gap: 12px; /* Reduced gap between inputs */
         }
 
         .form-group {
@@ -328,18 +332,18 @@
         }
 
         .form-group label {
-            font-size: 0.85rem; /* Slightly smaller label font */
+            font-size: 0.8rem; /* Slightly smaller label font */
             color: var(--text-light);
-            margin-bottom: 5px; /* Reduced margin below label */
+            margin-bottom: 4px; /* Reduced margin below label */
             font-weight: 500;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 10px 12px; /* Reduced padding inside inputs */
-            border-radius: 8px;
+            padding: 8px 10px; /* Reduced padding inside inputs */
+            border-radius: 6px; /* Slightly smaller border-radius */
             border: 1px solid var(--border-color);
-            font-size: 0.95rem; /* Slightly smaller input text font */
+            font-size: 0.95rem; /* Consistent input text font */
             color: var(--text-dark);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
             background-color: var(--bg-light);
@@ -347,41 +351,41 @@
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+            box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2); /* Slightly smaller shadow */
             outline: none;
             background-color: white;
         }
 
         textarea {
-            min-height: 70px; /* Slightly reduced min-height for textarea */
+            min-height: 60px; /* Further reduced min-height for textarea */
             resize: vertical;
             grid-column: 1 / -1;
         }
 
         #chauxViveForm button[type="submit"] {
-            padding: 12px 20px; /* Reduced button padding */
+            padding: 10px 18px; /* Reduced button padding */
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px; /* Slightly smaller border-radius */
             cursor: pointer;
-            font-size: 1rem; /* Slightly smaller button font */
+            font-size: 0.95rem; /* Slightly smaller button font */
             font-weight: 600;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
-            margin-top: 10px; /* Reduced margin above button */
+            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.25); /* Smaller shadow */
+            margin-top: 8px; /* Reduced margin above button */
             justify-self: end;
             width: fit-content;
             display: flex;
             align-items: center;
-            gap: 6px; /* Reduced gap for icon and text */
+            gap: 5px; /* Reduced gap for icon and text */
             grid-column: span 2;
         }
 
         #chauxViveForm button[type="submit"]:hover {
             background-color: #E69500;
-            transform: translateY(-1px); /* Slightly reduced lift */
-            box-shadow: 0 6px 18px rgba(255, 165, 0, 0.4);
+            transform: translateY(-0.5px); /* Very subtle lift */
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.35);
         }
 
         /* --- Table Styling --- */
@@ -396,15 +400,16 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            min-width: 800px; /* Ensures a minimum width for the table on larger screens, preventing excessive squeezing */
         }
 
         th, td {
-            padding: 12px 15px; /* Reduced padding in cells */
+            padding: 10px 12px; /* Reduced padding in cells */
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             border-right: 1px solid var(--border-color);
-            white-space: nowrap;
-            font-size: 0.9rem; /* Smaller font for table content */
+            white-space: nowrap; /* Prevent content from wrapping unless necessary */
+            font-size: 0.85rem; /* Smaller font for table content */
         }
 
         th:last-child, td:last-child {
@@ -416,7 +421,7 @@
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem; /* Smaller font for table headers */
+            font-size: 0.75rem; /* Smaller font for table headers */
             letter-spacing: 0.5px;
             position: sticky;
             top: 0;
@@ -433,8 +438,8 @@
 
         tbody tr:hover {
             background-color: #FFF3E0;
-            transform: translateY(-1px); /* Subtle lift */
-            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+            transform: translateY(-0.5px); /* Very subtle lift */
+            box-shadow: 0 0.5px 3px rgba(0,0,0,0.03);
             cursor: pointer;
         }
 
@@ -451,15 +456,15 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 6px 10px; /* Smaller button padding */
-            border-radius: 5px;
+            padding: 5px 8px; /* Smaller button padding */
+            border-radius: 4px; /* Smaller border-radius */
             cursor: pointer;
-            font-size: 0.8rem; /* Smaller button font */
-            margin: 0 2px; /* Reduced margin for multiple buttons */
+            font-size: 0.75rem; /* Smaller button font */
+            margin: 0 1px; /* Reduced margin for multiple buttons */
             transition: background-color 0.3s ease, transform 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 4px; /* Reduced gap for icon and text */
+            gap: 3px; /* Reduced gap for icon and text */
         }
 
         .table-actions button:hover {
@@ -476,176 +481,361 @@
 
         /* --- Alert Messages --- */
         .alert {
-            padding: 12px 15px; /* Reduced padding */
-            margin-bottom: 15px; /* Reduced margin */
+            padding: 10px 12px; /* Reduced padding */
+            margin-bottom: 12px; /* Reduced margin */
             border-radius: var(--border-radius);
             font-weight: 600;
-            font-size: 0.9rem; /* Slightly smaller font */
+            font-size: 0.85rem; /* Slightly smaller font */
             display: flex;
             align-items: center;
-            gap: 8px; /* Reduced gap */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            gap: 6px; /* Reduced gap */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             animation: fadeInDown 0.5s ease-out;
+        }
+        .alert.success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+        .alert.error {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Pagination Styling --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .pagination button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: #E69500;
+            transform: translateY(-1px);
+        }
+
+        .pagination button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .pagination span {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Custom Confirmation Modal (not used by deleteRow, but kept for styling) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content-box {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-hover);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.visible .modal-content-box {
+            transform: translateY(0);
+        }
+
+        #confirmMessage {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-actions button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .modal-actions .ok-btn {
+            background-color: #E74C3C; /* Red for delete confirmation */
+            color: white;
+            border: none;
+        }
+
+        .modal-actions .ok-btn:hover {
+            background-color: #C0392B;
+            transform: translateY(-1px);
+        }
+
+        .modal-actions .cancel-btn {
+            background-color: var(--border-color);
+            color: var(--text-dark);
+            border: 1px solid var(--text-light);
+        }
+
+        .modal-actions .cancel-btn:hover {
+            background-color: #D5D5D5;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive adjustments for modal */
+        @media (max-width: 768px) {
+            .modal-content-box {
+                padding: 15px;
+                width: 95%;
+            }
+            #confirmMessage {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            .modal-actions button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
         }
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
             .main-content {
-                padding: 25px; /* Further reduced padding */
+                padding: 18px; /* Further reduced padding */
             }
             .page-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             .form-section, .table-section {
-                padding: 20px; /* Further reduced padding */
+                padding: 18px; /* Further reduced padding */
             }
             .section-header h2 {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
+            }
+            /* Adjust min-width for the form grid */
+            #chauxViveForm {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 10px;
             }
         }
 
         @media (max-width: 992px) {
             .sidebar {
                 width: var(--sidebar-width-collapsed);
-                padding: 15px 0;
+                padding: 10px 0; /* Further reduced padding */
             }
             .sidebar .sidebar-header {
-                padding: 0 8px 15px;
+                padding: 0 5px 10px; /* Even less padding */
             }
             .sidebar .sidebar-title {
-                font-size: 1.1rem;
+                font-size: 1rem; /* Even smaller font when hidden */
                 display: none;
             }
             .sidebar .nav-item {
-                padding: 10px 0;
+                padding: 8px 0; /* Even less padding */
             }
             .sidebar .nav-item i {
-                font-size: 1rem;
+                font-size: 0.9rem; /* Smaller icons */
             }
             .sidebar .nav-item a {
                 display: none;
             }
             .sidebar .nav-item.active {
-                margin: 0 8px;
+                margin: 0 5px; /* Reduced margin */
             }
             .sidebar .sidebar-footer {
                 display: none;
             }
             .sidebar .sidebar-toggle {
-                right: -10px; /* Adjusted position */
-                width: 20px; /* Smaller toggle */
-                height: 20px;
+                right: -8px; /* Adjusted position */
+                width: 18px; /* Smaller toggle */
+                height: 18px;
             }
             .sidebar .sidebar-toggle .fas {
-                font-size: 0.7rem;
+                font-size: 0.6rem;
             }
 
             .main-content {
-                padding: 15px; /* Even smaller padding on tablets */
+                padding: 12px; /* Even smaller padding on tablets */
+                gap: 18px;
             }
             .page-title {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
+                font-size: 1.6rem;
+                margin-bottom: 15px;
             }
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
+                gap: 6px;
+                padding-bottom: 8px; /* Reduced padding */
             }
             .section-header h2 {
                 width: 100%;
                 text-align: center;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             .section-actions {
                 width: 100%;
-                text-align: center;
+                justify-content: center; /* Center buttons */
             }
             .section-actions button {
-                font-size: 0.8rem;
-                padding: 6px 9px;
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+            #chauxViveForm {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Even smaller min-width */
+                gap: 8px;
+            }
+            input, select, textarea {
+                padding: 7px 9px; /* Smaller input padding */
+                font-size: 0.9rem;
+            }
+            .form-group label {
+                font-size: 0.75rem;
+                margin-bottom: 2px;
+            }
+            #chauxViveForm button[type="submit"] {
+                padding: 9px 14px;
+                font-size: 0.9rem;
+                gap: 4px;
             }
         }
 
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
+                font-size: 14px; /* Even smaller base font for mobile */
             }
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: static;
                 border-radius: 0;
-                padding: 10px 0;
+                padding: 8px 0; /* Reduced padding */
             }
             .sidebar .sidebar-toggle {
                 display: none;
             }
             .sidebar-header {
-                padding: 0 10px 10px;
+                padding: 0 8px 8px; /* Reduced padding */
             }
             .sidebar-title {
                 display: block;
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
             .sidebar-title i {
-                margin-right: 8px;
-            }
-            .nav-menu {
-                margin-top: 8px;
-            }
-            .nav-item {
-                padding: 8px 12px;
-                margin: 4px;
-                border-radius: 6px;
-            }
-            .nav-item a {
-                font-size: 0.9rem;
-            }
-            .nav-item i {
-                font-size: 0.95rem;
                 margin-right: 6px;
             }
+            .nav-menu {
+                margin-top: 6px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-item {
+                padding: 6px 10px; /* Further reduced padding */
+                margin: 3px;
+                border-radius: 5px;
+            }
+            .nav-item a {
+                font-size: 0.85rem; /* Smaller menu item text */
+                margin-right: 0;
+            }
+            .nav-item i {
+                font-size: 0.85rem;
+                margin-right: 5px;
+            }
             .nav-item.active {
-                border-left: 4px solid var(--primary-color); /* Slightly thinner border */
+                border: 1px solid var(--primary-color);
             }
             .sidebar.collapsed {
                 width: 100%;
             }
 
             .main-content {
-                padding: 10px; /* Minimal padding on very small screens */
-                gap: 15px;
+                padding: 8px; /* Minimal padding on very small screens */
+                gap: 12px;
             }
             .page-title {
-                font-size: 1.6rem;
-                margin-bottom: 15px;
+                font-size: 1.4rem;
+                margin-bottom: 10px;
             }
             .form-section, .table-section {
-                padding: 15px;
+                padding: 12px; /* Reduced padding */
             }
             #chauxViveForm {
                 grid-template-columns: 1fr;
-                gap: 12px; /* Even smaller gap */
+                gap: 10px; /* Reduced gap */
             }
             input, select, textarea {
-                padding: 8px 10px; /* Smaller input padding */
-                font-size: 0.9rem;
+                padding: 6px 8px; /* Even smaller input padding */
+                font-size: 0.88rem;
             }
             .form-group label {
-                font-size: 0.8rem;
-                margin-bottom: 3px;
+                font-size: 0.7rem;
+                margin-bottom: 2px;
             }
             #chauxViveForm button[type="submit"] {
-                padding: 10px 15px;
-                font-size: 0.95rem;
-                gap: 5px;
+                padding: 8px 12px;
+                font-size: 0.88rem;
+                gap: 4px;
             }
 
             .table-responsive {
                 border-radius: 0;
                 border-left: none;
                 border-right: none;
+            }
+
+            table {
+                min-width: unset; /* Remove min-width for table on very small screens */
             }
 
             /* Table-specific overrides for very small screens (stacking) */
@@ -661,7 +851,7 @@
 
             tr {
                 border: 1px solid var(--border-color);
-                margin-bottom: 8px; /* Reduced margin */
+                margin-bottom: 6px; /* Reduced margin */
                 border-radius: var(--border-radius);
                 overflow: hidden;
             }
@@ -670,11 +860,11 @@
                 border: none;
                 border-bottom: 1px solid #eee;
                 position: relative;
-                padding-left: 45%; /* Adjusted for smaller data-label width */
+                padding-left: 48%; /* Adjusted for smaller data-label width */
                 text-align: right;
-                padding-top: 8px; /* Reduced vertical padding */
-                padding-bottom: 8px;
-                font-size: 0.88rem; /* Slightly smaller font for stacked data */
+                padding-top: 6px; /* Reduced vertical padding */
+                padding-bottom: 6px;
+                font-size: 0.85rem; /* Slightly smaller font for stacked data */
             }
 
             td:last-child {
@@ -684,27 +874,40 @@
             td::before {
                 content: attr(data-label);
                 position: absolute;
-                left: 8px; /* Adjusted left position */
-                width: 40%; /* Adjusted width for proper alignment */
-                padding-right: 8px;
+                left: 6px; /* Adjusted left position */
+                width: 45%; /* Adjusted width for proper alignment */
+                padding-right: 6px;
                 white-space: nowrap;
                 text-align: left;
                 font-weight: bold;
                 color: var(--primary-color);
-                font-size: 0.85rem; /* Smaller font for stacked labels */
+                font-size: 0.8rem; /* Smaller font for stacked labels */
             }
             td.table-actions {
-                padding-left: 8px; /* Reset padding for actions */
+                padding-left: 6px; /* Reset padding for actions */
                 text-align: center;
                 border-top: 1px solid #eee;
             }
             td.table-actions button {
-                padding: 5px 8px;
-                font-size: 0.75rem;
-                gap: 3px;
+                padding: 4px 7px;
+                font-size: 0.7rem;
+                gap: 2px;
             }
             td.table-actions::before {
                 content: none;
+            }
+
+            .pagination {
+                flex-wrap: wrap;
+                gap: 5px;
+                padding: 8px;
+            }
+            .pagination button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .pagination span {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -811,6 +1014,25 @@
         <div class="section-header">
             <h2>Historique des Chaux Vive</h2>
             <div class="section-actions">
+                <!-- Month Filter added here -->
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
+                    <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
+                        <option value="">Tous les mois</option>
+                        <option value="1">Janvier</option>
+                        <option value="2">Février</option>
+                        <option value="3">Mars</option>
+                        <option value="4">Avril</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Juin</option>
+                        <option value="7">Juillet</option>
+                        <option value="8">Août</option>
+                        <option value="9">Septembre</option>
+                        <option value="10">Octobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Décembre</option>
+                    </select>
+                </div>
                 <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
@@ -839,10 +1061,35 @@
                 <tbody id="data-body"></tbody>
             </table>
         </div>
+        <div class="pagination" id="pagination-controls">
+            <button id="prev-page"><i class="fas fa-chevron-left"></i> Précédent</button>
+            <span id="page-info">Page 1 sur 1</span>
+            <button id="next-page">Suivant <i class="fas fa-chevron-right"></i></button>
+        </div>
     </div>
 </div>
+
+<!-- Custom Confirmation Modal HTML (not used by deleteRow, but kept for styling) -->
+<div id="customConfirmModal" class="modal-overlay">
+    <div class="modal-content-box">
+        <p id="confirmMessage"></p>
+        <div class="modal-actions">
+            <button id="confirmCancelBtn" class="cancel-btn">Annuler</button>
+            <button id="confirmOkBtn" class="ok-btn">Confirmer</button>
+        </div>
+    </div>
+</div>
+
 <script>
     let currentEditId = null;
+    // IMPORTANT: This API_BASE_URL is a relative path.
+    // Ensure your backend serves these paths correctly relative to your frontend's URL.
+    const API_BASE_URL = window.location.origin + "/api/chaux-vive";
+
+    let rawAllTableData = []; // Stores ALL data fetched from the backend, unfiltered
+    let filteredAndSortedData = []; // Stores data after filtering and sorting, used for pagination
+    let currentPage = 1;
+    const rowsPerPage = 10; // Number of rows per page
 
     // A utility function to show messages, consistent with other pages
     function showMessage(msg, type){
@@ -850,74 +1097,128 @@
         div.className = `alert ${type}`;
         div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
         const mainContent = document.querySelector('.main-content');
+        // Insert before the first form-section
         mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
         setTimeout(()=> div.remove(), 4000);
     }
 
-    function loadTable() {
-        fetch('/api/chaux-vive')
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Erreur de réseau ou du serveur lors du chargement des données.');
-                }
-                return res.json();
-            })
-            .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = ''; // Clear existing rows
-                // Sort data by date in descending order
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Applies filters and sorting to raw data, then updates filteredAndSortedData
+    function applyFiltersAndSort() {
+        let dataToProcess = [...rawAllTableData];
 
-                if (!Array.isArray(data) || data.length === 0) {
-                    const noDataRow = document.createElement('tr');
-                    noDataRow.innerHTML = `<td colspan="16" style="text-align: center;">Aucune donnée trouvée.</td>`;
-                    tbody.appendChild(noDataRow);
-                    return;
-                }
-
-                data.forEach(e => {
-                    const tbVal = typeof e.tb === 'number' ? e.tb.toFixed(2) : '';
-                    const tareVal = typeof e.tare === 'number' ? e.tare.toFixed(2) : '';
-                    const netCosumarVal = typeof e.netCosumar === 'number' ? e.netCosumar.toFixed(2) : '';
-
-                    // Calculate NET CMG and ECART on the client-side for display
-                    const netCmg = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
-                    const ecart = (parseFloat(netCmg) - parseFloat(e.netCosumar)).toFixed(2);
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                            <td data-label="Date">${e.date || ''}</td>
-                            <td data-label="H entrée">${e.hEntree || ''}</td>
-                            <td data-label="H sortie">${e.hSortie || ''}</td>
-                            <td data-label="Transporteur">${e.transporteur || ''}</td>
-                            <td data-label="N° BL">${e.numeroBL || ''}</td>
-                            <td data-label="IMMAT">${e.immat || ''}</td>
-                            <td data-label="TB">${tbVal}</td>
-                            <td data-label="TARE">${tareVal}</td>
-                            <td data-label="NET CMG">${netCmg}</td>
-                            <td data-label="Poste">${e.poste ?? ''}</td>
-                            <td data-label="Net COSUMAR">${netCosumarVal}</td>
-                            <td data-label="ECART">${ecart}</td>
-                            <td data-label="Lieu chargement">${e.lieuChargement || ''}</td>
-                            <td data-label="Lieu déchargement">${e.lieuDechargement || ''}</td>
-                            <td data-label="Observation">${e.observation || ''}</td>
-                            <td class="table-actions">
-                                <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
-                                <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
-                            </td>
-                        `;
-                    tbody.appendChild(tr);
-                });
-            })
-            .catch(error => {
-                console.error("Erreur lors du chargement des données:", error);
-                showMessage(`❌ ${error.message}`, 'error');
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+        // Filtre par mois si un mois est sélectionné
+        const monthValue = document.getElementById('monthFilter').value;
+        if (monthValue) {
+            const selectedMonth = parseInt(monthValue, 10) - 1; // 0 = janvier
+            dataToProcess = dataToProcess.filter(e => {
+                const d = new Date(e.date);
+                if (isNaN(d)) return false;
+                return d.getMonth() === selectedMonth;
             });
+        }
+
+        // Tri croissant (du plus ancien au plus récent)
+        filteredAndSortedData = dataToProcess.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+        );
+
+        currentPage = 1;
+        displayTablePage(currentPage);
     }
 
-    document.getElementById('chauxViveForm').onsubmit = function(e) {
+
+    // Main function to load data from backend and set up pagination
+    async function loadTable() {
+        const tbody = document.getElementById('data-body');
+        tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`; // Loading indicator
+
+        try {
+            const response = await fetch(API_BASE_URL); // Fetch all data
+            if (!response.ok) {
+                throw new Error('Erreur de réseau ou du serveur lors du chargement des données.');
+            }
+            rawAllTableData = await response.json(); // Store raw data
+
+            applyFiltersAndSort(); // Apply filters and sort, then display the first page
+        } catch (error) {
+            console.error("Erreur lors du chargement des données:", error);
+            showMessage(`❌ ${error.message}`, 'error');
+            const tbody = document.getElementById('data-body');
+            tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+        }
+    }
+
+    // Function to display data for the current page
+    function displayTablePage(page) {
+        const tbody = document.getElementById('data-body');
+        tbody.innerHTML = ''; // Clear existing rows
+
+        const startIndex = (page - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const paginatedData = filteredAndSortedData.slice(startIndex, endIndex); // Use filtered and sorted data
+
+        if (!Array.isArray(paginatedData) || paginatedData.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `<td colspan="16" style="text-align: center; color: var(--text-light);">Aucune donnée trouvée pour cette page.</td>`;
+            tbody.appendChild(noDataRow);
+        } else {
+            paginatedData.forEach(e => {
+                // Ensure values are numbers before calculation, then format for display
+                const tbNum = parseFloat(e.tb);
+                const tareNum = parseFloat(e.tare);
+                const netCosumarNum = parseFloat(e.netCosumar);
+
+                const tbVal = !isNaN(tbNum) ? tbNum.toFixed(2) : '';
+                const tareVal = !isNaN(tareNum) ? tareNum.toFixed(2) : '';
+                const netCosumarVal = !isNaN(netCosumarNum) ? netCosumarNum.toFixed(2) : '';
+
+                // Calculate NET CMG and ECART using the numeric values
+                const netCmg = (!isNaN(tbNum) && !isNaN(tareNum)) ? (tbNum - tareNum).toFixed(2) : '';
+                // Ensure netCmg is parsed to float before using in ecart calculation
+                const ecart = (!isNaN(parseFloat(netCmg)) && !isNaN(netCosumarNum)) ? (parseFloat(netCmg) - netCosumarNum).toFixed(2) : '';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                        <td data-label="Date">${e.date || ''}</td>
+                        <td data-label="H entrée">${e.hEntree || ''}</td>
+                        <td data-label="H sortie">${e.hSortie || ''}</td>
+                        <td data-label="Transporteur">${e.transporteur || ''}</td>
+                        <td data-label="N° BL">${e.numeroBL || ''}</td>
+                        <td data-label="IMMAT">${e.immat || ''}</td>
+                        <td data-label="TB">${tbVal}</td>
+                        <td data-label="TARE">${tareVal}</td>
+                        <td data-label="NET CMG">${netCmg}</td>
+                        <td data-label="Poste">${e.poste ?? ''}</td>
+                        <td data-label="Net COSUMAR">${netCosumarVal}</td>
+                        <td data-label="ECART">${ecart}</td>
+                        <td data-label="Lieu chargement">${e.lieuChargement || ''}</td>
+                        <td data-label="Lieu déchargement">${e.lieuDechargement || ''}</td>
+                        <td data-label="Observation">${e.observation || ''}</td>
+                        <td class="table-actions">
+                            <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
+                            <button class="delete-btn" onclick='deleteRow("${e.id || e._id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
+                        </td>
+                    `;
+                tbody.appendChild(tr);
+            });
+        }
+        setupPagination(); // Update pagination controls after displaying the page
+    }
+
+    // Function to set up and update pagination controls
+    function setupPagination() {
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage); // Use filtered data length
+        const pageInfoSpan = document.getElementById('page-info');
+        const prevPageBtn = document.getElementById('prev-page');
+        const nextPageBtn = document.getElementById('next-page');
+
+        pageInfoSpan.textContent = `Page ${currentPage} sur ${totalPages || 1}`; // Handle case with 0 data
+
+        prevPageBtn.disabled = currentPage === 1;
+        nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+    }
+
+    document.getElementById('chauxViveForm').onsubmit = async function(e) { // Changed to async
         e.preventDefault();
 
         const tbValue = parseFloat(document.getElementById('tb').value);
@@ -925,7 +1226,7 @@
         const netCosumarValue = parseFloat(document.getElementById('netCosumar').value);
 
         const netCmgValue = (tbValue - tareValue).toFixed(2); // Calculate NET CMG
-        const ecartValue = (netCmgValue - netCosumarValue).toFixed(2); // Calculate ECART
+        const ecartValue = (parseFloat(netCmgValue) - netCosumarValue).toFixed(2); // Calculate ECART
 
         const entry = {
             date: document.getElementById('date').value,
@@ -946,43 +1247,46 @@
         };
 
         const method = currentEditId ? 'PUT' : 'POST';
-        const url = currentEditId ? `/api/chaux-vive/${currentEditId}` : '/api/chaux-vive';
+        const url = currentEditId ? `${API_BASE_URL}/${currentEditId}` : API_BASE_URL; // Use API_BASE_URL
 
-        fetch(url, {
-            method: method,
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(entry)
-        })
-            .then(async res => {
-                if (!res.ok) {
-                    let msg = (await res.text());
-                    if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
-                    throw new Error(msg || 'Erreur inconnue.');
-                }
-                return res.json();
-            })
-            .then(() => {
-                showMessage('✅ Opération réussie.', 'success');
-                this.reset();
-                currentEditId = null;
-                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
-                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
-                // Reset button styles to default
-                const submitBtn = document.getElementById('submit-btn');
-                submitBtn.style.backgroundColor = 'var(--primary-color)';
-                submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
-                submitBtn.onmouseover = null;
-                submitBtn.onmouseout = null;
-                loadTable();
-            })
-            .catch(err => {
-                console.error("Form submission error:", err);
-                showMessage(`❌ ${err.message}`, 'error');
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true; // Disable button to prevent double submission
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...'; // Show spinner
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(entry)
             });
+            if (!res.ok) {
+                let msg = (await res.text());
+                if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
+                throw new Error(msg || 'Erreur inconnue.');
+            }
+            await res.json(); // Consume the response body
+
+            showMessage('✅ Opération réussie.', 'success');
+            this.reset();
+            currentEditId = null;
+            document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
+            // Reset button styles to default
+            submitBtn.style.backgroundColor = 'var(--primary-color)';
+            submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+            submitBtn.onmouseover = null;
+            submitBtn.onmouseout = null;
+            loadTable(); // Reload table to update and re-paginate
+        } catch (err) {
+            console.error("Form submission error:", err);
+            showMessage(`❌ ${err.message}`, 'error');
+        } finally {
+            submitBtn.disabled = false; // Re-enable button
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
+        }
     };
 
     function editRow(item) {
-        currentEditId = item.id;
+        currentEditId = item.id || item._id; // Use item.id first, then fallback to item._id
         document.getElementById('date').value = item.date || '';
         document.getElementById('hEntree').value = item.hEntree || '';
         document.getElementById('hSortie').value = item.hSortie || '';
@@ -1013,13 +1317,13 @@
         if(!confirm('❗ Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action est irréversible.')) {
             return;
         }
-        fetch(`/api/chaux-vive/${id}`, {method:'DELETE'})
+        fetch(`${API_BASE_URL}/${id}`, {method:'DELETE'}) // Use API_BASE_URL (relative path)
             .then(async res => {
                 if (!res.ok) {
                     throw new Error((await res.text()) || 'Erreur de suppression.');
                 }
                 showMessage('✅ Entrée supprimée avec succès.', 'success');
-                loadTable();
+                loadTable(); // Reload table to update and re-paginate
             })
             .catch(err => {
                 console.error("Delete error:", err);
@@ -1028,7 +1332,7 @@
     }
 
     function exportExcel() {
-        window.open('/api/chaux-vive/export', '_blank');
+        window.open(`${API_BASE_URL}/export`, '_blank'); // Use API_BASE_URL (relative path)
     }
 
     // Sidebar Toggle JavaScript - Reused logic
@@ -1036,6 +1340,9 @@
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const toggleIcon = sidebarToggle.querySelector('.fas');
+        const prevPageBtn = document.getElementById('prev-page');
+        const nextPageBtn = document.getElementById('next-page');
+        const monthFilterSelect = document.getElementById('monthFilter'); // Get month filter select
 
         // Check localStorage for the last sidebar state
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -1063,9 +1370,26 @@
             }
         });
 
+        // Add event listeners for pagination buttons
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTablePage(currentPage);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayTablePage(currentPage);
+            }
+        });
+
+        // Add event listener for month filter
+        monthFilterSelect.addEventListener('change', applyFiltersAndSort);
+
         // Initial load of table data when the DOM is ready
         loadTable();
     });
 </script>
-</body>
-</html>

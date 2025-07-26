@@ -298,6 +298,9 @@
         .section-actions {
             display: flex;
             gap: 10px;
+            /* Added for month filter alignment */
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
 
         .section-actions button, .section-actions input[type="text"] {
@@ -502,6 +505,91 @@
             box-shadow: none !important;
         }
 
+        /* --- Alert Messages --- */
+        .alert {
+            padding: 10px 12px; /* Reduced padding */
+            margin-bottom: 12px; /* Reduced margin */
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 0.85rem; /* Slightly smaller font */
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Reduced gap */
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            animation: fadeInDown 0.5s ease-out;
+        }
+        .alert.success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+        .alert.error {
+            background-color: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Pagination Styling --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .pagination button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: #397BC7; /* Darker blue on hover */
+            transform: translateY(-1px);
+        }
+
+        .pagination button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .pagination span {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+
+        /* Responsive adjustments for modal */
+        @media (max-width: 768px) {
+            .modal-content-box {
+                padding: 15px;
+                width: 95%;
+            }
+            #confirmMessage {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            .modal-actions button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
@@ -543,7 +631,7 @@
                 border-left: none; /* Remove border when collapsed */
             }
             .sidebar .nav-item i {
-                margin-right: 0; /* No margin when text is hidden */
+                margin-right: 0;
             }
             .sidebar .nav-item a {
                 display: none; /* Hide link text */
@@ -708,7 +796,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -736,7 +824,7 @@
                 <i class="fas fa-truck-loading"></i>
                 <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-truck-loading"></i>
                 <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
             </li>
@@ -847,7 +935,7 @@
             </div>
 
             <div class="form-buttons">
-                <button type="submit"><i class="fas fa-save"></i> Ajouter</button>
+                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Ajouter</button>
                 <button type="button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </form>
@@ -856,6 +944,26 @@
     <div class="table-section">
         <div class="section-header">
             <h2>Historique</h2>
+            <div class="section-actions">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
+                    <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
+                        <option value="">Tous les mois</option>
+                        <option value="1">Janvier</option>
+                        <option value="2">Février</option>
+                        <option value="3">Mars</option>
+                        <option value="4">Avril</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Juin</option>
+                        <option value="7">Juillet</option>
+                        <option value="8">Août</option>
+                        <option value="9">Septembre</option>
+                        <option value="10">Octobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Décembre</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="table-responsive">
             <table id="cbulkTable">
@@ -869,220 +977,238 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div class="pagination" id="pagination-controls">
+            <button id="prev-page"><i class="fas fa-chevron-left"></i> Précédent</button>
+            <span id="page-info">Page 1 sur 1</span>
+            <button id="next-page">Suivant <i class="fas fa-chevron-right"></i></button>
+        </div>
     </div>
 </div>
 
 <script>
-    const apiUrl = "/api/cbulkargentifere";
-    let editingId = null;
+    const API_BASE_URL = window.location.origin + "/api/cbulkargentifere";
+    let currentEditId = null;
+    let rawAllTableData = [];
+    let filteredAndSortedData = [];
+    let currentPage = 1;
+    const rowsPerPage = 10;
 
-    // Utility to format date for display
-    function formatDateForDisplay(isoDate) {
-        if (!isoDate) return '';
-        const [year, month, day] = isoDate.split('-');
-        return `${day}/${month}/${year}`; // Format DD/MM/YYYY for display
+    function showMessage(msg, type) {
+        const div = document.createElement('div');
+        div.className = `alert ${type}`;
+        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+        const mainContent = document.querySelector('.main-content');
+        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
+        setTimeout(() => div.remove(), 4000);
     }
 
-    document.getElementById("cbulkForm").addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const tb = parseFloat(form.tb.value);
-        const tare = parseFloat(form.tare.value);
-        const tnh = parseFloat((tb - tare).toFixed(2)); // Calculate and fix to 2 decimal places
+    function applyFiltersAndSort() {
+        let dataToProcess = [...rawAllTableData];
+        const monthFilter = document.getElementById('monthFilter').value;
 
-        const data = {
-            date: form.date.value,
-            heureEntree: form.heureEntree.value,
-            heureSortie: form.heureSortie.value,
-            transporteur: form.transporteur.value,
-            numeroBL: form.numeroBL.value,
-            matricule: form.matricule.value,
-            tb, tare, tnh,
-            numeroContenaire: form.numeroContenaire.value,
-            poste: parseInt(form.poste.value),
-            lieuDechargement: form.lieuDechargement.value,
-            observation: form.observation.value
+        if (monthFilter) {
+            const selectedMonth = parseInt(monthFilter, 10) - 1; // 0 = janvier
+            dataToProcess = dataToProcess.filter(e => {
+                if (!e.date) return false;
+                const entryDate = new Date(e.date);
+                if (isNaN(entryDate)) return false;
+                // On garde uniquement les entrées du mois sélectionné
+                return entryDate.getMonth() === selectedMonth;
+            });
+        }
+
+        // Tri décroissant par date (plus récent d'abord)
+        filteredAndSortedData = dataToProcess.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        currentPage = 1;
+        displayTablePage(currentPage);
+    }
+
+    async function loadTable() {
+        const tbody = document.querySelector('#cbulkTable tbody');
+        tbody.innerHTML = `
+      <tr>
+        <td colspan="14" style="text-align:center; color:var(--text-light)">
+          <i class="fas fa-spinner fa-spin"></i> Chargement...
+        </td>
+      </tr>`;
+
+        try {
+            const res = await fetch(API_BASE_URL);
+            if (!res.ok) throw new Error('Erreur réseau/serveur');
+            rawAllTableData = await res.json();
+            applyFiltersAndSort();
+        } catch (err) {
+            console.error(err);
+            showMessage(`❌ ${err.message}`, 'error');
+            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:red;">Erreur de chargement</td></tr>`;
+        }
+    }
+
+    function displayTablePage(page) {
+        const tbody = document.querySelector('#cbulkTable tbody');
+        tbody.innerHTML = '';
+        const start = (page - 1) * rowsPerPage;
+        const slice = filteredAndSortedData.slice(start, start + rowsPerPage);
+
+        if (!slice.length) {
+            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:var(--text-light);">
+        Aucune donnée pour cette page.
+      </td></tr>`;
+        } else {
+            slice.forEach(e => {
+                const tb = parseFloat(e.tb);
+                const tare = parseFloat(e.tare);
+                const tnh = (!isNaN(tb) && !isNaN(tare)) ? (tb - tare).toFixed(2) : '';
+                tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td data-label="Date">${e.date||''}</td>
+            <td data-label="H Entrée">${e.heureEntree||''}</td>
+            <td data-label="H Sortie">${e.heureSortie||''}</td>
+            <td data-label="Transporteur">${e.transporteur||''}</td>
+            <td data-label="N° BL">${e.numeroBL||''}</td>
+            <td data-label="Matricule">${e.matricule||''}</td>
+            <td data-label="TB">${!isNaN(tb)?tb.toFixed(2):''}</td>
+            <td data-label="TARE">${!isNaN(tare)?tare.toFixed(2):''}</td>
+            <td data-label="TN H">${tnh}</td>
+            <td data-label="N° Contenaire">${e.numeroContenaire||''}</td>
+            <td data-label="Poste">${e.poste??''}</td>
+            <td data-label="Lieu Déchargement">${e.lieuDechargement||''}</td>
+            <td data-label="Observation">${e.observation||''}</td>
+            <td class="table-actions">
+              <button onclick='editRow(${JSON.stringify(e)})' title="Modifier">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="delete-btn" onclick='deleteRow("${e.id||e._id}")' title="Supprimer">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        `);
+            });
+        }
+
+        setupPagination();
+    }
+
+    function setupPagination() {
+        const total = Math.ceil(filteredAndSortedData.length / rowsPerPage) || 1;
+        document.getElementById('page-info').textContent = `Page ${currentPage} sur ${total}`;
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === total;
+    }
+
+    document.getElementById('cbulkForm').onsubmit = async e => {
+        e.preventDefault();
+        const f = e.target;
+        const tb = parseFloat(f.tb.value), tare = parseFloat(f.tare.value);
+        const payload = {
+            date: f.date.value,
+            heureEntree: f.heureEntree.value,
+            heureSortie: f.heureSortie.value,
+            transporteur: f.transporteur.value,
+            numeroBL: f.numeroBL.value,
+            matricule: f.matricule.value,
+            tb, tare,
+            tnh: isNaN(tb - tare) ? null : parseFloat((tb - tare).toFixed(2)),
+            numeroContenaire: f.numeroContenaire.value,
+            poste: parseInt(f.poste.value),
+            lieuDechargement: f.lieuDechargement.value,
+            observation: f.observation.value
         };
 
-        const submitButton = form.querySelector("button[type=submit]");
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...';
 
         try {
-            let res;
-            if (editingId === null) {
-                res = await fetch(apiUrl + "/add", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
-                });
-                if (res.status === 409) {
-                    alert("❌ Doublon détecté ! L'entrée avec le même N° BL ou Matricule existe déjà.");
-                    return;
-                }
-                if (!res.ok) throw new Error("Erreur lors de l'ajout.");
-                alert('✅ Ajouté avec succès.');
-            } else {
-                // For update, include the ID in the data object
-                data.id = editingId;
-                res = await fetch(apiUrl + "/update", {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
-                });
-                if (!res.ok) throw new Error("Erreur lors de la mise à jour.");
-                alert('✅ Mis à jour avec succès.');
-            }
-        } catch (error) {
-            console.error('Operation failed:', error);
-            alert(`❌ Une erreur est survenue: ${error.message}`);
-            return; // Stop execution if there's an error
-        }
-
-        form.reset();
-        editingId = null;
-        submitButton.innerHTML = '<i class="fas fa-save"></i> Ajouter';
-        submitButton.style.backgroundColor = 'var(--primary-color)';
-        submitButton.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
-        loadData();
-    });
-
-    async function loadData() {
-        try {
-            const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            const entries = await res.json();
-            const tbody = document.querySelector("#cbulkTable tbody");
-            tbody.innerHTML = "";
-
-            // Sort by date DESC
-            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            let totalTNH = 0;
-
-            if (entries.length === 0) {
-                const noDataRow = document.createElement('tr');
-                noDataRow.innerHTML = `<td colspan="14" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée.</td>`;
-                tbody.appendChild(noDataRow);
-                return;
-            }
-
-            entries.forEach(entry => {
-                const tnhCalculated = (entry.tb - entry.tare).toFixed(2);
-                totalTNH += parseFloat(tnhCalculated) || 0;
-
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${formatDateForDisplay(entry.date)}</td>
-                    <td>${entry.heureEntree ? entry.heureEntree.substring(0, 5) : "—"}</td>
-                    <td>${entry.heureSortie ? entry.heureSortie.substring(0, 5) : "—"}</td>
-                    <td>${entry.transporteur || '—'}</td>
-                    <td>${entry.numeroBL || '—'}</td>
-                    <td>${entry.matricule || '—'}</td>
-                    <td>${parseFloat(entry.tb).toFixed(2)}</td>
-                    <td>${parseFloat(entry.tare).toFixed(2)}</td>
-                    <td>${tnhCalculated}</td>
-                    <td>${entry.numeroContenaire || '—'}</td>
-                    <td>${entry.poste || '—'}</td>
-                    <td>${entry.lieuDechargement || '—'}</td>
-                    <td>${entry.observation || '—'}</td>
-                    <td class="table-actions">
-                        <button onclick="editRow(${entry.id})"><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="delete-btn" onclick="deleteRow(${entry.id})"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `${API_BASE_URL}/${currentEditId}` : API_BASE_URL;
+            const res = await fetch(url, {
+                method, headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(payload)
             });
-
-            const totalRow = document.createElement('tr');
-            totalRow.classList.add('total-row');
-            totalRow.innerHTML = `
-                <td colspan="8" style="text-align: right; padding-right: 20px;">TOTAL TN H:</td>
-                <td><strong>${totalTNH.toFixed(2)}</strong></td>
-                <td colspan="5"></td>
-            `;
-            tbody.appendChild(totalRow);
-
-        } catch (error) {
-            console.error("Erreur lors du chargement des données:", error);
-            const tbody = document.querySelector("#cbulkTable tbody");
-            tbody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
+            if (!res.ok) {
+                let msg = await res.text();
+                if (res.status === 409) msg = 'Doublon détecté !';
+                throw new Error(msg || 'Erreur serveur');
+            }
+            await res.json();
+            showMessage('✅ Opération réussie.', 'success');
+            f.reset();
+            currentEditId = null;
+            document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée";
+            loadTable();
+        } catch (err) {
+            console.error(err);
+            showMessage(`❌ ${err.message}`, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
         }
+    };
+
+    function editRow(item) {
+        currentEditId = item.id || item._id;
+        for (const k of ['date','heureEntree','heureSortie','transporteur','numeroBL','matricule','tb','tare','numeroContenaire','poste','lieuDechargement','observation']) {
+            document.getElementById(k).value = item[k] ?? '';
+        }
+        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
+        document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+        document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
     }
 
-    async function deleteRow(id) {
-        if (confirm("❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.")) {
-            try {
-                const res = await fetch(apiUrl + "/delete/" + id, { method: "DELETE" });
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                alert('✅ Supprimé avec succès.');
-                loadData();
-            } catch (error) {
-                console.error("Erreur lors de la suppression:", error);
-                alert('❌ Impossible de supprimer l\'entrée.');
-            }
-        }
-    }
-
-    async function editRow(id) {
-        try {
-            const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            const entries = await res.json();
-            const entry = entries.find(e => e.id === id);
-
-            if (!entry) {
-                alert("Entrée non trouvée.");
-                return;
-            }
-
-            const form = document.getElementById("cbulkForm");
-            form.date.value = entry.date || '';
-            form.heureEntree.value = entry.heureEntree ? entry.heureEntree.substring(0, 5) : '';
-            form.heureSortie.value = entry.heureSortie ? entry.heureSortie.substring(0, 5) : '';
-            form.transporteur.value = entry.transporteur || '';
-            form.numeroBL.value = entry.numeroBL || '';
-            form.matricule.value = entry.matricule || '';
-            form.tb.value = entry.tb || '';
-            form.tare.value = entry.tare || '';
-            form.numeroContenaire.value = entry.numeroContenaire || '';
-            form.poste.value = entry.poste || '';
-            form.lieuDechargement.value = entry.lieuDechargement || '';
-            form.observation.value = entry.observation || '';
-
-            editingId = entry.id;
-            const submitButton = form.querySelector("button[type=submit]");
-            submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-            submitButton.style.backgroundColor = '#F39C12'; // Orange for update
-            submitButton.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
-
-        } catch (error) {
-            console.error("Erreur lors de la récupération des données pour modification:", error);
-            alert("❌ Impossible de charger l'entrée pour modification.");
-        }
+    function deleteRow(id) {
+        if (!confirm('❗ Confirmer la suppression ?')) return;
+        fetch(`${API_BASE_URL}/${id}`, {method:'DELETE'})
+            .then(async r => {
+                if (!r.ok) throw new Error(await r.text() || 'Erreur suppression');
+                showMessage('✅ Suppression réussie.', 'success');
+                loadTable();
+            })
+            .catch(err => {
+                console.error(err);
+                showMessage(`❌ ${err.message}`, 'error');
+            });
     }
 
     function exportExcel() {
-        window.open("/api/cbulkargentifere/export", "_blank");
+        window.open(`${API_BASE_URL}/export`, '_blank');
     }
 
-    // Sidebar toggle functionality
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
+        const toggle = document.getElementById('sidebarToggle');
+        const icon = toggle.querySelector('.fas');
+        const prev = document.getElementById('prev-page');
+        const next = document.getElementById('next-page');
+        const month = document.getElementById('monthFilter');
 
-        // Check local storage for preferred state
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        if (isCollapsed) {
+        // restaurer état sidebar
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
             sidebar.classList.add('collapsed');
+            icon.classList.replace('fa-chevron-left','fa-chevron-right');
         }
-
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const currentState = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentState); // Save state to local storage
+        toggle.addEventListener('click', () => {
+            const collapsed = sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', collapsed);
+            icon.classList.toggle('fa-chevron-right');
+            icon.classList.toggle('fa-chevron-left');
         });
-    });
 
-    window.onload = loadData;
+        prev.addEventListener('click', () => {
+            if (currentPage>1) displayTablePage(--currentPage);
+        });
+        next.addEventListener('click', () => {
+            const total = Math.ceil(filteredAndSortedData.length/rowsPerPage);
+            if (currentPage<total) displayTablePage(++currentPage);
+        });
+        month.addEventListener('change', applyFiltersAndSort);
+
+        loadTable();
+    });
 </script>
 
 </body>
