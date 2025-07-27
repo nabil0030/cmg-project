@@ -65,7 +65,7 @@
             position: sticky;
             top: 0;
             flex-shrink: 0;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-light);
             transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
             border-top-right-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
@@ -216,7 +216,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, background-color 0.3s ease;
             z-index: 11; /* Above sidebar */
         }
@@ -387,7 +387,7 @@
 
         /* Excel Export Button Styling */
         #formDs button[type="button"] { /* Target the export button specifically */
-            background-color: var(--accent-color); /* Accent green */
+            background-color: #2ECC71; /* Accent green */
             box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
         #formDs button[type="button"]:hover {
@@ -493,9 +493,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            opacity: 0; /* Start hidden */
-            transform: translateY(-20px); /* Start above */
-            animation: fadeInSlideDown 0.5s ease-out forwards;
         }
         .alert.success {
             background-color: #d4edda;
@@ -506,10 +503,6 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
-        }
-        @keyframes fadeInSlideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- Responsive Design --- */
@@ -703,6 +696,110 @@
                 width: 100%; /* Full width for export button */
             }
         }
+        /* Transporteur dropdown */
+        #transporteur-select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            margin-top: 5px;
+        }
+
+        /* Edit link */
+        .editor-toggle {
+            font-size: 14px;
+            color: #2d8cf0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+        .editor-toggle:hover {
+            text-decoration: underline;
+        }
+
+        /* Hidden editor section */
+        #transporteur-editor {
+            display: none;
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+            margin-top: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #transporteur-editor h3 {
+            margin-bottom: 16px;
+            font-size: 16px;
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        #transporteur-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        #transporteur-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f1f1;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        #transporteur-list button {
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #transporteur-list button:hover {
+            background-color: #c0392b;
+        }
+
+        #newTransporteur {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        #transporteur-editor .add-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #transporteur-editor .add-btn:hover {
+            background: #1662c4;
+        }
+
+
     </style>
 </head>
 <body>
@@ -718,7 +815,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -726,7 +823,7 @@
                 <i class="fas fa-weight"></i>
                 <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
             </li>
-            <li class="nav-item active"> <!-- Set active for current page -->
+            <li class="nav-item">
                 <i class="fas fa-weight"></i>
                 <a href="dsClassique.html"><span>DS classique</span></a>
             </li>
@@ -780,15 +877,9 @@
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
+                <a href="hm.html"><span> lmli7 jay </span></a>
 
             </li>
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="rapportHajjar.html"><span> rapport Hajjar</span></a>
-
-            </li>
-
 
             <li class="nav-item">
                 <i class="fas fa-cog"></i>
@@ -808,14 +899,14 @@
 <div class="main-content">
     <h1 class="page-title">DS Classique</h1>
 
-    <div id="message"></div> <!-- For displaying success/error messages -->
+    <div id="message"></div>
 
     <div class="form-section">
         <div class="section-header">
             <h2 id="form-section-title">Ajouter une entrée</h2>
         </div>
         <form id="formDs">
-            <input type="hidden" id="id"> <!-- Hidden input for storing ID during edit -->
+            <input type="hidden" id="id">
 
             <div class="form-group">
                 <label for="date">Date:</label>
@@ -829,13 +920,17 @@
                 <label for="hSortie">H Sortie:</label>
                 <input type="time" id="hSortie" required>
             </div>
-            <div class="form-group">
-                <label for="transporteur">Transporteur:</label>
-                <select id="transporteur">
-                    <option value="OUMJIRAN">OUMJIRAN</option>
-                    <option value="BOUDRHAM">BOUDRHAM</option>
-                </select>
+            <div style="margin-left: 20px;margin-top: 5px;">
+                <label for="transporteur-select">Transporteur :</label>
+                <select id="transporteur-select"></select>
+
+                <div style="margin-top: 8px;">
+                    <a class="editor-toggle" onclick="toggleTransporteurEditor()" style="font-size: 14px; color: #2d8cf0; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-pen"></i> Éditer les transporteurs
+                    </a>
+                </div>
             </div>
+
             <div class="form-group">
                 <label for="numeroBL">N° BL:</label>
                 <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
@@ -855,9 +950,7 @@
             <div class="form-group">
                 <label for="poste">POSTE:</label>
                 <select id="poste">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    <option>1</option><option>2</option><option>3</option>
                 </select>
             </div>
             <div class="form-group">
@@ -870,16 +963,23 @@
             </div>
 
             <div class="form-buttons">
-                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
-                <button type="button" id="export-excel-button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
-                <button type="button" id="cancel-edit-button" style="display:none;"><i class="fas fa-times"></i> Annuler</button>
+                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter / Mettre à jour</button>
+                <button type="button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+            </div>
+            <div id="transporteur-editor" style="display: none; margin-top: 20px; background: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
+                <h3 style="margin-bottom: 10px;">Modifier les transporteurs</h3>
+
+                <ul id="transporteur-list" style="padding-left: 20px; margin-bottom: 15px;"></ul>
+
+                <input type="text" id="newTransporteur" placeholder="Nouveau transporteur" style="padding: 8px; margin-top: 5px; margin-right: 5px;">
+                <button type="button" onclick="addTransporteur()" style="background: #2d8cf0; color: white; padding: 8px 12px; border: none; border-radius: 5px;">Ajouter</button>
             </div>
         </form>
     </div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique DS Classique</h2>
+            <h2>Historique</h2>
         </div>
         <div class="table-responsive">
             <table id="tableDs">
@@ -891,253 +991,246 @@
                     <th>Lieu De Décharge</th><th>Observation</th><th>Actions</th>
                 </tr>
                 </thead>
-                <tbody>
-                <!-- Data will be loaded here by JavaScript -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // API base URL for DS Classique operations
-    const API_BASE_URL = 'http://localhost:8080/api/ds-classique';
+    const api = "/api/ds-classique";
 
-    // Get form elements
-    const formDs = document.getElementById('formDs');
-    const idInput = document.getElementById('id');
-    const dateInput = document.getElementById('date');
-    const hEntreeInput = document.getElementById('hEntree');
-    const hSortieInput = document.getElementById('hSortie');
-    const transporteurInput = document.getElementById('transporteur');
-    const numeroBLInput = document.getElementById('numeroBL');
-    const immatriculeInput = document.getElementById('immatricule');
-    const tbInput = document.getElementById('tb');
-    const tareInput = document.getElementById('tare');
-    const posteInput = document.getElementById('poste');
-    const lieuDeDechargeInput = document.getElementById('lieuDeDecharge');
-    const observationInput = document.getElementById('observation');
-    const submitButton = document.getElementById('submit-button');
-    const formSectionTitle = document.getElementById('form-section-title');
-    const cancelEditButton = document.getElementById('cancel-edit-button');
-    const tableBody = document.querySelector('#tableDs tbody');
-    const messageDiv = document.getElementById('message');
-
-    /**
-     * Displays a temporary message to the user.
-     * @param {string} msg - The message to display.
-     * @param {string} type - The type of message ('success' or 'error').
-     */
     function showMessage(msg, type) {
-        messageDiv.innerHTML = `<div class="alert ${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}</div>`;
-        messageDiv.style.display = 'block';
-        setTimeout(() => {
-            messageDiv.style.display = 'none';
-            messageDiv.innerHTML = ''; // Clear content after hiding
-        }, 5000); // Message disappears after 5 seconds
+        const div = document.getElementById("message");
+        div.innerHTML = `<div class="alert ${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}</div>`;
+        setTimeout(() => div.innerHTML = "", 4000);
     }
 
-    /**
-     * Clears the form fields and resets to 'Add' mode.
-     */
-    function clearForm() {
-        idInput.value = '';
-        formDs.reset(); // Resets all form fields to their initial state
-        submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter';
-        formSectionTitle.textContent = 'Ajouter une entrée';
-        cancelEditButton.style.display = 'none';
-    }
+    document.getElementById("formDs")
+        .addEventListener("submit", async e => {
+            e.preventDefault();
+            const rec = {
+                id: document.getElementById("id").value || null,
+                date: document.getElementById("date").value,
+                hEntree: document.getElementById("hEntree").value,
+                hSortie: document.getElementById("hSortie").value,
+                transporteur: document.getElementById("transporteur").value,
+                numeroBL: document.getElementById("numeroBL").value,
+                immatricule: document.getElementById("immatricule").value,
+                tb: parseFloat(document.getElementById("tb").value),
+                tare: parseFloat(document.getElementById("tare").value),
+                poste: parseInt(document.getElementById("poste").value),
+                lieuDeDecharge: document.getElementById("lieuDeDecharge").value,
+                observation: document.getElementById("observation").value
+            };
 
-    /**
-     * Loads all DS Classique data from the backend and populates the table.
-     */
-    async function loadDsData() {
+            try {
+                const res = await axios.post(api, rec); // Assuming POST handles both add and update based on ID presence
+                if (res.data.includes("dupliquée")) {
+                    showMessage(res.data, "error");
+                } else {
+                    showMessage(res.data, "success");
+                    document.getElementById("formDs").reset();
+                    document.getElementById("id").value = ""; // Clear hidden ID
+                    document.getElementById('form-section-title').textContent = "Ajouter une entrée"; // Reset title
+                    const submitButton = document.getElementById('submit-button');
+                    submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter / Mettre à jour'; // Reset button text
+                    submitButton.style.backgroundColor = ''; // Reset button color
+                    submitButton.style.boxShadow = '';
+                    loadData();
+                }
+            } catch (err) {
+                console.error("Submission error:", err);
+                let errorMessage = "Erreur inattendue.";
+                if (err.response && err.response.data) {
+                    errorMessage = err.response.data;
+                } else if (err.message) {
+                    errorMessage = err.message;
+                }
+                showMessage(`Erreur : ${errorMessage}`, "error");
+            }
+        });
+
+    async function loadData() {
         try {
-            const response = await axios.get(API_BASE_URL);
-            const data = response.data;
-            tableBody.innerHTML = ''; // Clear existing table rows
+            const res = await axios.get(api);
+            const tbody = document.querySelector("#tableDs tbody");
+            tbody.innerHTML = "";
 
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px;">Aucune donnée disponible.</td></tr>';
+            if (res.data.length === 0) {
+                const noDataRow = document.createElement('tr');
+                noDataRow.innerHTML = `<td colspan="13" style="text-align: center;">Aucune donnée trouvée.</td>`;
+                tbody.appendChild(noDataRow);
                 return;
             }
 
-            data.forEach(item => {
-                const row = tableBody.insertRow();
-                const net = (item.tb - item.tare).toFixed(2); // Calculate NET weight
+            // Sort data by date in descending order
+            res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                row.innerHTML = `
+            res.data.forEach(item => {
+                const tr = document.createElement("tr");
+                const net = (item.tb - item.tare).toFixed(2); // Calculate NET
+                tr.innerHTML = `
                     <td>${item.date}</td>
-                    <td>${item.hEntree}</td>
-                    <td>${item.hSortie}</td>
+                    <td>${item.hEntree?.substring(0,5)||""}</td>
+                    <td>${item.hSortie?.substring(0,5)||""}</td>
                     <td>${item.transporteur}</td>
                     <td>${item.numeroBL}</td>
                     <td>${item.immatricule}</td>
-                    <td>${item.tb !== undefined ? item.tb.toFixed(2) : '0.00'}</td>
-                    <td>${item.tare !== undefined ? item.tare.toFixed(2) : '0.00'}</td>
+                    <td>${item.tb}</td>
+                    <td>${item.tare}</td>
                     <td>${net}</td>
                     <td>${item.poste}</td>
                     <td>${item.lieuDeDecharge}</td>
-                    <td>${item.observation || ''}</td>
+                    <td>${item.observation||""}</td>
                     <td class="table-actions">
-                        <button onclick="editDsData('${item.id}')"><i class="fas fa-edit"></i> </button>
-                        <button class="delete-btn" onclick="deleteDsData('${item.id}')"><i class="fas fa-trash-alt"></i> </button>
-                    </td>
-                `;
+                        <button onclick='edit(${JSON.stringify(item)})'><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="delete-btn" onclick='remove(${item.id})'><i class="fas fa-trash-alt"></i> Supprimer</button>
+                    </td>`;
+                tbody.appendChild(tr);
             });
         } catch (error) {
-            console.error('Erreur lors du chargement des données DS Classique:', error);
-            showMessage('Erreur lors du chargement des données. Veuillez vérifier la connexion au serveur.', 'error');
-            tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px; color: red;">Échec du chargement des données.</td></tr>';
+            console.error("Error loading data:", error);
+            document.querySelector("#tableDs tbody").innerHTML =
+                `<tr><td colspan="13" style="text-align:center;color:red;">Erreur lors du chargement des données.</td></tr>`;
         }
     }
 
-    /**
-     * Handles form submission to add or update DS Classique data.
-     * @param {Event} event - The form submission event.
-     */
-    async function saveDsData(event) {
-        event.preventDefault(); // Prevent default form submission
+    function edit(item) {
+        document.getElementById("id").value = item.id;
+        document.getElementById("date").value = item.date;
+        document.getElementById("hEntree").value = item.hEntree?.substring(0,5);
+        document.getElementById("hSortie").value = item.hSortie?.substring(0,5);
+        document.getElementById("transporteur").value = item.transporteur;
+        document.getElementById("numeroBL").value = item.numeroBL;
+        document.getElementById("immatricule").value = item.immatricule;
+        document.getElementById("tb").value = item.tb;
+        document.getElementById("tare").value = item.tare;
+        document.getElementById("poste").value = item.poste;
+        document.getElementById("lieuDeDecharge").value = item.lieuDeDecharge;
+        document.getElementById("observation").value = item.observation;
 
-        const id = idInput.value;
-        const dsData = {
-            date: dateInput.value,
-            hEntree: hEntreeInput.value,
-            hSortie: hSortieInput.value,
-            transporteur: transporteurInput.value,
-            numeroBL: numeroBLInput.value,
-            immatricule: immatriculeInput.value,
-            tb: parseFloat(tbInput.value),
-            tare: parseFloat(tareInput.value),
-            poste: posteInput.value,
-            lieuDeDecharge: lieuDeDechargeInput.value,
-            observation: observationInput.value
-        };
+        // Change form title and button for edit mode
+        document.getElementById('form-section-title').textContent = "Modifier une entrée";
+        const submitButton = document.getElementById('submit-button');
+        submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+        submitButton.style.backgroundColor = '#FFA500'; // Orange color for update
+        submitButton.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+        submitButton.onmouseover = () => submitButton.style.backgroundColor = '#E69500';
+        submitButton.onmouseout = () => submitButton.style.backgroundColor = '#FFA500';
 
-        try {
-            if (id) {
-                // Update existing record
-                await axios.put(`${API_BASE_URL}/${id}`, dsData);
-                showMessage('Entrée mise à jour avec succès !', 'success');
-            } else {
-                // Add new record
-                await axios.post(API_BASE_URL, dsData);
-                showMessage('Nouvelle entrée ajoutée avec succès !', 'success');
+        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function remove(id) {
+        if (confirm("❗ Supprimer cette ligne ? Cette action est irréversible.")) {
+            try {
+                await axios.delete(`${api}/${id}`);
+                showMessage("✅ Entrée supprimée avec succès.", "success");
+                loadData();
+            } catch (err) {
+                console.error("Deletion error:", err);
+                let errorMessage = "Erreur inattendue lors de la suppression.";
+                if (err.response && err.response.data) {
+                    errorMessage = err.response.data;
+                } else if (err.message) {
+                    errorMessage = err.message;
+                }
+                showMessage(`❌ Erreur : ${errorMessage}`, "error");
             }
-            clearForm();
-            loadDsData(); // Reload data to update the table
-        } catch (error) {
-            console.error('Erreur lors de la sauvegarde des données DS Classique:', error);
-            showMessage('Erreur lors de la sauvegarde des données. ' + (error.response?.data || error.message), 'error');
         }
     }
 
-    /**
-     * Populates the form with data for editing a specific record.
-     * @param {string} id - The ID of the record to edit.
-     */
-    async function editDsData(id) {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/${id}`);
-            const item = response.data;
-
-            idInput.value = item.id;
-            dateInput.value = item.date;
-            hEntreeInput.value = item.hEntree;
-            hSortieInput.value = item.hSortie;
-            transporteurInput.value = item.transporteur;
-            numeroBLInput.value = item.numeroBL;
-            immatriculeInput.value = item.immatricule;
-            tbInput.value = item.tb;
-            tareInput.value = item.tare;
-            posteInput.value = item.poste;
-            lieuDeDechargeInput.value = item.lieuDeDecharge;
-            observationInput.value = item.observation;
-
-            submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-            formSectionTitle.textContent = 'Modifier l\'entrée';
-            cancelEditButton.style.display = 'inline-flex'; // Show cancel button
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top to show the form
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données pour modification:', error);
-            showMessage('Erreur lors du chargement des données pour modification.', 'error');
-        }
-    }
-
-    /**
-     * Deletes a DS Classique record.
-     * @param {string} id - The ID of the record to delete.
-     */
-    async function deleteDsData(id) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
-            return; // User cancelled
-        }
-        try {
-            await axios.delete(`${API_BASE_URL}/${id}`);
-            showMessage('Entrée supprimée avec succès !', 'success');
-            loadDsData(); // Reload data to update the table
-        } catch (error) {
-            console.error('Erreur lors de la suppression des données DS Classique:', error);
-            showMessage('Erreur lors de la suppression des données. ' + (error.response?.data || error.message), 'error');
-        }
-    }
-
-    /**
-     * Triggers the Excel export from the backend.
-     */
     function exportExcel() {
-        window.location.href = `${API_BASE_URL}/export/excel`;
-        showMessage('Exportation Excel lancée...', 'success');
+        window.location.href = "/api/ds-classique/export/excel";
     }
 
-
-    // --- Sidebar Toggle Functionality ---
+    // Sidebar Toggle functionality with localStorage persistence
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
-        const mainContent = document.querySelector('.main-content');
+        const toggleIcon = sidebarToggle.querySelector('.fas'); // Get the icon within the toggle button
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+        // Apply initial state
+        if (isCollapsed) {
+            sidebar.classList.add('collapsed');
+            toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right'); // Point right
+        } else {
+            toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left'); // Point left
+        }
 
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
-            // Adjust main content margin if needed, though flexbox handles this well
-            // if (sidebar.classList.contains('collapsed')) {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width-collapsed)';
-            // } else {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width)';
-            // }
-        });
+            const currentlyCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', currentlyCollapsed);
 
-        // Highlight the active navigation item based on the current page URL
-        const currentPath = window.location.pathname.split('/').pop();
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            const link = item.querySelector('a');
-            if (link) {
-                const linkHref = link.getAttribute('href').split('/').pop();
-                if (linkHref === currentPath) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
+            // Toggle icon direction
+            if (currentlyCollapsed) {
+                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
             }
         });
 
-        // Set default date for convenience
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0');
-        const day = today.getDate().toString().padStart(2, '0');
-        dateInput.value = `${year}-${month}-${day}`;
-
-        // Load data when the page loads
-        loadDsData();
-
-        // Add event listener for form submission
-        formDs.addEventListener('submit', saveDsData);
-
-        // Add event listener for cancel edit button
-        cancelEditButton.addEventListener('click', clearForm);
+        loadData(); // Initial load of table data
     });
+    let transporteurs = JSON.parse(localStorage.getItem('transporteurs') || '["AHMED"]');
+
+    function renderTransporteurs() {
+        const list = document.getElementById("transporteur-list");
+        list.innerHTML = "";
+        transporteurs.forEach((name, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+          ${name}
+          <button onclick="removeTransporteur(${index})" class="btn-supprimer">Supprimer</button>
+        `;
+            list.appendChild(li);
+        });
+    }
+
+    function updateTransporteurSelect() {
+        const select = document.getElementById("transporteur-select");
+        if (!select) return;
+
+        select.innerHTML = "";
+        transporteurs.forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+    }
+
+    function addTransporteur() {
+        const input = document.getElementById("newTransporteur");
+        const name = input.value.trim();
+        if (name && !transporteurs.includes(name)) {
+            transporteurs.push(name);
+            localStorage.setItem('transporteurs', JSON.stringify(transporteurs));
+            input.value = "";
+            renderTransporteurs();
+            updateTransporteurSelect();
+        }
+    }
+
+    function removeTransporteur(index) {
+        transporteurs.splice(index, 1);
+        localStorage.setItem('transporteurs', JSON.stringify(transporteurs));
+        renderTransporteurs();
+        updateTransporteurSelect();
+    }
+
+    function toggleTransporteurEditor() {
+        const editor = document.getElementById("transporteur-editor");
+        editor.style.display = editor.style.display === "none" ? "block" : "none";
+        renderTransporteurs();
+    }
+
+    // ✅ On page load
+    renderTransporteurs();
+    updateTransporteurSelect();
 </script>
 </body>
 </html>
