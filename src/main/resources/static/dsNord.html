@@ -292,6 +292,7 @@
         .section-actions {
             display: flex;
             gap: 10px;
+            align-items: center; /* Align filter label and select */
         }
 
         .section-actions button {
@@ -312,7 +313,7 @@
         }
 
         /* --- Form Styling --- */
-        #formNord { /* Changed from #formDs */
+        #formNord { /* Changed ID to formNord */
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -354,7 +355,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #formNord .form-buttons { /* Changed from #formDs */
+        #formNord .form-buttons { /* Changed ID to formNord */
             grid-column: 1 / -1; /* Span all columns */
             display: flex;
             justify-content: flex-end; /* Align buttons to the right */
@@ -362,7 +363,7 @@
             margin-top: 15px;
         }
 
-        #formNord button[type="submit"], #formNord button[type="button"] { /* Changed from #formDs */
+        #formNord button[type="submit"], #formNord button[type="button"] { /* Changed ID to formNord */
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -379,20 +380,30 @@
             width: fit-content; /* Ensure button only takes content width */
         }
 
-        #formNord button[type="submit"]:hover, #formNord button[type="button"]:hover { /* Changed from #formDs */
+        #formNord button[type="submit"]:hover, #formNord button[type="button"]:hover { /* Changed ID to formNord */
             background-color: #397BC7; /* Darker blue on hover */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
         }
 
         /* Excel Export Button Styling */
-        #formNord button[type="button"] { /* Target the export button specifically - Changed from #formDs */
+        #formNord button[type="button"]#export-excel-button { /* Changed ID to formNord */
             background-color: var(--accent-color); /* Accent green */
             box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
-        #formNord button[type="button"]:hover { /* Changed from #formDs */
+        #formNord button[type="button"]#export-excel-button:hover { /* Changed ID to formNord */
             background-color: #28B463;
             box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Cancel Button Styling */
+        #formNord button[type="button"]#cancel-edit-button { /* Changed ID to formNord */
+            background-color: #6C757D; /* Gray for cancel */
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        #formNord button[type="button"]#cancel-edit-button:hover { /* Changed ID to formNord */
+            background-color: #5A6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
         }
 
         /* --- Table Styling --- */
@@ -512,6 +523,49 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- Pagination & Filter Controls --- */
+        .controls {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:15px;
+            gap:10px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .controls label {
+            font-weight:500;
+            margin-right:8px;
+        }
+        #monthFilter {
+            padding:8px;
+            border-radius:5px;
+            border:1px solid var(--border-color);
+            background:white;
+            font-size:1rem;
+        }
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pagination-controls button {
+            padding:8px 12px;
+            border:none;
+            background-color:var(--primary-color);
+            color:white;
+            border-radius:5px;
+            cursor:pointer;
+            transition:background-color 0.2s;
+        }
+        .pagination-controls button:disabled {
+            background-color:#ccc;
+            cursor:not-allowed;
+        }
+        .pagination-controls span {
+            font-weight:600;
+            margin:0 10px;
+        }
+
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
             .main-content {
@@ -555,7 +609,9 @@
                 margin-right: 0; /* No margin when text is hidden */
             }
             .nav-item a {
-                display: none; /* Hide link text */
+                opacity: 0; /* Hide link text */
+                width: 0;
+                pointer-events: none;
             }
             .nav-item.active {
                 background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
@@ -564,7 +620,8 @@
                 border-left: none; /* No border when collapsed, use background */
             }
             .sidebar-footer {
-                display: none; /* Hide footer when collapsed */
+                opacity: 0; /* Hide footer when collapsed */
+                pointer-events: none;
             }
             .sidebar-toggle {
                 right: -15px; /* Keep toggle position relative to collapsed sidebar */
@@ -589,7 +646,14 @@
             }
             .section-actions {
                 width: 100%;
-                text-align: center;
+                justify-content: center; /* Center filter on smaller screens */
+            }
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .pagination-controls button {
+                width: 100%;
             }
         }
 
@@ -685,10 +749,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #formNord { /* Changed from #formDs */
+            #formNord { /* Changed ID to formNord */
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #formNord .form-buttons button { /* Target all buttons in form-buttons - Changed from #formDs */
+            #formNord .form-buttons button { /* Changed ID to formNord, Target all buttons in form-buttons */
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -730,8 +794,7 @@
                 <i class="fas fa-weight"></i>
                 <a href="dsClassique.html"><span>DS classique</span></a>
             </li>
-            <li class="nav-item active"> <!-- Set active for current page: dsNord.html -->
-                <i class="fas fa-weight-hanging"></i>
+            <li class="nav-item active"> <i class="fas fa-weight-hanging"></i>
                 <a href="dsNord.html"><span>DS NORD</span></a>
             </li>
             <li class="nav-item">
@@ -753,43 +816,31 @@
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
-
             </li>
-
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
-
             </li>
-
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
-
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
-
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
-
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-truck-loading"></i>
+                <a href="synthese.html"><span> synthese </span></a>
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="rapportHajjar.html"><span> rapport Hajjar</span></a>
-
             </li>
-
-
             <li class="nav-item">
                 <i class="fas fa-cog"></i>
                 <a href="#"><span>Settings</span></a>
@@ -808,15 +859,13 @@
 <div class="main-content">
     <h1 class="page-title">DS Nord</h1>
 
-    <div id="message"></div> <!-- For displaying success/error messages -->
+    <div id="message"></div>
 
     <div class="form-section">
         <div class="section-header">
             <h2 id="form-section-title">Ajouter une entrée</h2>
         </div>
-        <form id="formNord"> <!-- Changed ID to formNord -->
-            <input type="hidden" id="id"> <!-- Hidden input for storing ID during edit -->
-
+        <form id="formNord"> <input type="hidden" id="id">
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" required>
@@ -831,7 +880,8 @@
             </div>
             <div class="form-group">
                 <label for="transporteur">Transporteur:</label>
-                <select id="transporteur">
+                <select id="transporteur" required>
+                    <option value="">Sélectionner un transporteur</option>
                     <option value="OUMJIRAN">OUMJIRAN</option>
                     <option value="BOUDRHAM">BOUDRHAM</option>
                 </select>
@@ -842,68 +892,105 @@
             </div>
             <div class="form-group">
                 <label for="immatricule">Immatricule:</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+                <input type="text" id="immatricule" placeholder="Immatriculation du véhicule" required>
             </div>
             <div class="form-group">
                 <label for="tb">TB:</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids Brut" required>
+                <input type="number" id="tb" step="0.01" placeholder="Poids TB" required>
             </div>
             <div class="form-group">
                 <label for="tare">TARE:</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids Tare" required>
+                <input type="number" id="tare" step="0.01" placeholder="Poids TARE" required>
             </div>
             <div class="form-group">
-                <label for="poste">POSTE:</label>
-                <select id="poste">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <label for="poste">Poste:</label>
+                <input type="text" id="poste" placeholder="Poste" required>
             </div>
             <div class="form-group">
                 <label for="lieuDeDecharge">Lieu De Décharge:</label>
-                <input type="text" id="lieuDeDecharge" placeholder="Lieu de Déchargement" required>
+                <input type="text" id="lieuDeDecharge" placeholder="Lieu de décharge" required>
             </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
+            <div class="form-group">
                 <label for="observation">Observation:</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+                <textarea id="observation" placeholder="Observations (facultatif)"></textarea>
             </div>
 
             <div class="form-buttons">
                 <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
-                <button type="button" id="export-excel-button" onclick="exportDsNordExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button> <!-- Updated onclick -->
-                <button type="button" id="cancel-edit-button" style="display:none;"><i class="fas fa-times"></i> Annuler</button>
+                <button type="button" id="export-excel-button" onclick="exportDsNordExcel()">
+                    <i class="fas fa-file-excel"></i> Exporter Excel
+                </button>
+                <button type="button" id="cancel-edit-button" style="display:none;">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
             </div>
         </form>
     </div>
 
+    <div class="controls">
+        <div class="filter">
+            <label for="monthFilter">Filtrer par mois :</label>
+            <select id="monthFilter">
+                <option value="all">Tous</option>
+                <option value="1">1 — Janvier</option>
+                <option value="2">2 — Février</option>
+                <option value="3">3 — Mars</option>
+                <option value="4">4 — Avril</option>
+                <option value="5">5 — Mai</option>
+                <option value="6">6 — Juin</option>
+                <option value="7">7 — Juillet</option>
+                <option value="8">8 — Août</option>
+                <option value="9">9 — Septembre</option>
+                <option value="10">10 — Octobre</option>
+                <option value="11">11 — Novembre</option>
+                <option value="12">12 — Décembre</option>
+            </select>
+        </div>
+
+    </div>
+
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique DS Nord</h2> <!-- Updated title -->
+            <h2>Historique DS Nord</h2>
         </div>
         <div class="table-responsive">
-            <table id="tableNord"> <!-- Changed ID to tableNord -->
-                <thead>
-                <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th>
-                    <th>Transporteur</th><th>N° BL</th><th>Immatricule</th>
-                    <th>TB</th><th>TARE</th><th>NET</th><th>Poste</th>
-                    <th>Lieu De Décharge</th><th>Observation</th><th>Actions</th>
-                </tr>
-                </thead>
+            <table id="tableNord"> <thead>
+            <tr>
+                <th>Date</th>
+                <th>H Entrée</th>
+                <th>H Sortie</th>
+                <th>Transporteur</th>
+                <th>N° BL</th>
+                <th>Immatricule</th>
+                <th>TB</th>
+                <th>TARE</th>
+                <th>NET</th>
+                <th>Poste</th>
+                <th>Lieu De Décharge</th>
+                <th>Observation</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
                 <tbody>
-                <!-- Data will be loaded here by JavaScript -->
                 </tbody>
             </table>
         </div>
     </div>
+    <div class="pagination-controls">
+        <button id="prevPage">&laquo; Précédent</button>
+        <span id="pageInfo">Page 1 / 1</span>
+        <button id="nextPage">Suivant &raquo;</button>
+    </div>
 </div>
 
 <script>
-    // API base URL for DS Nord operations (Updated API endpoint)
-    const API_BASE_URL = 'http://localhost:8080/api/dsnord';
+    const API_BASE_URL = 'http://localhost:8080/api/dsnord'; // Ensure this matches your DS Nord backend endpoint
+    const rowsPerPage = 10;
+    let currentPage = 1;
+    let dsNordAllData = [];
+    let filteredData = [];
 
-    // Get form elements (Updated to formNord)
+    // Form elements (IDs changed to match dsNord.html)
     const formNord = document.getElementById('formNord');
     const idInput = document.getElementById('id');
     const dateInput = document.getElementById('date');
@@ -920,62 +1007,87 @@
     const submitButton = document.getElementById('submit-button');
     const formSectionTitle = document.getElementById('form-section-title');
     const cancelEditButton = document.getElementById('cancel-edit-button');
-    const tableBody = document.querySelector('#tableNord tbody'); // Updated to tableNord
+    const tableBody = document.querySelector('#tableNord tbody'); // Selector changed
     const messageDiv = document.getElementById('message');
+    const monthFilter = document.getElementById('monthFilter');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const pageInfoSpan = document.getElementById('pageInfo');
 
-    /**
-     * Displays a temporary message to the user.
-     * @param {string} msg - The message to display.
-     * @param {string} type - The type of message ('success' or 'error').
-     */
     function showMessage(msg, type) {
-        messageDiv.innerHTML = `<div class="alert ${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}</div>`;
+        messageDiv.innerHTML = `<div class="alert ${type}">
+            <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}
+        </div>`;
         messageDiv.style.display = 'block';
-        setTimeout(() => {
+        setTimeout(()=>{
             messageDiv.style.display = 'none';
-            messageDiv.innerHTML = ''; // Clear content after hiding
-        }, 5000); // Message disappears after 5 seconds
+            messageDiv.innerHTML = '';
+        }, 5000);
     }
 
-    /**
-     * Clears the form fields and resets to 'Add' mode.
-     */
     function clearForm() {
         idInput.value = '';
-        formNord.reset(); // Resets all form fields to their initial state
+        formNord.reset();
         submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter';
         formSectionTitle.textContent = 'Ajouter une entrée';
         cancelEditButton.style.display = 'none';
+        // Set default date again after clearing
+        const today = new Date(), y=today.getFullYear(), m=('0'+(today.getMonth()+1)).slice(-2), d=('0'+today.getDate()).slice(-2);
+        dateInput.value = `${y}-${m}-${d}`;
     }
 
-    /**
-     * Loads all DS Nord data from the backend and populates the table, sorted by date.
-     */
     async function loadDsNordData() {
         try {
-            const response = await axios.get(API_BASE_URL);
-            let data = response.data; // Use 'let' because we will reassign 'data' after sorting
-
-            // Sort data by date from oldest to newest
-            data.sort((a, b) => {
-                // Assuming date is in 'YYYY-MM-DD' format, direct string comparison works for sorting
-                // For more robust date comparison, convert to Date objects:
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
-                return dateA - dateB;
+            const resp = await axios.get(API_BASE_URL);
+            // Sort by date in ascending order
+            dsNordAllData = resp.data.sort((a,b)=>{
+                return new Date(a.date) - new Date(b.date);
             });
+            applyMonthFilter(); // Filter and render page 1
+        } catch(err) {
+            console.error(err);
+            showMessage('Échec du chargement des données. Veuillez vérifier la connexion au serveur.', 'error');
+            tableBody.innerHTML = `<tr><td colspan="13" style="text-align:center;color:red;padding:20px;">
+                Échec du chargement des données.
+            </td></tr>`;
+        }
+    }
 
-            tableBody.innerHTML = ''; // Clear existing table rows
+    function applyMonthFilter() {
+        const m = monthFilter.value;
+        if (m === 'all') {
+            filteredData = [...dsNordAllData];
+        } else {
+            const mi = parseInt(m, 10);
+            filteredData = dsNordAllData.filter(item => {
+                const itemDate = new Date(item.date);
+                return (itemDate.getMonth() + 1) === mi;
+            });
+        }
+        currentPage = 1; // Reset to first page after applying filter
+        renderTable();
+    }
 
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px;">Aucune donnée disponible.</td></tr>';
-                return;
-            }
+    function renderTable() {
+        tableBody.innerHTML = '';
+        if (filteredData.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:20px;">
+                Aucune donnée disponible pour le mois sélectionné.
+            </td></tr>`;
+        } else {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+            else if (totalPages === 0) currentPage = 0; // Handle case where there are no items
 
-            data.forEach(item => {
+            const start = (currentPage - 1) * rowsPerPage;
+            const pageData = filteredData.slice(start, start + rowsPerPage);
+
+            pageData.forEach(item => {
+                const tbValue = item.tb !== undefined ? parseFloat(item.tb) : 0;
+                const tareValue = item.tare !== undefined ? parseFloat(item.tare) : 0;
+                const net = (tbValue - tareValue).toFixed(2); // Calculate NET
+
                 const row = tableBody.insertRow();
-                const net = (item.tb - item.tare).toFixed(2); // Calculate NET weight
-
                 row.innerHTML = `
                     <td>${item.date}</td>
                     <td>${item.hEntree}</td>
@@ -983,34 +1095,33 @@
                     <td>${item.transporteur}</td>
                     <td>${item.numeroBL}</td>
                     <td>${item.immatricule}</td>
-                    <td>${item.tb !== undefined ? item.tb.toFixed(2) : '0.00'}</td>
-                    <td>${item.tare !== undefined ? item.tare.toFixed(2) : '0.00'}</td>
+                    <td>${tbValue.toFixed(2)}</td>
+                    <td>${tareValue.toFixed(2)}</td>
                     <td>${net}</td>
                     <td>${item.poste}</td>
                     <td>${item.lieuDeDecharge}</td>
                     <td>${item.observation || ''}</td>
                     <td class="table-actions">
-                        <button onclick="editDsNordData('${item.id}')"><i class="fas fa-edit"></i> </button>
-                        <button class="delete-btn" onclick="deleteDsNordData('${item.id}')"><i class="fas fa-trash-alt"></i> </button>
-                    </td>
-                `;
+                        <button onclick="editDsNordData('${item.id}')">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteDsNordData('${item.id}')">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>`;
             });
-        } catch (error) {
-            console.error('Erreur lors du chargement des données DS Nord:', error);
-            showMessage('Erreur lors du chargement des données. Veuillez vérifier la connexion au serveur.', 'error');
-            tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px; color: red;">Échec du chargement des données.</td></tr>';
+
+            // Update pagination info and button states
+            pageInfoSpan.textContent = `Page ${currentPage > 0 ? currentPage : 0} / ${totalPages > 0 ? totalPages : 0}`;
+            prevPageBtn.disabled = currentPage <= 1 || totalPages === 0;
+            nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
         }
     }
 
-    /**
-     * Handles form submission to add or update DS Nord data.
-     * @param {Event} event - The form submission event.
-     */
-    async function saveDsNordData(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const id = idInput.value;
-        const dsNordData = {
+    async function saveDsNordData(e) {
+        e.preventDefault();
+        const id = idInput.value.trim();
+        const payload = {
             date: dateInput.value,
             hEntree: hEntreeInput.value,
             hSortie: hSortieInput.value,
@@ -1026,31 +1137,24 @@
 
         try {
             if (id) {
-                // Update existing record
-                await axios.put(`${API_BASE_URL}/${id}`, dsNordData);
-                showMessage('Entrée mise à jour avec succès !', 'success');
+                await axios.put(`${API_BASE_URL}/${id}`, payload);
+                showMessage('Entrée mise à jour avec succès !','success');
             } else {
-                // Add new record
-                await axios.post(API_BASE_URL, dsNordData);
-                showMessage('Nouvelle entrée ajoutée avec succès !', 'success');
+                await axios.post(API_BASE_URL, payload);
+                showMessage('Nouvelle entrée ajoutée !','success');
             }
             clearForm();
-            loadDsNordData(); // Reload data to update the table
-        } catch (error) {
-            console.error('Erreur lors de la sauvegarde des données DS Nord:', error);
-            showMessage('Erreur lors de la sauvegarde des données. ' + (error.response?.data || error.message), 'error');
+            loadDsNordData(); // Reload all data to reflect changes
+        } catch(err) {
+            console.error(err);
+            showMessage('Erreur lors de la sauvegarde : '+(err.response?.data?.message || err.message),'error');
         }
     }
 
-    /**
-     * Populates the form with data for editing a specific record.
-     * @param {string} id - The ID of the record to edit.
-     */
     async function editDsNordData(id) {
         try {
-            const response = await axios.get(`${API_BASE_URL}/${id}`);
-            const item = response.data;
-
+            const resp = await axios.get(`${API_BASE_URL}/${id}`);
+            const item = resp.data;
             idInput.value = item.id;
             dateInput.value = item.date;
             hEntreeInput.value = item.hEntree;
@@ -1065,88 +1169,67 @@
             observationInput.value = item.observation;
 
             submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-            formSectionTitle.textContent = 'Modifier l\'entrée';
-            cancelEditButton.style.display = 'inline-flex'; // Show cancel button
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top to show the form
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données pour modification:', error);
-            showMessage('Erreur lors du chargement des données pour modification.', 'error');
+            formSectionTitle.textContent = 'Modifier l’entrée';
+            cancelEditButton.style.display = 'inline-flex';
+            window.scrollTo({top:0,behavior:'smooth'}); // Scroll to top for easy editing
+        } catch(err) {
+            console.error(err);
+            showMessage('Erreur lors du chargement pour modification.','error');
         }
     }
 
-    /**
-     * Deletes a DS Nord record.
-     * @param {string} id - The ID of the record to delete.
-     */
     async function deleteDsNordData(id) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
-            return; // User cancelled
-        }
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) return; // Confirmation dialog
         try {
             await axios.delete(`${API_BASE_URL}/${id}`);
-            showMessage('Entrée supprimée avec succès !', 'success');
-            loadDsNordData(); // Reload data to update the table
-        } catch (error) {
-            console.error('Erreur lors de la suppression des données DS Nord:', error);
-            showMessage('Erreur lors de la suppression des données. ' + (error.response?.data || error.message), 'error');
+            showMessage('Entrée supprimée avec succès !','success');
+            loadDsNordData(); // Reload data after deletion
+        } catch(err) {
+            console.error(err);
+            showMessage('Erreur lors de la suppression : '+(err.response?.data?.message || err.message),'error');
         }
     }
 
-    /**
-     * Triggers the Excel export for DS Nord from the backend.
-     */
     function exportDsNordExcel() {
         window.location.href = `${API_BASE_URL}/export/excel`;
-        showMessage('Exportation Excel lancée...', 'success');
+        showMessage('Export Excel lancé... Votre téléchargement devrait commencer bientôt.','success');
     }
 
-
-    // --- Sidebar Toggle Functionality ---
+    // Event Listeners on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', () => {
+        // Sidebar toggle functionality
         const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mainContent = document.querySelector('.main-content');
-
-        sidebarToggle.addEventListener('click', () => {
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
-            // Adjust main content margin if needed, though flexbox handles this well
-            // if (sidebar.classList.contains('collapsed')) {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width-collapsed)';
-            // } else {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width)';
-            // }
         });
 
-        // Highlight the active navigation item based on the current page URL
-        const currentPath = window.location.pathname.split('/').pop();
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            const link = item.querySelector('a');
-            if (link) {
-                const linkHref = link.getAttribute('href').split('/').pop();
-                if (linkHref === currentPath) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
+        // Set default date to today
+        clearForm(); // Also sets default date
+
+        // Form submission and cancel edit
+        formNord.addEventListener('submit', saveDsNordData);
+        cancelEditButton.addEventListener('click', clearForm);
+
+        // Month filter event listener
+        monthFilter.addEventListener('change', applyMonthFilter);
+
+        // Pagination button event listeners
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
             }
         });
 
-        // Set default date for convenience
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0');
-        const day = today.getDate().toString().padStart(2, '0');
-        dateInput.value = `${year}-${month}-${day}`;
-
-        // Load data when the page loads
+        // Initial data load
         loadDsNordData();
-
-        // Add event listener for form submission
-        formNord.addEventListener('submit', saveDsNordData);
-
-        // Add event listener for cancel edit button
-        cancelEditButton.addEventListener('click', clearForm);
     });
 </script>
 </body>
