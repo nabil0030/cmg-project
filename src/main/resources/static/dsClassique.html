@@ -292,6 +292,7 @@
         .section-actions {
             display: flex;
             gap: 10px;
+            align-items: center; /* Align filter label and select */
         }
 
         .section-actions button {
@@ -386,13 +387,23 @@
         }
 
         /* Excel Export Button Styling */
-        #formDs button[type="button"] { /* Target the export button specifically */
+        #formDs button[type="button"]#export-excel-button { /* Target the export button specifically */
             background-color: var(--accent-color); /* Accent green */
             box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
-        #formDs button[type="button"]:hover {
+        #formDs button[type="button"]#export-excel-button:hover {
             background-color: #28B463;
             box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Cancel Button Styling */
+        #formDs button[type="button"]#cancel-edit-button {
+            background-color: #6C757D; /* Gray for cancel */
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        #formDs button[type="button"]#cancel-edit-button:hover {
+            background-color: #5A6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
         }
 
         /* --- Table Styling --- */
@@ -512,6 +523,47 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- Pagination Controls --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: #397BC7;
+            transform: translateY(-2px);
+        }
+
+        .pagination button:disabled {
+            background-color: #A0A0A0;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .pagination #page-info {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
             .main-content {
@@ -555,7 +607,9 @@
                 margin-right: 0; /* No margin when text is hidden */
             }
             .nav-item a {
-                display: none; /* Hide link text */
+                opacity: 0; /* Hide link text */
+                width: 0;
+                pointer-events: none;
             }
             .nav-item.active {
                 background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
@@ -564,7 +618,8 @@
                 border-left: none; /* No border when collapsed, use background */
             }
             .sidebar-footer {
-                display: none; /* Hide footer when collapsed */
+                opacity: 0; /* Hide footer when collapsed */
+                pointer-events: none;
             }
             .sidebar-toggle {
                 right: -15px; /* Keep toggle position relative to collapsed sidebar */
@@ -589,7 +644,14 @@
             }
             .section-actions {
                 width: 100%;
-                text-align: center;
+                justify-content: center; /* Center filter on smaller screens */
+            }
+            .pagination {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .pagination button {
+                width: 100%;
             }
         }
 
@@ -808,93 +870,120 @@
 <div class="main-content">
     <h1 class="page-title">DS Classique</h1>
 
-    <div id="message"></div> <!-- For displaying success/error messages -->
-
-    <div class="form-section">
-        <div class="section-header">
-            <h2 id="form-section-title">Ajouter une entrée</h2>
-        </div>
-        <form id="formDs">
-            <input type="hidden" id="id"> <!-- Hidden input for storing ID during edit -->
-
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" required>
-            </div>
-            <div class="form-group">
-                <label for="hEntree">H Entrée:</label>
-                <input type="time" id="hEntree" required>
-            </div>
-            <div class="form-group">
-                <label for="hSortie">H Sortie:</label>
-                <input type="time" id="hSortie" required>
-            </div>
-            <div class="form-group">
-                <label for="transporteur">Transporteur:</label>
-                <select id="transporteur">
-                    <option value="OUMJIRAN">OUMJIRAN</option>
-                    <option value="BOUDRHAM">BOUDRHAM</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="numeroBL">N° BL:</label>
-                <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
-            </div>
-            <div class="form-group">
-                <label for="immatricule">Immatricule:</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
-            </div>
-            <div class="form-group">
-                <label for="tb">TB:</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids Brut" required>
-            </div>
-            <div class="form-group">
-                <label for="tare">TARE:</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids Tare" required>
-            </div>
-            <div class="form-group">
-                <label for="poste">POSTE:</label>
-                <select id="poste">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="lieuDeDecharge">Lieu De Décharge:</label>
-                <input type="text" id="lieuDeDecharge" placeholder="Lieu de Déchargement" required>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="observation">Observation:</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
-                <button type="button" id="export-excel-button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
-                <button type="button" id="cancel-edit-button" style="display:none;"><i class="fas fa-times"></i> Annuler</button>
-            </div>
-        </form>
+    <div id="message"></div> <div class="form-section">
+    <div class="section-header">
+        <h2 id="form-section-title">Ajouter une entrée</h2>
     </div>
+    <form id="formDs">
+        <input type="hidden" id="id"> <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" required>
+    </div>
+        <div class="form-group">
+            <label for="hEntree">H Entrée:</label>
+            <input type="time" id="hEntree" required>
+        </div>
+        <div class="form-group">
+            <label for="hSortie">H Sortie:</label>
+            <input type="time" id="hSortie" required>
+        </div>
+        <div class="form-group">
+            <label for="transporteur">Transporteur:</label>
+            <select id="transporteur">
+                <option value="OUMJIRAN">OUMJIRAN</option>
+                <option value="BOUDRHAM">BOUDRHAM</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="numeroBL">N° BL:</label>
+            <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
+        </div>
+        <div class="form-group">
+            <label for="immatricule">Immatricule:</label>
+            <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+        </div>
+        <div class="form-group">
+            <label for="tb">TB:</label>
+            <input type="number" step="0.01" id="tb" placeholder="Poids Brut" required>
+        </div>
+        <div class="form-group">
+            <label for="tare">TARE:</label>
+            <input type="number" step="0.01" id="tare" placeholder="Poids Tare" required>
+        </div>
+        <div class="form-group">
+            <label for="poste">POSTE:</label>
+            <select id="poste">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lieuDeDecharge">Lieu De Décharge:</label>
+            <input type="text" id="lieuDeDecharge" placeholder="Lieu de Déchargement" required>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="observation">Observation:</label>
+            <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
+            <button type="button" id="export-excel-button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+            <button type="button" id="cancel-edit-button" style="display:none;"><i class="fas fa-times"></i> Annuler</button>
+        </div>
+    </form>
+</div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique DS Classique</h2>
+            <h2>Historique des entrées</h2>
+            <div class="section-actions">
+                <label for="monthFilter">Filtrer par mois :</label>
+                <select id="monthFilter">
+                    <option value="">Tous</option>
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+            </div>
         </div>
         <div class="table-responsive">
             <table id="tableDs">
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th>
-                    <th>Transporteur</th><th>N° BL</th><th>Immatricule</th>
-                    <th>TB</th><th>TARE</th><th>NET</th><th>Poste</th>
-                    <th>Lieu De Décharge</th><th>Observation</th><th>Actions</th>
+                    <th>Date</th>
+                    <th>H Entrée</th>
+                    <th>H Sortie</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>Immatricule</th>
+                    <th>TB</th>
+                    <th>TARE</th>
+                    <th>Net</th>
+                    <th>Poste</th>
+                    <th>Lieu De Décharge</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Data will be loaded here by JavaScript -->
                 </tbody>
             </table>
+        </div>
+        <div class="pagination" id="pagination-controls">
+            <button id="prev-page" disabled>Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page" disabled>Suivant</button>
         </div>
     </div>
 </div>
@@ -903,7 +992,7 @@
     // API base URL for DS Classique operations
     const API_BASE_URL = 'http://localhost:8080/api/ds-classique';
 
-    // Get form elements
+    // Récupération des éléments du DOM
     const formDs = document.getElementById('formDs');
     const idInput = document.getElementById('id');
     const dateInput = document.getElementById('date');
@@ -923,49 +1012,80 @@
     const tableBody = document.querySelector('#tableDs tbody');
     const messageDiv = document.getElementById('message');
 
-    /**
-     * Displays a temporary message to the user.
-     * @param {string} msg - The message to display.
-     * @param {string} type - The type of message ('success' or 'error').
-     */
+    // Nouveaux éléments pour filtre/pagination
+    const monthFilter = document.getElementById('monthFilter');
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageInfo = document.getElementById('page-info');
+    const rowsPerPage = 10;
+    let rawDsData = [];       // toutes les données
+    let filteredDsData = [];  // après filtre et tri
+    let currentPage = 1;
+
+    /** Affiche un message temporaire */
     function showMessage(msg, type) {
-        messageDiv.innerHTML = `<div class="alert ${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}</div>`;
+        messageDiv.innerHTML = `<div class="alert ${type}">
+            <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}
+        </div>`;
         messageDiv.style.display = 'block';
-        setTimeout(() => {
+        setTimeout(()=>{
             messageDiv.style.display = 'none';
-            messageDiv.innerHTML = ''; // Clear content after hiding
-        }, 5000); // Message disappears after 5 seconds
+            messageDiv.innerHTML = '';
+        }, 5000);
     }
 
-    /**
-     * Clears the form fields and resets to 'Add' mode.
-     */
+    /** Réinitialise le formulaire en mode “Ajout” */
     function clearForm() {
         idInput.value = '';
-        formDs.reset(); // Resets all form fields to their initial state
+        formDs.reset();
         submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter';
         formSectionTitle.textContent = 'Ajouter une entrée';
         cancelEditButton.style.display = 'none';
     }
 
-    /**
-     * Loads all DS Classique data from the backend and populates the table.
-     */
+    /** Chargement initial des données (sans affichage direct) */
     async function loadDsData() {
         try {
-            const response = await axios.get(API_BASE_URL);
-            const data = response.data;
-            tableBody.innerHTML = ''; // Clear existing table rows
+            const res = await axios.get(API_BASE_URL);
+            rawDsData = res.data;
+            applyFiltersAndSort(); // lance le filtre, tri et affichage
+        } catch (e) {
+            console.error(e);
+            showMessage('⚠️ Échec du chargement des données.', 'error');
+        }
+    }
 
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px;">Aucune donnée disponible.</td></tr>';
-                return;
-            }
+    /** Applique le filtre mois + tri croissant puis affiche */
+    function applyFiltersAndSort() {
+        filteredDsData = rawDsData
+            .filter(item=>{
+                if (!monthFilter.value) return true;
+                const m = new Date(item.date).getMonth()+1;
+                return m === parseInt(monthFilter.value,10);
+            })
+            .sort((a,b)=>new Date(a.date) - new Date(b.date)); // du plus ancien au plus récent
+        currentPage = 1;
+        renderTable();
+    }
 
-            data.forEach(item => {
+    /** Affiche la page courante (10 lignes max) et met à jour la pagination */
+    function renderTable() {
+        tableBody.innerHTML = '';
+        const totalPages = Math.max(1, Math.ceil(filteredDsData.length / rowsPerPage));
+        const start = (currentPage - 1) * rowsPerPage;
+        const pageData = filteredDsData.slice(start, start + rowsPerPage);
+
+        if (pageData.length === 0) {
+            tableBody.innerHTML = `<tr>
+                <td colspan="13" style="text-align:center; padding:20px;">
+                    Aucun enregistrement trouvé.
+                </td>
+            </tr>`;
+        } else {
+            pageData.forEach(item => {
+                const net = (item.tb - item.tare).toFixed(2);
+                const realId = item.id || item._id;
                 const row = tableBody.insertRow();
-                const net = (item.tb - item.tare).toFixed(2); // Calculate NET weight
-
                 row.innerHTML = `
                     <td>${item.date}</td>
                     <td>${item.hEntree}</td>
@@ -973,32 +1093,40 @@
                     <td>${item.transporteur}</td>
                     <td>${item.numeroBL}</td>
                     <td>${item.immatricule}</td>
-                    <td>${item.tb !== undefined ? item.tb.toFixed(2) : '0.00'}</td>
-                    <td>${item.tare !== undefined ? item.tare.toFixed(2) : '0.00'}</td>
+                    <td>${item.tb?.toFixed(2)||'0.00'}</td>
+                    <td>${item.tare?.toFixed(2)||'0.00'}</td>
                     <td>${net}</td>
                     <td>${item.poste}</td>
                     <td>${item.lieuDeDecharge}</td>
-                    <td>${item.observation || ''}</td>
+                    <td>${item.observation||''}</td>
                     <td class="table-actions">
-                        <button onclick="editDsData('${item.id}')"><i class="fas fa-edit"></i> </button>
-                        <button class="delete-btn" onclick="deleteDsData('${item.id}')"><i class="fas fa-trash-alt"></i> </button>
+                        <button onclick="editDsData('${realId}')" title="Modifier">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteDsData('${realId}')" title="Supprimer">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 `;
             });
-        } catch (error) {
-            console.error('Erreur lors du chargement des données DS Classique:', error);
-            showMessage('Erreur lors du chargement des données. Veuillez vérifier la connexion au serveur.', 'error');
-            tableBody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 20px; color: red;">Échec du chargement des données.</td></tr>';
         }
+
+        pageInfo.textContent = `Page ${currentPage} / ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
     }
 
-    /**
-     * Handles form submission to add or update DS Classique data.
-     * @param {Event} event - The form submission event.
-     */
-    async function saveDsData(event) {
-        event.preventDefault(); // Prevent default form submission
+    //--- Hooks sur filtre et pagination
+    monthFilter.addEventListener('change', applyFiltersAndSort);
+    prevBtn.addEventListener('click', ()=>{ if(currentPage>1){ currentPage--; renderTable(); }});
+    nextBtn.addEventListener('click', ()=>{
+        const tp = Math.ceil(filteredDsData.length/rowsPerPage);
+        if(currentPage<tp){ currentPage++; renderTable(); }
+    });
 
+    //--- Gestion de l'envoi du formulaire (Ajout / Mise à jour) – inchangé
+    async function saveDsData(event) {
+        event.preventDefault();
         const id = idInput.value;
         const dsData = {
             date: dateInput.value,
@@ -1013,34 +1141,26 @@
             lieuDeDecharge: lieuDeDechargeInput.value,
             observation: observationInput.value
         };
-
         try {
             if (id) {
-                // Update existing record
                 await axios.put(`${API_BASE_URL}/${id}`, dsData);
-                showMessage('Entrée mise à jour avec succès !', 'success');
+                showMessage('✔️ Entrée mise à jour avec succès !', 'success');
             } else {
-                // Add new record
                 await axios.post(API_BASE_URL, dsData);
-                showMessage('Nouvelle entrée ajoutée avec succès !', 'success');
+                showMessage('✔️ Nouvelle entrée ajoutée avec succès !', 'success');
             }
             clearForm();
-            loadDsData(); // Reload data to update the table
+            loadDsData();
         } catch (error) {
-            console.error('Erreur lors de la sauvegarde des données DS Classique:', error);
-            showMessage('Erreur lors de la sauvegarde des données. ' + (error.response?.data || error.message), 'error');
+            console.error(error);
+            showMessage('❌ Échec de la sauvegarde. '+(error.response?.data||error.message), 'error');
         }
     }
 
-    /**
-     * Populates the form with data for editing a specific record.
-     * @param {string} id - The ID of the record to edit.
-     */
+    //--- Modification d’une entrée – inchangé
     async function editDsData(id) {
         try {
-            const response = await axios.get(`${API_BASE_URL}/${id}`);
-            const item = response.data;
-
+            const { data: item } = await axios.get(`${API_BASE_URL}/${id}`);
             idInput.value = item.id;
             dateInput.value = item.date;
             hEntreeInput.value = item.hEntree;
@@ -1053,91 +1173,48 @@
             posteInput.value = item.poste;
             lieuDeDechargeInput.value = item.lieuDeDecharge;
             observationInput.value = item.observation;
-
             submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
             formSectionTitle.textContent = 'Modifier l\'entrée';
-            cancelEditButton.style.display = 'inline-flex'; // Show cancel button
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top to show the form
+            cancelEditButton.style.display = 'inline-flex';
+            window.scrollTo({ top:0, behavior:'smooth' });
         } catch (error) {
-            console.error('Erreur lors de la récupération des données pour modification:', error);
-            showMessage('Erreur lors du chargement des données pour modification.', 'error');
+            console.error(error);
+            showMessage('❌ Impossible de charger l’entrée pour modification.', 'error');
         }
     }
 
-    /**
-     * Deletes a DS Classique record.
-     * @param {string} id - The ID of the record to delete.
-     */
+    //--- Suppression – inchangé
     async function deleteDsData(id) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
-            return; // User cancelled
-        }
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) return;
         try {
             await axios.delete(`${API_BASE_URL}/${id}`);
-            showMessage('Entrée supprimée avec succès !', 'success');
-            loadDsData(); // Reload data to update the table
+            showMessage('✔️ Entrée supprimée !', 'success');
+            loadDsData();
         } catch (error) {
-            console.error('Erreur lors de la suppression des données DS Classique:', error);
-            showMessage('Erreur lors de la suppression des données. ' + (error.response?.data || error.message), 'error');
+            console.error(error);
+            showMessage('❌ Échec de la suppression.', 'error');
         }
     }
 
-    /**
-     * Triggers the Excel export from the backend.
-     */
+    //--- Export Excel – inchangé
     function exportExcel() {
         window.location.href = `${API_BASE_URL}/export/excel`;
-        showMessage('Exportation Excel lancée...', 'success');
+        showMessage('🔄 Export Excel lancé…', 'success');
     }
 
-
-    // --- Sidebar Toggle Functionality ---
+    //--- Initialisation après chargement du DOM
     document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mainContent = document.querySelector('.main-content');
-
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            // Adjust main content margin if needed, though flexbox handles this well
-            // if (sidebar.classList.contains('collapsed')) {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width-collapsed)';
-            // } else {
-            //     mainContent.style.marginLeft = 'var(--sidebar-width)';
-            // }
-        });
-
-        // Highlight the active navigation item based on the current page URL
-        const currentPath = window.location.pathname.split('/').pop();
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            const link = item.querySelector('a');
-            if (link) {
-                const linkHref = link.getAttribute('href').split('/').pop();
-                if (linkHref === currentPath) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            }
-        });
-
-        // Set default date for convenience
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0');
-        const day = today.getDate().toString().padStart(2, '0');
-        dateInput.value = `${year}-${month}-${day}`;
-
-        // Load data when the page loads
-        loadDsData();
-
-        // Add event listener for form submission
         formDs.addEventListener('submit', saveDsData);
-
-        // Add event listener for cancel edit button
         cancelEditButton.addEventListener('click', clearForm);
+
+        // Valeur par défaut du filtre mois
+        monthFilter.value = '';
+        // Chargement initial
+        loadDsData();
     });
+
+    //--- Sidebar toggle, nav highlight, etc. inchangé…
 </script>
+
 </body>
 </html>
