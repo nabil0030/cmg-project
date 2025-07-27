@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DS Classique - Enhanced</title>
+    <title>DS Classique</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
@@ -65,7 +65,7 @@
             position: sticky;
             top: 0;
             flex-shrink: 0;
-            box-shadow: var(--shadow-light);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
             border-top-right-radius: var(--border-radius);
             border-bottom-right-radius: var(--border-radius);
@@ -216,7 +216,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: var(--shadow-light);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, background-color 0.3s ease;
             z-index: 11; /* Above sidebar */
         }
@@ -292,6 +292,7 @@
         .section-actions {
             display: flex;
             gap: 10px;
+            align-items: center; /* Align filter label and select */
         }
 
         .section-actions button {
@@ -312,7 +313,7 @@
         }
 
         /* --- Form Styling --- */
-        #formDs {
+        #formDsClassique {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -354,7 +355,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #formDs .form-buttons { /* Container for form submission and other buttons */
+        #formDsClassique .form-buttons {
             grid-column: 1 / -1; /* Span all columns */
             display: flex;
             justify-content: flex-end; /* Align buttons to the right */
@@ -362,7 +363,7 @@
             margin-top: 15px;
         }
 
-        #formDs button[type="submit"], #formDs button[type="button"] {
+        #formDsClassique button[type="submit"], #formDsClassique button[type="button"] {
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -379,20 +380,30 @@
             width: fit-content; /* Ensure button only takes content width */
         }
 
-        #formDs button[type="submit"]:hover, #formDs button[type="button"]:hover {
+        #formDsClassique button[type="submit"]:hover, #formDsClassique button[type="button"]:hover {
             background-color: #397BC7; /* Darker blue on hover */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
         }
 
         /* Excel Export Button Styling */
-        #formDs button[type="button"] { /* Target the export button specifically */
-            background-color: #2ECC71; /* Accent green */
+        #formDsClassique button[type="button"]#export-excel-button { /* Target the export button specifically */
+            background-color: var(--accent-color); /* Accent green */
             box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
-        #formDs button[type="button"]:hover {
+        #formDsClassique button[type="button"]#export-excel-button:hover {
             background-color: #28B463;
             box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Cancel Button Styling */
+        #formDsClassique button[type="button"]#cancel-edit-button {
+            background-color: #6C757D; /* Gray for cancel */
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+        #formDsClassique button[type="button"]#cancel-edit-button:hover {
+            background-color: #5A6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
         }
 
         /* --- Table Styling --- */
@@ -493,6 +504,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            opacity: 0; /* Start hidden */
+            transform: translateY(-20px); /* Start above */
+            animation: fadeInSlideDown 0.5s ease-out forwards;
         }
         .alert.success {
             background-color: #d4edda;
@@ -503,6 +517,51 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+        @keyframes fadeInSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Pagination Controls --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background-color: #397BC7;
+            transform: translateY(-2px);
+        }
+
+        .pagination button:disabled {
+            background-color: #A0A0A0;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .pagination #page-info {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
         }
 
         /* --- Responsive Design --- */
@@ -548,7 +607,9 @@
                 margin-right: 0; /* No margin when text is hidden */
             }
             .nav-item a {
-                display: none; /* Hide link text */
+                opacity: 0; /* Hide link text */
+                width: 0;
+                pointer-events: none;
             }
             .nav-item.active {
                 background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
@@ -557,7 +618,8 @@
                 border-left: none; /* No border when collapsed, use background */
             }
             .sidebar-footer {
-                display: none; /* Hide footer when collapsed */
+                opacity: 0; /* Hide footer when collapsed */
+                pointer-events: none;
             }
             .sidebar-toggle {
                 right: -15px; /* Keep toggle position relative to collapsed sidebar */
@@ -582,7 +644,14 @@
             }
             .section-actions {
                 width: 100%;
-                text-align: center;
+                justify-content: center; /* Center filter on smaller screens */
+            }
+            .pagination {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .pagination button {
+                width: 100%;
             }
         }
 
@@ -678,10 +747,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #formDs {
+            #formDsClassique {
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #formDs .form-buttons button { /* Target all buttons in form-buttons */
+            #formDsClassique .form-buttons button {
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -696,110 +765,6 @@
                 width: 100%; /* Full width for export button */
             }
         }
-        /* Transporteur dropdown */
-        #transporteur-select {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background-color: #f8f9fa;
-            margin-top: 5px;
-        }
-
-        /* Edit link */
-        .editor-toggle {
-            font-size: 14px;
-            color: #2d8cf0;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-        .editor-toggle:hover {
-            text-decoration: underline;
-        }
-
-        /* Hidden editor section */
-        #transporteur-editor {
-            display: none;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 350px;
-            margin-top: 30px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        #transporteur-editor h3 {
-            margin-bottom: 16px;
-            font-size: 16px;
-            color: #1a73e8;
-            font-weight: 600;
-        }
-
-        #transporteur-list {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 15px;
-        }
-
-        #transporteur-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f1f1f1;
-            padding: 8px 12px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        #transporteur-list button {
-            background-color: #e74c3c;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #transporteur-list button:hover {
-            background-color: #c0392b;
-        }
-
-        #newTransporteur {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-        }
-
-        #transporteur-editor .add-btn {
-            background: #1a73e8;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #transporteur-editor .add-btn:hover {
-            background: #1662c4;
-        }
-
-
     </style>
 </head>
 <body>
@@ -815,7 +780,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -823,9 +788,8 @@
                 <i class="fas fa-weight"></i>
                 <a href="controle-bascule-hjds.html"><span>C. Bascule HJ & DS</span></a>
             </li>
-            <li class="nav-item">
-                <i class="fas fa-weight"></i>
-                <a href="dsClassique.html"><span>DS classique</span></a>
+            <li class="nav-item active"> <i class="fas fa-weight"></i>
+                <a href="dsClassique.html"><span>DS Classique</span></a>
             </li>
             <li class="nav-item">
                 <i class="fas fa-weight-hanging"></i>
@@ -850,37 +814,31 @@
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
-
             </li>
-
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expZincSafi.html"><span>Exp Zinc safi</span></a>
-
             </li>
-
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expCuivreOncf.html"><span> Cuivre Oncf </span></a>
-
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expCuivreNord.html"><span> Cuivre Nord</span></a>
-
-            </li>
-
-            <li class="nav-item">
-                <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
-
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="hm.html"><span> lmli7 jay </span></a>
-
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
             </li>
-
+            <li class="nav-item">
+                <i class="fas fa-truck-loading"></i>
+                <a href="synthese.html"><span> synthese </span></a>
+            </li>
+            <li class="nav-item">
+                <i class="fas fa-truck-loading"></i>
+                <a href="rapportHajjar.html"><span> rapport Hajjar</span></a>
+            </li>
             <li class="nav-item">
                 <i class="fas fa-cog"></i>
                 <a href="#"><span>Settings</span></a>
@@ -899,338 +857,305 @@
 <div class="main-content">
     <h1 class="page-title">DS Classique</h1>
 
-    <div id="message"></div>
-
-    <div class="form-section">
-        <div class="section-header">
-            <h2 id="form-section-title">Ajouter une entrée</h2>
-        </div>
-        <form id="formDs">
-            <input type="hidden" id="id">
-
-            <div class="form-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date" required>
-            </div>
-            <div class="form-group">
-                <label for="hEntree">H Entrée:</label>
-                <input type="time" id="hEntree" required>
-            </div>
-            <div class="form-group">
-                <label for="hSortie">H Sortie:</label>
-                <input type="time" id="hSortie" required>
-            </div>
-            <div style="margin-left: 20px;margin-top: 5px;">
-                <label for="transporteur-select">Transporteur :</label>
-                <select id="transporteur-select"></select>
-
-                <div style="margin-top: 8px;">
-                    <a class="editor-toggle" onclick="toggleTransporteurEditor()" style="font-size: 14px; color: #2d8cf0; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
-                        <i class="fas fa-pen"></i> Éditer les transporteurs
-                    </a>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="numeroBL">N° BL:</label>
-                <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
-            </div>
-            <div class="form-group">
-                <label for="immatricule">Immatricule:</label>
-                <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
-            </div>
-            <div class="form-group">
-                <label for="tb">TB:</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids Brut" required>
-            </div>
-            <div class="form-group">
-                <label for="tare">TARE:</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids Tare" required>
-            </div>
-            <div class="form-group">
-                <label for="poste">POSTE:</label>
-                <select id="poste">
-                    <option>1</option><option>2</option><option>3</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="lieuDeDecharge">Lieu De Décharge:</label>
-                <input type="text" id="lieuDeDecharge" placeholder="Lieu de Déchargement" required>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="observation">Observation:</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter / Mettre à jour</button>
-                <button type="button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
-            </div>
-            <div id="transporteur-editor" style="display: none; margin-top: 20px; background: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
-                <h3 style="margin-bottom: 10px;">Modifier les transporteurs</h3>
-
-                <ul id="transporteur-list" style="padding-left: 20px; margin-bottom: 15px;"></ul>
-
-                <input type="text" id="newTransporteur" placeholder="Nouveau transporteur" style="padding: 8px; margin-top: 5px; margin-right: 5px;">
-                <button type="button" onclick="addTransporteur()" style="background: #2d8cf0; color: white; padding: 8px 12px; border: none; border-radius: 5px;">Ajouter</button>
-            </div>
-        </form>
+    <div id="message"></div> <div class="form-section">
+    <div class="section-header">
+        <h2 id="form-section-title">Ajouter une entrée</h2>
     </div>
+    <form id="formDsClassique">
+        <input type="hidden" id="id"> <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" required>
+    </div>
+        <div class="form-group">
+            <label for="hEntree">H Entrée:</label>
+            <input type="time" id="hEntree" required>
+        </div>
+        <div class="form-group">
+            <label for="hSortie">H Sortie:</label>
+            <input type="time" id="hSortie" required>
+        </div>
+        <div class="form-group">
+            <label for="transporteur">Transporteur:</label>
+            <input type="text" id="transporteur" placeholder="Nom du Transporteur" required>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroBL">N° BL:</label>
+            <input type="text" id="numeroBL" placeholder="Numéro de Bon de Livraison" required>
+        </div>
+        <div class="form-group">
+            <label for="immatricule">Immatricule:</label>
+            <input type="text" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+        </div>
+        <div class="form-group">
+            <label for="tb">TB:</label>
+            <input type="number" step="0.01" id="tb" placeholder="Poids Brut" required>
+        </div>
+        <div class="form-group">
+            <label for="tare">TARE:</label>
+            <input type="number" step="0.01" id="tare" placeholder="Poids Tare" required>
+        </div>
+        <div class="form-group">
+            <label for="poste">POSTE:</label>
+            <select id="poste">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="observation">Observation:</label>
+            <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" id="submit-button"><i class="fas fa-plus"></i> Ajouter</button>
+            <button type="button" id="export-excel-button" onclick="exportDsClassiqueExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+            <button type="button" id="cancel-edit-button" style="display:none;"><i class="fas fa-times"></i> Annuler</button>
+        </div>
+    </form>
+</div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique</h2>
+            <h2>Historique des entrées</h2>
+            <div class="section-actions">
+                <label for="monthFilter">Filtrer par mois :</label>
+                <select id="monthFilter">
+                    <option value="">Tous</option>
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+            </div>
         </div>
         <div class="table-responsive">
-            <table id="tableDs">
+            <table id="tableDsClassique">
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th>
-                    <th>Transporteur</th><th>N° BL</th><th>Immatricule</th>
-                    <th>TB</th><th>TARE</th><th>NET</th><th>Poste</th>
-                    <th>Lieu De Décharge</th><th>Observation</th><th>Actions</th>
+                    <th>Date</th>
+                    <th>H Entrée</th>
+                    <th>H Sortie</th>
+                    <th>Transporteur</th>
+                    <th>N° BL</th>
+                    <th>Immatricule</th>
+                    <th>TB</th>
+                    <th>TARE</th>
+                    <th>Net</th>
+                    <th>Poste</th>
+                    <th>Observation</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                </tbody>
             </table>
+        </div>
+        <div class="pagination" id="pagination-controls">
+            <button id="prev-page" disabled>Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page" disabled>Suivant</button>
         </div>
     </div>
 </div>
 
 <script>
-    const api = "/api/ds-classique";
+    const API_BASE_URL = 'http://localhost:8080/api/ds-classique';
+    const formDs              = document.getElementById('formDsClassique');
+    const idInput             = document.getElementById('id');
+    const dateInput           = document.getElementById('date');
+    const hEntreeInput        = document.getElementById('hEntree');
+    const hSortieInput        = document.getElementById('hSortie');
+    const transporteurInput   = document.getElementById('transporteur');
+    const numeroBLInput       = document.getElementById('numeroBL');
+    const immatriculeInput    = document.getElementById('immatricule');
+    const tbInput             = document.getElementById('tb');
+    const tareInput           = document.getElementById('tare');
+    const posteInput          = document.getElementById('poste');
+    const observationInput    = document.getElementById('observation');
+    const submitButton        = document.getElementById('submit-button');
+    const formSectionTitle    = document.getElementById('form-section-title');
+    const cancelEditButton    = document.getElementById('cancel-edit-button');
+    const tableBody           = document.querySelector('#tableDsClassique tbody');
+    const messageDiv          = document.getElementById('message');
+
+    // Pagination & filtre
+    const monthFilter         = document.getElementById('monthFilter');
+    const prevBtn             = document.getElementById('prev-page');
+    const nextBtn             = document.getElementById('next-page');
+    const pageInfo            = document.getElementById('page-info');
+    const rowsPerPage         = 10;
+    let rawDsData = [], filteredDsData = [], currentPage = 1;
 
     function showMessage(msg, type) {
-        const div = document.getElementById("message");
-        div.innerHTML = `<div class="alert ${type}"><i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}</div>`;
-        setTimeout(() => div.innerHTML = "", 4000);
+        messageDiv.innerHTML = `<div class="alert ${type}">
+      <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'}"></i> ${msg}
+    </div>`;
+        setTimeout(()=> messageDiv.innerHTML = '', 4000);
     }
 
-    document.getElementById("formDs")
-        .addEventListener("submit", async e => {
-            e.preventDefault();
-            const rec = {
-                id: document.getElementById("id").value || null,
-                date: document.getElementById("date").value,
-                hEntree: document.getElementById("hEntree").value,
-                hSortie: document.getElementById("hSortie").value,
-                transporteur: document.getElementById("transporteur").value,
-                numeroBL: document.getElementById("numeroBL").value,
-                immatricule: document.getElementById("immatricule").value,
-                tb: parseFloat(document.getElementById("tb").value),
-                tare: parseFloat(document.getElementById("tare").value),
-                poste: parseInt(document.getElementById("poste").value),
-                lieuDeDecharge: document.getElementById("lieuDeDecharge").value,
-                observation: document.getElementById("observation").value
-            };
+    function clearForm() {
+        idInput.value = '';
+        formDs.reset();
+        submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter';
+        formSectionTitle.textContent = 'Ajouter une entrée';
+        cancelEditButton.style.display = 'none';
+    }
 
-            try {
-                const res = await axios.post(api, rec); // Assuming POST handles both add and update based on ID presence
-                if (res.data.includes("dupliquée")) {
-                    showMessage(res.data, "error");
-                } else {
-                    showMessage(res.data, "success");
-                    document.getElementById("formDs").reset();
-                    document.getElementById("id").value = ""; // Clear hidden ID
-                    document.getElementById('form-section-title').textContent = "Ajouter une entrée"; // Reset title
-                    const submitButton = document.getElementById('submit-button');
-                    submitButton.innerHTML = '<i class="fas fa-plus"></i> Ajouter / Mettre à jour'; // Reset button text
-                    submitButton.style.backgroundColor = ''; // Reset button color
-                    submitButton.style.boxShadow = '';
-                    loadData();
-                }
-            } catch (err) {
-                console.error("Submission error:", err);
-                let errorMessage = "Erreur inattendue.";
-                if (err.response && err.response.data) {
-                    errorMessage = err.response.data;
-                } else if (err.message) {
-                    errorMessage = err.message;
-                }
-                showMessage(`Erreur : ${errorMessage}`, "error");
-            }
-        });
-
-    async function loadData() {
+    async function loadDsData() {
         try {
-            const res = await axios.get(api);
-            const tbody = document.querySelector("#tableDs tbody");
-            tbody.innerHTML = "";
-
-            if (res.data.length === 0) {
-                const noDataRow = document.createElement('tr');
-                noDataRow.innerHTML = `<td colspan="13" style="text-align: center;">Aucune donnée trouvée.</td>`;
-                tbody.appendChild(noDataRow);
-                return;
-            }
-
-            // Sort data by date in descending order
-            res.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            res.data.forEach(item => {
-                const tr = document.createElement("tr");
-                const net = (item.tb - item.tare).toFixed(2); // Calculate NET
-                tr.innerHTML = `
-                    <td>${item.date}</td>
-                    <td>${item.hEntree?.substring(0,5)||""}</td>
-                    <td>${item.hSortie?.substring(0,5)||""}</td>
-                    <td>${item.transporteur}</td>
-                    <td>${item.numeroBL}</td>
-                    <td>${item.immatricule}</td>
-                    <td>${item.tb}</td>
-                    <td>${item.tare}</td>
-                    <td>${net}</td>
-                    <td>${item.poste}</td>
-                    <td>${item.lieuDeDecharge}</td>
-                    <td>${item.observation||""}</td>
-                    <td class="table-actions">
-                        <button onclick='edit(${JSON.stringify(item)})'><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="delete-btn" onclick='remove(${item.id})'><i class="fas fa-trash-alt"></i> Supprimer</button>
-                    </td>`;
-                tbody.appendChild(tr);
-            });
-        } catch (error) {
-            console.error("Error loading data:", error);
-            document.querySelector("#tableDs tbody").innerHTML =
-                `<tr><td colspan="13" style="text-align:center;color:red;">Erreur lors du chargement des données.</td></tr>`;
+            const { data } = await axios.get(API_BASE_URL);
+            rawDsData = data;
+            applyFiltersAndSort();
+        } catch (e) {
+            console.error(e);
+            showMessage('⚠️ Échec du chargement des données.', 'error');
         }
     }
 
-    function edit(item) {
-        document.getElementById("id").value = item.id;
-        document.getElementById("date").value = item.date;
-        document.getElementById("hEntree").value = item.hEntree?.substring(0,5);
-        document.getElementById("hSortie").value = item.hSortie?.substring(0,5);
-        document.getElementById("transporteur").value = item.transporteur;
-        document.getElementById("numeroBL").value = item.numeroBL;
-        document.getElementById("immatricule").value = item.immatricule;
-        document.getElementById("tb").value = item.tb;
-        document.getElementById("tare").value = item.tare;
-        document.getElementById("poste").value = item.poste;
-        document.getElementById("lieuDeDecharge").value = item.lieuDeDecharge;
-        document.getElementById("observation").value = item.observation;
-
-        // Change form title and button for edit mode
-        document.getElementById('form-section-title').textContent = "Modifier une entrée";
-        const submitButton = document.getElementById('submit-button');
-        submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-        submitButton.style.backgroundColor = '#FFA500'; // Orange color for update
-        submitButton.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
-        submitButton.onmouseover = () => submitButton.style.backgroundColor = '#E69500';
-        submitButton.onmouseout = () => submitButton.style.backgroundColor = '#FFA500';
-
-        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    function applyFiltersAndSort() {
+        filteredDsData = rawDsData
+            .filter(item => {
+                if (!monthFilter.value) return true;
+                return (new Date(item.date).getMonth()+1) === +monthFilter.value;
+            })
+            .sort((a,b) => new Date(a.date) - new Date(b.date));
+        currentPage = 1;
+        renderTable();
     }
 
-    async function remove(id) {
-        if (confirm("❗ Supprimer cette ligne ? Cette action est irréversible.")) {
-            try {
-                await axios.delete(`${api}/${id}`);
-                showMessage("✅ Entrée supprimée avec succès.", "success");
-                loadData();
-            } catch (err) {
-                console.error("Deletion error:", err);
-                let errorMessage = "Erreur inattendue lors de la suppression.";
-                if (err.response && err.response.data) {
-                    errorMessage = err.response.data;
-                } else if (err.message) {
-                    errorMessage = err.message;
-                }
-                showMessage(`❌ Erreur : ${errorMessage}`, "error");
-            }
-        }
-    }
+    function renderTable() {
+        tableBody.innerHTML = '';
+        const totalPages = Math.max(1, Math.ceil(filteredDsData.length / rowsPerPage));
+        const start = (currentPage-1)*rowsPerPage;
+        const pageSlice = filteredDsData.slice(start, start+rowsPerPage);
 
-    function exportExcel() {
-        window.location.href = "/api/ds-classique/export/excel";
-    }
-
-    // Sidebar Toggle functionality with localStorage persistence
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const toggleIcon = sidebarToggle.querySelector('.fas'); // Get the icon within the toggle button
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-
-        // Apply initial state
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
-            toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right'); // Point right
+        if (pageSlice.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:20px;">Aucun enregistrement.</td></tr>';
         } else {
-            toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left'); // Point left
+            pageSlice.forEach(item => {
+                const net = (item.tb - item.tare).toFixed(2);
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.hEntree}</td>
+          <td>${item.hSortie}</td>
+          <td>${item.transporteur}</td>
+          <td>${item.numeroBL}</td>
+          <td>${item.immatricule}</td>
+          <td>${item.tb.toFixed(2)}</td>
+          <td>${item.tare.toFixed(2)}</td>
+          <td>${net}</td>
+          <td>${item.poste}</td>
+          <td>${item.observation||''}</td>
+          <td class="table-actions">
+            <button onclick="editDsData('${item.id}')"><i class="fas fa-edit"></i></button>
+            <button class="delete-btn" onclick="deleteDsData('${item.id}')"><i class="fas fa-trash-alt"></i></button>
+          </td>`;
+            });
         }
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const currentlyCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentlyCollapsed);
+        pageInfo.textContent = `Page ${currentPage} / ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    }
 
-            // Toggle icon direction
-            if (currentlyCollapsed) {
-                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+    // Filtre & pagination events
+    monthFilter.addEventListener('change', applyFiltersAndSort);
+    prevBtn.addEventListener('click', ()=>{ if (currentPage>1){ currentPage--; renderTable(); }});
+    nextBtn.addEventListener('click', ()=>{ if (currentPage < Math.ceil(filteredDsData.length/rowsPerPage)){ currentPage++; renderTable(); }});
+
+    // Ajout / mise à jour
+    formDs.addEventListener('submit', async e => {
+        e.preventDefault();
+        const dsData = {
+            date: dateInput.value,
+            hEntree: hEntreeInput.value,
+            hSortie: hSortieInput.value,
+            transporteur: transporteurInput.value,
+            numeroBL: numeroBLInput.value,
+            immatricule: immatriculeInput.value,
+            tb: parseFloat(tbInput.value),
+            tare: parseFloat(tareInput.value),
+            poste: posteInput.value,
+            observation: observationInput.value
+        };
+        try {
+            if (idInput.value) {
+                await axios.put(`${API_BASE_URL}/${idInput.value}`, dsData);
+                showMessage('✔️ Modifié !', 'success');
             } else {
-                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+                await axios.post(API_BASE_URL, dsData);
+                showMessage('✔️ Ajouté !', 'success');
             }
-        });
-
-        loadData(); // Initial load of table data
+            clearForm();
+            loadDsData();
+        } catch (err) {
+            console.error(err);
+            showMessage('❌ Erreur lors de la sauvegarde.', 'error');
+        }
     });
-    let transporteurs = JSON.parse(localStorage.getItem('transporteurs') || '["AHMED"]');
 
-    function renderTransporteurs() {
-        const list = document.getElementById("transporteur-list");
-        list.innerHTML = "";
-        transporteurs.forEach((name, index) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-          ${name}
-          <button onclick="removeTransporteur(${index})" class="btn-supprimer">Supprimer</button>
-        `;
-            list.appendChild(li);
-        });
-    }
-
-    function updateTransporteurSelect() {
-        const select = document.getElementById("transporteur-select");
-        if (!select) return;
-
-        select.innerHTML = "";
-        transporteurs.forEach(name => {
-            const option = document.createElement("option");
-            option.value = name;
-            option.textContent = name;
-            select.appendChild(option);
-        });
-    }
-
-    function addTransporteur() {
-        const input = document.getElementById("newTransporteur");
-        const name = input.value.trim();
-        if (name && !transporteurs.includes(name)) {
-            transporteurs.push(name);
-            localStorage.setItem('transporteurs', JSON.stringify(transporteurs));
-            input.value = "";
-            renderTransporteurs();
-            updateTransporteurSelect();
+    // Modifier
+    async function editDsData(id) {
+        try {
+            const { data } = await axios.get(`${API_BASE_URL}/${id}`);
+            idInput.value = data.id;
+            dateInput.value = data.date;
+            hEntreeInput.value = data.hEntree;
+            hSortieInput.value = data.hSortie;
+            transporteurInput.value = data.transporteur;
+            numeroBLInput.value = data.numeroBL;
+            immatriculeInput.value = data.immatricule;
+            tbInput.value = data.tb;
+            tareInput.value = data.tare;
+            posteInput.value = data.poste;
+            observationInput.value = data.observation;
+            submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+            formSectionTitle.textContent = 'Modifier l’entrée';
+            cancelEditButton.style.display = 'inline-flex';
+            window.scrollTo({top:0,behavior:'smooth'});
+        } catch {
+            showMessage('❌ Impossible de charger pour modification.', 'error');
         }
     }
 
-    function removeTransporteur(index) {
-        transporteurs.splice(index, 1);
-        localStorage.setItem('transporteurs', JSON.stringify(transporteurs));
-        renderTransporteurs();
-        updateTransporteurSelect();
+    // Supprimer
+    async function deleteDsData(id) {
+        if (!confirm('Confirmez la suppression ?')) return;
+        try {
+            await axios.delete(`${API_BASE_URL}/${id}`);
+            showMessage('✔️ Supprimé !', 'success');
+            loadDsData();
+        } catch {
+            showMessage('❌ Échec de la suppression.', 'error');
+        }
     }
 
-    function toggleTransporteurEditor() {
-        const editor = document.getElementById("transporteur-editor");
-        editor.style.display = editor.style.display === "none" ? "block" : "none";
-        renderTransporteurs();
+    // Export Excel
+    function exportExcel() {
+        window.location.href = `${API_BASE_URL}/export/excel`;
+        showMessage('🔄 Export lancé…', 'success');
     }
 
-    // ✅ On page load
-    renderTransporteurs();
-    updateTransporteurSelect();
+    // Annulation
+    cancelEditButton.addEventListener('click', clearForm);
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+        monthFilter.value = '';
+        loadDsData();
+    });
 </script>
+
 </body>
 </html>
