@@ -3,16 +3,16 @@ package com.cmg.back.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "transporteurs")
-public class Transporteur {
+@Table(name = "postes")
+public class Poste {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nom;
 
-    public Transporteur() {}
-    public Transporteur(String nom) { this.nom = nom; }
+    public Poste() {}
+    public Poste(String nom) { this.nom = nom; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

@@ -42,14 +42,22 @@ public class WebSecurityConfig {
                                 "/", "/home", "/home.html",
                                 "/signup", "/login",
                                 "/index.html", "/favicon.ico",
+                                "/admin.html",
                                 "/css/**", "/js/**", "/images/**",
-                                "/synthese.html", "/rapportHajjar.html",
-                                "/cbulkArgentifere.html", "/chauxVive.html",
-                                "/expZincSafi.html", "/chauxViveLafarge.html",
-                                "/controleBasculeHJDS.html", "/controle-bascule-hjds.html",
-                                "/controle-bascule-ka.html", "/dsClassique.html",
-                                "/dsNord.html", "/expZincOncf.html", "/expCuivreOncf.html",
-                                "/expCuivreNord.html", "/expPbCmgOnf.html"
+
+                                // Pages publiques
+                                "/dsClassique.html", "/chauxVive.html", "/rapportHajjar.html",
+                                "/cbulkArgentifere.html", "/chauxViveLafarge.html",
+                                "/controle-bascule-hjds.html", "/controle-bascule-ka.html",
+                                "/dsNord.html", "/expZincSafi.html",
+                                "/expZincOncf.html", "/expCuivreOncf.html",
+                                "/expCuivreNord.html", "/expPbCmgOnf.html",
+
+                                // APIs publiques pour admin.html
+                                "/api/transporteurs/**",
+                                "/api/postes/**",
+                                "/api/lieux-dechargement/**",
+                                "/api/lieux-chargement/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/cbulkargentifere/**",
@@ -70,15 +78,15 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")                 // page de login personnalisée
-                        .loginProcessingUrl("/login")        // endpoint utilisé par le formulaire
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/index.html", true)
-                        .failureUrl("/login?error=true")     // gestion erreur login
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")  // gestion message de déconnexion
+                        .logoutSuccessUrl("/login?logout=true")
                         .permitAll()
                 )
                 .userDetailsService(customUserDetailsService);

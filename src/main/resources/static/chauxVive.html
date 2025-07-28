@@ -911,7 +911,6 @@
             }
         }
     </style>
-</head>
 <body>
 <div class="sidebar" id="sidebar">
     <button class="sidebar-toggle" id="sidebarToggle">
@@ -925,7 +924,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -945,7 +944,7 @@
                 <i class="fas fa-truck-loading"></i>
                 <a href="controle-bascule-ka.html"><span>C. Bascule KA</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-truck-loading"></i>
                 <a href="chauxVive.html"><span>Chaux Vive</span></a>
             </li>
@@ -982,12 +981,12 @@
 
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
 
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
+                <a href="synthese.html"><span> synthese </span></a>
 
             </li>
             <li class="nav-item">
@@ -1015,78 +1014,84 @@
 <div class="main-content">
     <h1 class="page-title">CHAUX VIVE</h1>
 
-    <div class="form-section">
-        <div class="section-header">
-            <h2>Ajouter ou Modifier une entrée</h2>
-        </div>
-        <form id="chauxViveForm" autocomplete="off">
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" required>
-            </div>
-            <div class="form-group">
-                <label for="hEntree">Heure Entrée</label>
-                <input type="time" id="hEntree" required>
-            </div>
-            <div class="form-group">
-                <label for="hSortie">Heure Sortie</label>
-                <input type="time" id="hSortie" required>
-            </div>
-            <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" id="transporteur" placeholder="Nom du transporteur" required>
-            </div>
-            <div class="form-group">
-                <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required>
-            </div>
-            <div class="form-group">
-                <label for="immat">Immatriculation</label>
-                <input type="text" id="immat" placeholder="Immatriculation du Véhicule" required>
-            </div>
-            <div class="form-group">
-                <label for="tb">TB</label>
-                <input type="number" id="tb" placeholder="Poids TB" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="tare">TARE</label>
-                <input type="number" id="tare" placeholder="Poids TARE" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="poste">Poste</label>
-                <input type="number" id="poste" placeholder="Poste (1, 2 ou 3)" min="1" max="3" required>
-            </div>
-            <div class="form-group">
-                <label for="netCosumar">Net COSUMAR</label>
-                <input type="number" id="netCosumar" placeholder="Poids Net COSUMAR" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="lieuChargement">Lieu de chargement</label>
-                <input type="text" id="lieuChargement" placeholder="Ex: C.M.G" required>
-            </div>
-            <div class="form-group">
-                <label for="lieuDechargement">Lieu de déchargement</label>
-                <input type="text" id="lieuDechargement" placeholder="Ex: COSUMAR" required>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="observation">Observation</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
-            </div>
-            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
-            </div>
-        </form>
+    <div id="message"></div> <div class="form-section">
+    <div class="section-header">
+        <h2 id="form-section-title">Ajouter ou Modifier une entrée</h2>
     </div>
+    <form id="chauxViveForm" autocomplete="off">
+        <input type="hidden" id="id"> <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" required>
+    </div>
+        <div class="form-group">
+            <label for="hEntree">Heure Entrée</label>
+            <input type="time" id="hEntree" required>
+        </div>
+        <div class="form-group">
+            <label for="hSortie">Heure Sortie</label>
+            <input type="time" id="hSortie" required>
+        </div>
+        <div class="form-group">
+            <label for="transporteur-select">Transporteur</label>
+            <select id="transporteur-select" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="numeroBL">N° BL</label>
+            <input type="text" id="numeroBL" placeholder="N° Bon de Livraison" required>
+        </div>
+        <div class="form-group">
+            <label for="immat">Immatriculation</label>
+            <input type="text" id="immat" placeholder="Immatriculation du Véhicule" required>
+        </div>
+        <div class="form-group">
+            <label for="tb">TB</label>
+            <input type="number" id="tb" placeholder="Poids TB" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="tare">TARE</label>
+            <input type="number" id="tare" placeholder="Poids TARE" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="poste-select">Poste</label>
+            <select id="poste-select" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="netCosumar">Net COSUMAR</label>
+            <input type="number" id="netCosumar" placeholder="Poids Net COSUMAR" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="lieu-chargement-select">Lieu de chargement</label>
+            <select id="lieu-chargement-select" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lieu-dechargement-select">Lieu de déchargement</label>
+            <select id="lieu-dechargement-select" required>
+            </select>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="observation">Observation</label>
+            <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+        </div>
+        <div class="form-buttons">
+            <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
+            <button type="button" id="cancel-edit-btn" style="display:none;">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+        </div>
+    </form>
+</div>
 
     <div class="table-section">
         <div class="section-header">
             <h2>Historique des Chaux Vive</h2>
             <div class="section-actions">
-                <!-- Month Filter added here -->
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
                     <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
-                        <option value="">Tous les mois</option>
+                        <option value="all">Tous les mois</option>
                         <option value="1">Janvier</option>
                         <option value="2">Février</option>
                         <option value="3">Mars</option>
@@ -1129,16 +1134,15 @@
                 <tbody id="data-body"></tbody>
             </table>
         </div>
-        <div class="pagination" id="pagination-controls">
-            <button id="prev-page"><i class="fas fa-chevron-left"></i> Précédent</button>
-            <span id="page-info">Page 1 sur 1</span>
-            <button id="next-page">Suivant <i class="fas fa-chevron-right"></i></button>
+        <div class="pagination-controls" id="pagination-controls">
+            <button id="prev-page">&laquo; Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page">Suivant &raquo;</button>
         </div>
     </div>
 </div>
 
-<!-- Custom Confirmation Modal HTML (not used by deleteRow, but kept for styling) -->
-<div id="customConfirmModal" class="modal-overlay">
+<div id="customConfirmModal" class="modal-overlay" style="display:none;">
     <div class="modal-content-box">
         <p id="confirmMessage"></p>
         <div class="modal-actions">
@@ -1149,25 +1153,153 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Base URL for the reference data API
+        const API_BASE = 'http://localhost:8080/api';
+
+        // Mapping of select element IDs to their respective API endpoints and value key
+        const refConfig = {
+            "transporteur-select": { endpoint: "transporteurs", key: "nom" },
+            "poste-select": { endpoint: "postes", key: "nom" },
+            "lieu-chargement-select": { endpoint: "lieux-chargement", key: "nom" },
+            "lieu-dechargement-select": { endpoint: "lieux-dechargement", key: "nom" }
+        };
+
+        // Fills a single select field with provided values
+        function fillSelect(selectId, values, valueKey) {
+            const select = document.getElementById(selectId);
+            if (!select) {
+                console.warn(`⚠️ Select element with ID '${selectId}' not found.`);
+                return;
+            }
+            select.innerHTML = ""; // Clear existing options
+
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = `Sélectionner un ${selectId.replace('-select', '').replace('-', ' ')}`;
+            select.appendChild(defaultOption);
+
+            values.forEach(item => {
+                const option = document.createElement("option");
+                // Assuming each item in the array has an 'id' and a 'nom' (or whatever valueKey is)
+                option.value = item[valueKey];
+                option.textContent = item[valueKey];
+                select.appendChild(option);
+            });
+        }
+
+        // Fetches all reference data and populates select fields
+        async function loadAllRefs() {
+            const fetchPromises = Object.entries(refConfig).map(([selectId, config]) => {
+                return fetch(`${API_BASE}/${config.endpoint}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! status: ${res.status} for ${config.endpoint}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => ({ selectId, data, valueKey: config.key }))
+                    .catch(error => {
+                        console.error(`⚠️ Failed to load data for ${config.endpoint}:`, error);
+                        return { selectId, data: [], valueKey: config.key, error: true }; // Return empty data on error
+                    });
+            });
+
+            const results = await Promise.all(fetchPromises);
+
+            results.forEach(result => {
+                if (!result.error) {
+                    fillSelect(result.selectId, result.data, result.valueKey);
+                } else {
+                    // Display specific error message for this field
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.innerHTML += `<div class="alert error">
+                            <i class="fas fa-exclamation-circle"></i> Échec du chargement des options pour ${result.selectId.replace('-select', '').replace('-', ' ')}.
+                        </div>`;
+                    messageDiv.style.display = 'block';
+                    setTimeout(()=> messageDiv.style.display = 'none', 5000);
+                }
+            });
+        }
+
+        loadAllRefs(); // Load all reference data on page load
+    });
+</script>
+
+<script>
     let currentEditId = null;
-    // IMPORTANT: This API_BASE_URL is a relative path.
-    // Ensure your backend serves these paths correctly relative to your frontend's URL.
-    const API_BASE_URL = window.location.origin + "/api/chaux-vive";
+    const API_BASE_URL = "http://localhost:8080/api/chaux-vive"; // Ensure this is the correct absolute path
 
     let rawAllTableData = []; // Stores ALL data fetched from the backend, unfiltered
     let filteredAndSortedData = []; // Stores data after filtering and sorting, used for pagination
     let currentPage = 1;
     const rowsPerPage = 10; // Number of rows per page
 
+    // Get form elements
+    const chauxViveForm = document.getElementById('chauxViveForm');
+    const idInput = document.getElementById('id');
+    const dateInput = document.getElementById('date');
+    const hEntreeInput = document.getElementById('hEntree');
+    const hSortieInput = document.getElementById('hSortie');
+    const transporteurSelect = document.getElementById('transporteur-select'); // Still a select
+    const numeroBLInput = document.getElementById('numeroBL');
+    const immatInput = document.getElementById('immat');
+    const tbInput = document.getElementById('tb');
+    const tareInput = document.getElementById('tare');
+    const posteSelect = document.getElementById('poste-select'); // Still a select
+    const netCosumarInput = document.getElementById('netCosumar');
+    const lieuChargementSelect = document.getElementById('lieu-chargement-select'); // Now a select
+    const lieuDechargementSelect = document.getElementById('lieu-dechargement-select'); // Now a select
+    const observationInput = document.getElementById('observation');
+    const submitBtn = document.getElementById('submit-btn');
+    const formSectionTitle = document.getElementById('form-section-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const tableBody = document.getElementById('data-body'); // Updated ID for tbody
+
+    // Pagination & Filter Elements
+    const monthFilterSelect = document.getElementById('monthFilter');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
+    const messageDiv = document.getElementById('message'); // Message display area
+
+
     // A utility function to show messages, consistent with other pages
     function showMessage(msg, type){
-        const div = document.createElement('div');
-        div.className = `alert ${type}`;
-        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-        const mainContent = document.querySelector('.main-content');
-        // Insert before the first form-section
-        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
-        setTimeout(()=> div.remove(), 4000);
+        messageDiv.innerHTML = `<div class="alert ${type}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}
+            </div>`;
+        messageDiv.style.display = 'block';
+        setTimeout(()=> {
+            messageDiv.style.display = 'none';
+            messageDiv.innerHTML = '';
+        }, 5000);
+    }
+
+    // Clears the form fields and resets to 'Add' mode, setting default date.
+    function clearForm() {
+        currentEditId = null;
+        chauxViveForm.reset();
+        formSectionTitle.textContent = 'Ajouter ou Modifier une entrée';
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+        submitBtn.style.backgroundColor = 'var(--primary-color)';
+        submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
+        submitBtn.onmouseover = null;
+        submitBtn.onmouseout = null;
+        cancelEditBtn.style.display = 'none';
+
+        // Set default date to today
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+
+        // Reset select elements to default empty option
+        if(transporteurSelect) transporteurSelect.value = "";
+        if(posteSelect) posteSelect.value = "";
+        if(lieuChargementSelect) lieuChargementSelect.value = "";
+        if(lieuDechargementSelect) lieuDechargementSelect.value = "";
     }
 
     // Applies filters and sorting to raw data, then updates filteredAndSortedData
@@ -1175,8 +1307,8 @@
         let dataToProcess = [...rawAllTableData];
 
         // Filtre par mois si un mois est sélectionné
-        const monthValue = document.getElementById('monthFilter').value;
-        if (monthValue) {
+        const monthValue = monthFilterSelect.value;
+        if (monthValue && monthValue !== 'all') { // Check for 'all' option
             const selectedMonth = parseInt(monthValue, 10) - 1; // 0 = janvier
             dataToProcess = dataToProcess.filter(e => {
                 const d = new Date(e.date);
@@ -1190,15 +1322,14 @@
             (a, b) => new Date(a.date) - new Date(b.date)
         );
 
-        currentPage = 1;
+        currentPage = 1; // Reset to first page after applying filters
         displayTablePage(currentPage);
     }
 
 
     // Main function to load data from backend and set up pagination
     async function loadTable() {
-        const tbody = document.getElementById('data-body');
-        tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`; // Loading indicator
+        tableBody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`; // Loading indicator
 
         try {
             const response = await fetch(API_BASE_URL); // Fetch all data
@@ -1211,30 +1342,32 @@
         } catch (error) {
             console.error("Erreur lors du chargement des données:", error);
             showMessage(`❌ ${error.message}`, 'error');
-            const tbody = document.getElementById('data-body');
-            tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: red;">Erreur lors du chargement des données.</td></tr>`;
         }
     }
 
     // Function to display data for the current page
     function displayTablePage(page) {
-        const tbody = document.getElementById('data-body');
-        tbody.innerHTML = ''; // Clear existing rows
+        tableBody.innerHTML = ''; // Clear existing rows
 
-        const startIndex = (page - 1) * rowsPerPage;
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        else if (totalPages === 0) currentPage = 0; // Handle case where there are no items
+
+        const startIndex = (currentPage - 1) * rowsPerPage;
         const endIndex = startIndex + rowsPerPage;
         const paginatedData = filteredAndSortedData.slice(startIndex, endIndex); // Use filtered and sorted data
 
         if (!Array.isArray(paginatedData) || paginatedData.length === 0) {
             const noDataRow = document.createElement('tr');
             noDataRow.innerHTML = `<td colspan="16" style="text-align: center; color: var(--text-light);">Aucune donnée trouvée pour cette page.</td>`;
-            tbody.appendChild(noDataRow);
+            tableBody.appendChild(noDataRow);
         } else {
             paginatedData.forEach(e => {
                 // Ensure values are numbers before calculation, then format for display
-                const tbNum = parseFloat(e.tb);
-                const tareNum = parseFloat(e.tare);
-                const netCosumarNum = parseFloat(e.netCosumar);
+                const tbNum = parseFloat(e.tb || 0);
+                const tareNum = parseFloat(e.tare || 0);
+                const netCosumarNum = parseFloat(e.netCosumar || 0);
 
                 const tbVal = !isNaN(tbNum) ? tbNum.toFixed(2) : '';
                 const tareVal = !isNaN(tareNum) ? tareNum.toFixed(2) : '';
@@ -1242,7 +1375,6 @@
 
                 // Calculate NET CMG and ECART using the numeric values
                 const netCmg = (!isNaN(tbNum) && !isNaN(tareNum)) ? (tbNum - tareNum).toFixed(2) : '';
-                // Ensure netCmg is parsed to float before using in ecart calculation
                 const ecart = (!isNaN(parseFloat(netCmg)) && !isNaN(netCosumarNum)) ? (parseFloat(netCmg) - netCosumarNum).toFixed(2) : '';
 
                 const tr = document.createElement('tr');
@@ -1267,7 +1399,7 @@
                             <button class="delete-btn" onclick='deleteRow("${e.id || e._id}")'><i class="fas fa-trash-alt"></i></button>
                         </td>
                     `;
-                tbody.appendChild(tr);
+                tableBody.appendChild(tr);
             });
         }
         setupPagination(); // Update pagination controls after displaying the page
@@ -1275,49 +1407,44 @@
 
     // Function to set up and update pagination controls
     function setupPagination() {
-        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage); // Use filtered data length
-        const pageInfoSpan = document.getElementById('page-info');
-        const prevPageBtn = document.getElementById('prev-page');
-        const nextPageBtn = document.getElementById('next-page');
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        pageInfoSpan.textContent = `Page ${currentPage > 0 ? currentPage : 0} / ${totalPages > 0 ? totalPages : 0}`; // Handle case with 0 data
 
-        pageInfoSpan.textContent = `Page ${currentPage} sur ${totalPages || 1}`; // Handle case with 0 data
-
-        prevPageBtn.disabled = currentPage === 1;
-        nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+        prevPageBtn.disabled = currentPage <= 1 || totalPages === 0;
+        nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
     }
 
-    document.getElementById('chauxViveForm').onsubmit = async function(e) { // Changed to async
+    chauxViveForm.onsubmit = async function(e) {
         e.preventDefault();
 
-        const tbValue = parseFloat(document.getElementById('tb').value);
-        const tareValue = parseFloat(document.getElementById('tare').value);
-        const netCosumarValue = parseFloat(document.getElementById('netCosumar').value);
+        const tbValue = parseFloat(tbInput.value);
+        const tareValue = parseFloat(tareInput.value);
+        const netCosumarValue = parseFloat(netCosumarInput.value);
 
         const netCmgValue = (tbValue - tareValue).toFixed(2); // Calculate NET CMG
         const ecartValue = (parseFloat(netCmgValue) - netCosumarValue).toFixed(2); // Calculate ECART
 
         const entry = {
-            date: document.getElementById('date').value,
-            hEntree: document.getElementById('hEntree').value,
-            hSortie: document.getElementById('hSortie').value,
-            transporteur: document.getElementById('transporteur').value,
-            numeroBL: document.getElementById('numeroBL').value,
-            immat: document.getElementById('immat').value,
+            date: dateInput.value,
+            hEntree: hEntreeInput.value,
+            hSortie: hSortieInput.value,
+            transporteur: transporteurSelect.value, // Get value from select
+            numeroBL: numeroBLInput.value,
+            immat: immatInput.value,
             tb: tbValue,
             tare: tareValue,
             netCmg: parseFloat(netCmgValue), // Include NET CMG
-            poste: parseInt(document.getElementById('poste').value),
+            poste: posteSelect.value, // Get value from select
             netCosumar: netCosumarValue,
             ecart: parseFloat(ecartValue), // Include ECART
-            lieuChargement: document.getElementById('lieuChargement').value,
-            lieuDechargement: document.getElementById('lieuDechargement').value,
-            observation: document.getElementById('observation').value
+            lieuChargement: lieuChargementSelect.value, // Get value from select
+            lieuDechargement: lieuDechargementSelect.value, // Get value from select
+            observation: observationInput.value
         };
 
         const method = currentEditId ? 'PUT' : 'POST';
-        const url = currentEditId ? `${API_BASE_URL}/${currentEditId}` : API_BASE_URL; // Use API_BASE_URL
+        const url = currentEditId ? `${API_BASE_URL}/${currentEditId}` : API_BASE_URL;
 
-        const submitBtn = document.getElementById('submit-btn');
         submitBtn.disabled = true; // Disable button to prevent double submission
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...'; // Show spinner
 
@@ -1335,14 +1462,7 @@
             await res.json(); // Consume the response body
 
             showMessage('✅ Opération réussie.', 'success');
-            this.reset();
-            currentEditId = null;
-            document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
-            // Reset button styles to default
-            submitBtn.style.backgroundColor = 'var(--primary-color)';
-            submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
-            submitBtn.onmouseover = null;
-            submitBtn.onmouseout = null;
+            clearForm(); // Reset form and currentEditId
             loadTable(); // Reload table to update and re-paginate
         } catch (err) {
             console.error("Form submission error:", err);
@@ -1355,28 +1475,28 @@
 
     function editRow(item) {
         currentEditId = item.id || item._id; // Use item.id first, then fallback to item._id
-        document.getElementById('date').value = item.date || '';
-        document.getElementById('hEntree').value = item.hEntree || '';
-        document.getElementById('hSortie').value = item.hSortie || '';
-        document.getElementById('transporteur').value = item.transporteur || '';
-        document.getElementById('numeroBL').value = item.numeroBL || '';
-        document.getElementById('immat').value = item.immat || '';
-        document.getElementById('tb').value = item.tb ?? '';
-        document.getElementById('tare').value = item.tare ?? '';
-        document.getElementById('poste').value = item.poste ?? '';
-        document.getElementById('netCosumar').value = item.netCosumar ?? '';
-        document.getElementById('lieuChargement').value = item.lieuChargement || '';
-        document.getElementById('lieuDechargement').value = item.lieuDechargement || '';
-        document.getElementById('observation').value = item.observation || '';
+        dateInput.value = item.date || '';
+        hEntreeInput.value = item.hEntree || '';
+        hSortieInput.value = item.hSortie || '';
+        transporteurSelect.value = item.transporteur || ''; // Set value for select
+        numeroBLInput.value = item.numeroBL || '';
+        immatInput.value = item.immat || '';
+        tbInput.value = item.tb ?? '';
+        tareInput.value = item.tare ?? '';
+        posteSelect.value = item.poste ?? ''; // Set value for select
+        netCosumarInput.value = item.netCosumar ?? '';
+        lieuChargementSelect.value = item.lieuChargement || ''; // Set value for select
+        lieuDechargementSelect.value = item.lieuDechargement || ''; // Set value for select
+        observationInput.value = item.observation || '';
 
         // Change form title and button for edit mode
-        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
-        const submitBtn = document.getElementById('submit-btn');
+        formSectionTitle.textContent = "Modifier l'entrée existante";
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
         submitBtn.style.backgroundColor = '#4A90E2'; // Blue color for update
         submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
         submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#357abd';
         submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#4A90E2';
+        cancelEditBtn.style.display = 'inline-flex'; // Show cancel button
 
         document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
     }
@@ -1385,7 +1505,7 @@
         if(!confirm('❗ Êtes-vous sûr de vouloir supprimer cette entrée ? Cette action est irréversible.')) {
             return;
         }
-        fetch(`${API_BASE_URL}/${id}`, {method:'DELETE'}) // Use API_BASE_URL (relative path)
+        fetch(`${API_BASE_URL}/${id}`, {method:'DELETE'})
             .then(async res => {
                 if (!res.ok) {
                     throw new Error((await res.text()) || 'Erreur de suppression.');
@@ -1400,7 +1520,8 @@
     }
 
     function exportExcel() {
-        window.open(`${API_BASE_URL}/export`, '_blank'); // Use API_BASE_URL (relative path)
+        window.open(`${API_BASE_URL}/export`, '_blank');
+        showMessage('Exportation Excel lancée...', 'success');
     }
 
     // Sidebar Toggle JavaScript - Reused logic
@@ -1408,9 +1529,6 @@
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const toggleIcon = sidebarToggle.querySelector('.fas');
-        const prevPageBtn = document.getElementById('prev-page');
-        const nextPageBtn = document.getElementById('next-page');
-        const monthFilterSelect = document.getElementById('monthFilter'); // Get month filter select
 
         // Check localStorage for the last sidebar state
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
@@ -1457,7 +1575,13 @@
         // Add event listener for month filter
         monthFilterSelect.addEventListener('change', applyFiltersAndSort);
 
-        // Initial load of table data when the DOM is ready
+        // Add event listener for cancel edit button
+        cancelEditBtn.addEventListener('click', clearForm);
+
+        // Initial load of table data and form clear when the DOM is ready
+        clearForm(); // Clear form and set default date
         loadTable();
     });
 </script>
+</body>
+</html>
