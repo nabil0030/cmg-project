@@ -709,7 +709,7 @@
                 <i class="fas fa-truck-loading"></i>
                 <a href="chauxVive.html"><span>Chaux Vive</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-truck-loading"></i>
                 <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
             </li>
@@ -742,12 +742,12 @@
 
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
 
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
+                <a href="synthese.html"><span> synthese </span></a>
 
             </li>
             <li class="nav-item">
@@ -775,74 +775,97 @@
 <div class="main-content">
     <h1 class="page-title">CHAUX VIVE - LAFARGE</h1>
 
-    <div class="form-section">
-        <div class="section-header">
-            <h2>Ajouter ou Modifier une entrée</h2>
-        </div>
-        <form id="chauxForm">
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" name="date" id="date" required>
-            </div>
-            <div class="form-group">
-                <label for="heureEntree">Heure Entrée</label>
-                <input type="time" name="heureEntree" id="heureEntree" required>
-            </div>
-            <div class="form-group">
-                <label for="heureSortie">Heure Sortie</label>
-                <input type="time" name="heureSortie" id="heureSortie" required>
-            </div>
-            <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" name="transporteur" id="transporteur" placeholder="Transporteur" required>
-            </div>
-            <div class="form-group">
-                <label for="numeroBL">N° BL</label>
-                <input type="text" name="numeroBL" id="numeroBL" placeholder="N° Bon de Livraison" required>
-            </div>
-            <div class="form-group">
-                <label for="immatricule">Immatricule</label>
-                <input type="text" name="immatricule" id="immatricule" placeholder="Immatriculation du Véhicule" required>
-            </div>
-            <div class="form-group">
-                <label for="tb">TB</label>
-                <input type="number" name="tb" id="tb" placeholder="Poids TB" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="tare">TARE</label>
-                <input type="number" name="tare" id="tare" placeholder="Poids TARE" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="netLafarge">Net LAFARGE</label>
-                <input type="number" name="netLafarge" id="netLafarge" placeholder="Net LAFARGE" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="poste">Poste</label>
-                <input type="number" name="poste" id="poste" placeholder="Poste" required>
-            </div>
-            <div class="form-group">
-                <label for="lieuChargement">Lieu Chargement</label>
-                <input type="text" name="lieuChargement" id="lieuChargement" value="LAFARGE" required readonly>
-            </div>
-            <div class="form-group">
-                <label for="lieuDechargement">Lieu Déchargement</label>
-                <input type="text" name="lieuDechargement" id="lieuDechargement" value="LAVERIE" required readonly>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="observation">Observation</label>
-                <input type="text" name="observation" id="observation" placeholder="Ajouter des observations supplémentaires...">
-            </div>
-
-            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit"><i class="fas fa-save"></i> Ajouter</button>
-            </div>
-        </form>
+    <div id="message"></div> <div class="form-section">
+    <div class="section-header">
+        <h2 id="form-section-title">Ajouter ou Modifier une entrée</h2>
     </div>
+    <form id="chauxForm">
+        <input type="hidden" id="entry-id"> <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" required>
+    </div>
+        <div class="form-group">
+            <label for="heureEntree">Heure Entrée</label>
+            <input type="time" name="heureEntree" id="heureEntree" required>
+        </div>
+        <div class="form-group">
+            <label for="heureSortie">Heure Sortie</label>
+            <input type="time" name="heureSortie" id="heureSortie" required>
+        </div>
+        <div class="form-group">
+            <label for="transporteur-select">Transporteur</label>
+            <select name="transporteur" id="transporteur-select" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="numeroBL">N° BL</label>
+            <input type="text" name="numeroBL" id="numeroBL" placeholder="N° Bon de Livraison" required>
+        </div>
+        <div class="form-group">
+            <label for="immatricule">Immatricule</label>
+            <input type="text" name="immatricule" id="immatricule" placeholder="Immatriculation du Véhicule" required>
+        </div>
+        <div class="form-group">
+            <label for="tb">TB</label>
+            <input type="number" name="tb" id="tb" placeholder="Poids TB" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="tare">TARE</label>
+            <input type="number" name="tare" id="tare" placeholder="Poids TARE" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="netLafarge">Net LAFARGE</label>
+            <input type="number" name="netLafarge" id="netLafarge" placeholder="Net LAFARGE" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="poste-select">Poste</label>
+            <select name="poste" id="poste-select" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lieuChargement">Lieu Chargement</label>
+            <input type="text" name="lieuChargement" id="lieuChargement" value="LAFARGE" required readonly>
+        </div>
+        <div class="form-group">
+            <label for="lieuDechargement">Lieu Déchargement</label>
+            <input type="text" name="lieuDechargement" id="lieuDechargement" value="LAVERIE" required readonly>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="observation">Observation</label>
+            <input type="text" name="observation" id="observation" placeholder="Ajouter des observations supplémentaires...">
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Ajouter</button>
+            <button type="button" id="cancel-edit-btn" style="display:none;">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+        </div>
+    </form>
+</div>
 
     <div class="table-section">
         <div class="section-header">
             <h2>Historique</h2>
             <div class="section-actions">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
+                    <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
+                        <option value="all">Tous les mois</option>
+                        <option value="1">Janvier</option>
+                        <option value="2">Février</option>
+                        <option value="3">Mars</option>
+                        <option value="4">Avril</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Juin</option>
+                        <option value="7">Juillet</option>
+                        <option value="8">Août</option>
+                        <option value="9">Septembre</option>
+                        <option value="10">Octobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Décembre</option>
+                    </select>
+                </div>
                 <button onclick="exporterExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
@@ -858,47 +881,285 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div class="pagination-controls" id="pagination-controls">
+            <button id="prev-page">&laquo; Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page">Suivant &raquo;</button>
+        </div>
     </div>
 </div>
 
 <script>
-    const apiUrl = '/api/chauxViveLafarge';
+    document.addEventListener("DOMContentLoaded", () => {
+        const API_BASE = 'http://localhost:8080/api';
+
+        const refConfig = {
+            "transporteur-select": { endpoint: "transporteurs", key: "nom" },
+            "poste-select": { endpoint: "postes", key: "nom" }
+        };
+
+        function fillSelect(selectId, values, valueKey) {
+            const select = document.getElementById(selectId);
+            if (!select) {
+                console.warn(`⚠️ Select element with ID '${selectId}' not found.`);
+                return;
+            }
+            select.innerHTML = "";
+
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = `Sélectionner un ${selectId.replace('-select', '').replace('-', ' ')}`;
+            select.appendChild(defaultOption);
+
+            values.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item[valueKey];
+                option.textContent = item[valueKey];
+                select.appendChild(option);
+            });
+        }
+
+        async function loadAllRefs() {
+            const fetchPromises = Object.entries(refConfig).map(([selectId, config]) => {
+                return fetch(`${API_BASE}/${config.endpoint}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! status: ${res.status} for ${config.endpoint}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => ({ selectId, data, valueKey: config.key }))
+                    .catch(error => {
+                        console.error(`⚠️ Failed to load data for ${config.endpoint}:`, error);
+                        return { selectId, data: [], valueKey: config.key, error: true };
+                    });
+            });
+
+            const results = await Promise.all(fetchPromises);
+            const messageDiv = document.getElementById('message');
+
+            results.forEach(result => {
+                if (!result.error) {
+                    fillSelect(result.selectId, result.data, result.valueKey);
+                } else {
+                    messageDiv.innerHTML += `<div class="alert error">
+                            <i class="fas fa-exclamation-circle"></i> Échec du chargement des options pour ${result.selectId.replace('-select', '').replace('-', ' ')}.
+                        </div>`;
+                    messageDiv.style.display = 'block';
+                    setTimeout(()=> messageDiv.style.display = 'none', 5000);
+                }
+            });
+        }
+
+        loadAllRefs();
+    });
+</script>
+
+<script>
+    const apiUrl = 'http://localhost:8080/api/chauxViveLafarge';
     let editingId = null;
 
-    // Utility to format date for display
+    // Pagination & Filter Variables
+    let rawAllTableData = []; // Stores ALL data fetched from the backend, unfiltered
+    let filteredAndSortedData = []; // Stores data after filtering and sorting, used for pagination
+    let currentPage = 1;
+    const rowsPerPage = 10; // Number of rows per page
+
+    // Get form elements
+    const chauxForm = document.getElementById('chauxForm');
+    const entryIdInput = document.getElementById('entry-id');
+    const dateInput = document.getElementById('date');
+    const heureEntreeInput = document.getElementById('heureEntree');
+    const heureSortieInput = document.getElementById('heureSortie');
+    const transporteurSelect = document.getElementById('transporteur-select');
+    const numeroBLInput = document.getElementById('numeroBL');
+    const immatriculeInput = document.getElementById('immatricule');
+    const tbInput = document.getElementById('tb');
+    const tareInput = document.getElementById('tare');
+    const netLafargeInput = document.getElementById('netLafarge');
+    const posteSelect = document.getElementById('poste-select');
+    const lieuChargementInput = document.getElementById('lieuChargement');
+    const lieuDechargementInput = document.getElementById('lieuDechargement');
+    const observationInput = document.getElementById('observation');
+    const submitBtn = document.getElementById('submit-btn');
+    const formSectionTitle = document.getElementById('form-section-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const tableBody = document.querySelector("#chauxTable tbody");
+    const messageDiv = document.getElementById('message');
+
+    // Pagination & Filter Elements
+    const monthFilterSelect = document.getElementById('monthFilter');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
+
+
+    function showMessage(msg, type){
+        messageDiv.innerHTML = `<div class="alert ${type}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}
+            </div>`;
+        messageDiv.style.display = 'block';
+        setTimeout(()=> {
+            messageDiv.style.display = 'none';
+            messageDiv.innerHTML = '';
+        }, 5000);
+    }
+
     function formatDateForDisplay(isoDate) {
         if (!isoDate) return '';
         const [year, month, day] = isoDate.split('-');
-        return `${day}/${month}/${year}`; // Format DD/MM/YYYY for display
+        return `${day}/${month}/${year}`;
     }
 
-    document.getElementById('chauxForm').addEventListener('submit', async function(e) {
+    function clearForm() {
+        editingId = null;
+        chauxForm.reset();
+        formSectionTitle.textContent = 'Ajouter ou Modifier une entrée';
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
+        submitBtn.style.backgroundColor = 'var(--primary-color)';
+        submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+        submitBtn.onmouseover = null;
+        submitBtn.onmouseout = null;
+        cancelEditBtn.style.display = 'none';
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+
+        if(transporteurSelect) transporteurSelect.value = "";
+        if(posteSelect) posteSelect.value = "";
+    }
+
+    // Applies filters and sorting to raw data, then updates filteredAndSortedData
+    function applyFiltersAndSort() {
+        let dataToProcess = [...rawAllTableData];
+
+        // Filter by month if a month is selected
+        const monthValue = monthFilterSelect.value;
+        if (monthValue && monthValue !== 'all') {
+            const selectedMonth = parseInt(monthValue, 10) - 1; // 0 = January
+            dataToProcess = dataToProcess.filter(e => {
+                const d = new Date(e.date);
+                if (isNaN(d)) return false;
+                return d.getMonth() === selectedMonth;
+            });
+        }
+
+        // Sort by date (descending - most recent first)
+        filteredAndSortedData = dataToProcess.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        currentPage = 1; // Reset to first page after applying filters
+        displayTablePage(currentPage);
+    }
+
+    async function loadData() {
+        tableBody.innerHTML = `<tr><td colspan="16" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`;
+
+        try {
+            const res = await fetch(apiUrl);
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            rawAllTableData = await res.json(); // Store raw data
+            applyFiltersAndSort(); // Filter, sort and display
+        } catch (error) {
+            console.error("Erreur lors du chargement des données:", error);
+            tableBody.innerHTML = `<tr><td colspan="16" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
+            showMessage(`❌ Erreur de chargement des données: ${error.message}`, 'error');
+        }
+    }
+
+    // Function to display data for the current page
+    function displayTablePage(page) {
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        else if (totalPages === 0) currentPage = 0;
+
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const paginatedData = filteredAndSortedData.slice(startIndex, endIndex);
+
+        if (!Array.isArray(paginatedData) || paginatedData.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `<td colspan="16" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée pour cette page.</td>`;
+            tableBody.appendChild(noDataRow);
+        } else {
+            paginatedData.forEach(entry => {
+                const netCmgCalculated = (parseFloat(entry.tb) - parseFloat(entry.tare)).toFixed(2);
+                const ecartCalculated = (parseFloat(netCmgCalculated) - parseFloat(entry.netLafarge)).toFixed(2);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                        <td>${formatDateForDisplay(entry.date)}</td>
+                        <td>${entry.heureEntree ? entry.heureEntree.substring(0, 5) : "—"}</td>
+                        <td>${entry.heureSortie ? entry.heureSortie.substring(0, 5) : "—"}</td>
+                        <td>${entry.transporteur || '—'}</td>
+                        <td>${entry.numeroBL || '—'}</td>
+                        <td>${entry.immatricule || '—'}</td>
+                        <td>${parseFloat(entry.tb).toFixed(2)}</td>
+                        <td>${parseFloat(entry.tare).toFixed(2)}</td>
+                        <td>${netCmgCalculated}</td>
+                        <td>${entry.poste || '—'}</td>
+                        <td>${parseFloat(entry.netLafarge).toFixed(2)}</td>
+                        <td>${ecartCalculated}</td>
+                        <td>${entry.lieuChargement || '—'}</td>
+                        <td>${entry.lieuDechargement || '—'}</td>
+                        <td>${entry.observation || '—'}</td>
+                        <td class="table-actions">
+                            <button onclick="editRow(${entry.id})"><i class="fas fa-edit"></i> </button>
+                            <button class="delete-btn" onclick="deleteRow(${entry.id})"><i class="fas fa-trash-alt"></i> </button>
+                        </td>`;
+                tableBody.appendChild(row);
+            });
+        }
+        setupPagination(); // Update pagination controls
+    }
+
+    // Function to set up and update pagination controls
+    function setupPagination() {
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        pageInfoSpan.textContent = `Page ${currentPage > 0 ? currentPage : 0} / ${totalPages > 0 ? totalPages : 0}`;
+
+        prevPageBtn.disabled = currentPage <= 1 || totalPages === 0;
+        nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+    }
+
+
+    chauxForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const form = e.target;
-        const tb = parseFloat(form.tb.value);
-        const tare = parseFloat(form.tare.value);
+
+        const tb = parseFloat(tbInput.value);
+        const tare = parseFloat(tareInput.value);
+        const netLafarge = parseFloat(netLafargeInput.value);
+
         const netCmg = tb - tare;
-        const netLafarge = parseFloat(form.netLafarge.value);
         const ecart = netCmg - netLafarge;
 
         const data = {
-            date: form.date.value,
-            heureEntree: form.heureEntree.value,
-            heureSortie: form.heureSortie.value,
-            transporteur: form.transporteur.value,
-            numeroBL: form.numeroBL.value,
-            immatricule: form.immatricule.value,
-            tb, tare,
-            netCmg: parseFloat(netCmg.toFixed(2)), // Ensure consistent precision
-            netLafarge,
-            ecart: parseFloat(ecart.toFixed(2)), // Ensure consistent precision
-            poste: parseInt(form.poste.value),
-            lieuChargement: form.lieuChargement.value,
-            lieuDechargement: form.lieuDechargement.value,
-            observation: form.observation.value
+            date: dateInput.value,
+            heureEntree: heureEntreeInput.value,
+            heureSortie: heureSortieInput.value,
+            transporteur: transporteurSelect.value,
+            numeroBL: numeroBLInput.value,
+            immatricule: immatriculeInput.value,
+            tb: parseFloat(tb.toFixed(2)),
+            tare: parseFloat(tare.toFixed(2)),
+            netCmg: parseFloat(netCmg.toFixed(2)),
+            netLafarge: parseFloat(netLafarge.toFixed(2)),
+            ecart: parseFloat(ecart.toFixed(2)),
+            poste: posteSelect.value,
+            lieuChargement: lieuChargementInput.value,
+            lieuDechargement: lieuDechargementInput.value,
+            observation: observationInput.value
         };
 
-        const submitButton = form.querySelector("button[type=submit]");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...';
 
         try {
             let res;
@@ -909,13 +1170,12 @@
                     body: JSON.stringify(data)
                 });
                 if (res.status === 409) {
-                    alert("❌ Doublon détecté ! L'entrée avec le même N° BL ou Immatricule existe déjà.");
+                    showMessage("❌ Doublon détecté ! L'entrée avec le même N° BL ou Immatricule existe déjà.", 'error');
                     return;
                 }
                 if (!res.ok) throw new Error("Erreur lors de l'ajout.");
-                alert('✅ Ajouté avec succès.');
+                showMessage('✅ Ajouté avec succès.', 'success');
             } else {
-                // For update, include the ID in the data object
                 data.id = editingId;
                 res = await fetch(apiUrl + '/update', {
                     method: 'PUT',
@@ -923,164 +1183,136 @@
                     body: JSON.stringify(data)
                 });
                 if (!res.ok) throw new Error("Erreur lors de la mise à jour.");
-                alert('✅ Mis à jour avec succès.');
+                showMessage('✅ Mis à jour avec succès.', 'success');
             }
         } catch (error) {
             console.error('Operation failed:', error);
-            alert(`❌ Une erreur est survenue: ${error.message}`);
-            return; // Stop execution if there's an error
+            showMessage(`❌ Une erreur est survenue: ${error.message}`, 'error');
+            return;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
+            submitBtn.style.backgroundColor = 'var(--primary-color)';
         }
 
-        form.reset();
-        editingId = null;
-        submitButton.innerHTML = '<i class="fas fa-save"></i> Ajouter';
-        submitButton.style.backgroundColor = 'var(--primary-color)';
-        submitButton.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+        clearForm();
         loadData();
     });
 
-    async function loadData() {
-        try {
-            const res = await fetch(apiUrl);
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            const entries = await res.json();
-            const tbody = document.querySelector("#chauxTable tbody");
-            tbody.innerHTML = "";
-
-            // Sort by date DESC
-            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            let totalNetCmg = 0;
-
-            if (entries.length === 0) {
-                const noDataRow = document.createElement('tr');
-                noDataRow.innerHTML = `<td colspan="16" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée.</td>`;
-                tbody.appendChild(noDataRow);
-                return;
-            }
-
-            entries.forEach(entry => {
-                const netCmgCalculated = (entry.tb - entry.tare).toFixed(2);
-                const ecartCalculated = (netCmgCalculated - entry.netLafarge).toFixed(2);
-                totalNetCmg += parseFloat(netCmgCalculated) || 0;
-
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${formatDateForDisplay(entry.date)}</td>
-                    <td>${entry.heureEntree ? entry.heureEntree.substring(0, 5) : "—"}</td>
-                    <td>${entry.heureSortie ? entry.heureSortie.substring(0, 5) : "—"}</td>
-                    <td>${entry.transporteur || '—'}</td>
-                    <td>${entry.numeroBL || '—'}</td>
-                    <td>${entry.immatricule || '—'}</td>
-                    <td>${parseFloat(entry.tb).toFixed(2)}</td>
-                    <td>${parseFloat(entry.tare).toFixed(2)}</td>
-                    <td>${netCmgCalculated}</td>
-                    <td>${entry.poste || '—'}</td>
-                    <td>${parseFloat(entry.netLafarge).toFixed(2)}</td>
-                    <td>${ecartCalculated}</td>
-                    <td>${entry.lieuChargement || '—'}</td>
-                    <td>${entry.lieuDechargement || '—'}</td>
-                    <td>${entry.observation || '—'}</td>
-                    <td class="table-actions">
-                        <button onclick="editRow(${entry.id})"><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="delete-btn" onclick="deleteRow(${entry.id})"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                    </td>`;
-                tbody.appendChild(row);
-            });
-
-            const totalRow = document.createElement('tr');
-            totalRow.classList.add('total-row');
-            totalRow.innerHTML = `
-                <td colspan="8" style="text-align: right; padding-right: 20px;">TOTAL NET CMG:</td>
-                <td><strong>${totalNetCmg.toFixed(2)}</strong></td>
-                <td colspan="7"></td>
-            `;
-            tbody.appendChild(totalRow);
-
-        } catch (error) {
-            console.error("Erreur lors du chargement des données:", error);
-            const tbody = document.querySelector("#chauxTable tbody");
-            tbody.innerHTML = `<tr><td colspan="16" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
-        }
-    }
-
     async function deleteRow(id) {
-        if (confirm("❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.")) {
-            try {
-                const res = await fetch(apiUrl + "/delete/" + id, { method: "DELETE" });
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-                alert('✅ Supprimé avec succès.');
-                loadData();
-            } catch (error) {
-                console.error("Erreur lors de la suppression:", error);
-                alert('❌ Impossible de supprimer l\'entrée.');
-            }
+        if (!confirm('❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.')) {
+            return;
+        }
+        try {
+            const res = await fetch(`${apiUrl}/delete/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            showMessage('✅ Supprimé avec succès.', 'success');
+            loadData();
+        } catch (error) {
+            console.error("Erreur lors de la suppression:", error);
+            showMessage(`❌ Impossible de supprimer l'entrée: ${error.message}`, 'error');
         }
     }
 
     async function editRow(id) {
         try {
+            // Fetch all data and find the specific entry for editing
             const res = await fetch(apiUrl);
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const entries = await res.json();
             const entry = entries.find(e => e.id === id);
 
             if (!entry) {
-                alert("Entrée non trouvée.");
+                showMessage("Entrée non trouvée.", 'error');
                 return;
             }
 
-            const form = document.getElementById('chauxForm');
-            form.date.value = entry.date || '';
-            form.heureEntree.value = entry.heureEntree ? entry.heureEntree.substring(0, 5) : '';
-            form.heureSortie.value = entry.heureSortie ? entry.heureSortie.substring(0, 5) : '';
-            form.transporteur.value = entry.transporteur || '';
-            form.numeroBL.value = entry.numeroBL || '';
-            form.immatricule.value = entry.immatricule || '';
-            form.tb.value = entry.tb || '';
-            form.tare.value = entry.tare || '';
-            form.netLafarge.value = entry.netLafarge || '';
-            form.poste.value = entry.poste || '';
-            form.lieuChargement.value = entry.lieuChargement || '';
-            form.lieuDechargement.value = entry.lieuDechargement || '';
-            form.observation.value = entry.observation || '';
-
             editingId = entry.id;
-            const submitButton = form.querySelector("button[type=submit]");
-            submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-            submitButton.style.backgroundColor = '#F39C12'; // Orange for update
-            submitButton.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+            dateInput.value = entry.date || '';
+            heureEntreeInput.value = entry.heureEntree ? entry.heureEntree.substring(0, 5) : '';
+            heureSortieInput.value = entry.heureSortie ? entry.heureSortie.substring(0, 5) : '';
+            transporteurSelect.value = entry.transporteur || '';
+            numeroBLInput.value = entry.numeroBL || '';
+            immatriculeInput.value = entry.immatricule || '';
+            tbInput.value = entry.tb ?? '';
+            tareInput.value = entry.tare ?? '';
+            netLafargeInput.value = entry.netLafarge ?? '';
+            posteSelect.value = entry.poste || '';
+            lieuChargementInput.value = entry.lieuChargement || '';
+            lieuDechargementInput.value = entry.lieuDechargement || '';
+            observationInput.value = entry.observation || '';
+
+            formSectionTitle.textContent = "Modifier l'entrée existante";
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+            submitBtn.style.backgroundColor = '#F39C12';
+            submitBtn.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+            submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E08E0B';
+            submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#F39C12';
+            cancelEditBtn.style.display = 'inline-flex';
+
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
 
         } catch (error) {
             console.error("Erreur lors de la récupération des données pour modification:", error);
-            alert("❌ Impossible de charger l'entrée pour modification.");
+            showMessage(`❌ Impossible de charger l'entrée pour modification: ${error.message}`, 'error');
         }
     }
 
     function exporterExcel() {
-        window.location.href = '/api/chauxViveLafarge/export';
+        window.location.href = `${apiUrl}/export`;
+        showMessage('Exportation Excel lancée...', 'success');
     }
 
-    // Sidebar toggle functionality
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
+        const toggleIcon = sidebarToggle.querySelector('.fas');
 
-        // Check local storage for preferred state
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
+            toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+        } else {
+            sidebar.classList.remove('collapsed');
+            toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
         }
 
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             const currentState = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentState); // Save state to local storage
+            localStorage.setItem('sidebarCollapsed', currentState);
+
+            if (currentState) {
+                toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
         });
+
+        // Add event listeners for pagination buttons
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTablePage(currentPage);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayTablePage(currentPage);
+            }
+        });
+
+        // Add event listener for month filter
+        monthFilterSelect.addEventListener('change', applyFiltersAndSort);
+
+        cancelEditBtn.addEventListener('click', clearForm);
+
+        // Initial load
+        clearForm();
+        loadData();
     });
-
-    window.onload = loadData;
 </script>
-
 </body>
-</html>
