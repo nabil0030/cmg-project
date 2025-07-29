@@ -685,7 +685,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -717,7 +717,7 @@
                 <i class="fas fa-truck-loading"></i>
                 <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-truck-loading"></i>
                 <a href="expZincOncf.html"><span>Exp Zinc Oncf</span></a>
 
@@ -742,12 +742,12 @@
 
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
 
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
+                <a href="synthese.html"><span> synthese </span></a>
 
             </li>
             <li class="nav-item">
@@ -775,66 +775,70 @@
 <div class="main-content">
     <h1 class="page-title">EXP ZINC ONCF</h1>
 
+    <div id="message"></div>
     <div class="form-section">
         <div class="section-header">
-            <h2>Ajouter ou Modifier une entrée</h2>
+            <h2 id="form-section-title">Ajouter ou Modifier une entrée</h2>
         </div>
         <form id="expzinc-form">
+            <input type="hidden" id="entry-id">
             <div class="form-group">
                 <label for="date">Date</label>
-                <input type="date" id="date" required />
+                <input type="date" name="date" id="date" required />
             </div>
             <div class="form-group">
                 <label for="heureEntree">Heure Entrée</label>
-                <input type="time" id="heureEntree" required />
+                <input type="time" name="heureEntree" id="heureEntree" required />
             </div>
             <div class="form-group">
                 <label for="heureSortie">Heure Sortie</label>
-                <input type="time" id="heureSortie" required />
+                <input type="time" name="heureSortie" id="heureSortie" required />
             </div>
             <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" id="transporteur" placeholder="Nom du Transporteur" required />
+                <label for="transporteur-select">Transporteur</label>
+                <select name="transporteur" id="transporteur-select" required></select>
             </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
-                <input type="text" id="numeroBL" placeholder="Numéro Bon de Livraison" required />
+                <input type="text" name="numeroBL" id="numeroBL" placeholder="Numéro Bon de Livraison" required />
             </div>
             <div class="form-group">
                 <label for="matricule">Matricule</label>
-                <input type="text" id="matricule" placeholder="Immatriculation Véhicule" required />
+                <input type="text" name="matricule" id="matricule" placeholder="Immatriculation Véhicule" required />
             </div>
             <div class="form-group">
                 <label for="tb">TB</label>
-                <input type="number" step="0.01" id="tb" placeholder="Poids TB" required />
+                <input type="number" name="tb" step="0.01" id="tb" placeholder="Poids TB" required />
             </div>
             <div class="form-group">
                 <label for="tare">TARE</label>
-                <input type="number" step="0.01" id="tare" placeholder="Poids TARE" required />
+                <input type="number" name="tare" step="0.01" id="tare" placeholder="Poids TARE" required />
+            </div>
+            <div class="form-group">
+                <label for="tnh">TN H</label>
+                <input type="number" id="tnh" readonly placeholder="Calculé automatiquement (TB - TARE)">
             </div>
             <div class="form-group">
                 <label for="numeroContenaire">N° Contenaire</label>
-                <input type="text" id="numeroContenaire" placeholder="Numéro de Contenaire" required />
+                <input type="text" name="numeroContenaire" id="numeroContenaire" placeholder="Numéro de Contenaire" required />
             </div>
             <div class="form-group">
-                <label for="poste">Poste</label>
-                <select id="poste" required>
-                    <option value="">-- Sélectionner Poste --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+                <label for="poste-select">Poste</label>
+                <select name="poste" id="poste-select" required></select>
             </div>
             <div class="form-group">
-                <label for="lieuDechargement">Lieu de déchargement</label>
-                <input type="text" id="lieuDechargement" value="ONCF" required readonly />
+                <label for="lieu-dechargement-select">Lieu de déchargement</label>
+                <select name="lieuDeDechargement" id="lieu-dechargement-select" required></select>
             </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label for="observation">Observation</label>
-                <textarea id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
+                <textarea name="observation" id="observation" placeholder="Ajouter des observations supplémentaires..."></textarea>
             </div>
-            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
-                <button type="submit"><i class="fas fa-save"></i> Enregistrer</button>
+            <div class="form-buttons">
+                <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Enregistrer</button>
+                <button type="button" id="cancel-edit-btn" style="display:none;">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
             </div>
         </form>
     </div>
@@ -843,11 +847,29 @@
         <div class="section-header">
             <h2>Historique</h2>
             <div class="section-actions">
-                <button onclick="exporterExcel() "><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
+                    <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
+                        <option value="all">Tous les mois</option>
+                        <option value="1">Janvier</option>
+                        <option value="2">Février</option>
+                        <option value="3">Mars</option>
+                        <option value="4">Avril</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Juin</option>
+                        <option value="7">Juillet</option>
+                        <option value="8">Août</option>
+                        <option value="9">Septembre</option>
+                        <option value="10">Octobre</option>
+                        <option value="11">Novembre</option>
+                        <option value="12">Décembre</option>
+                    </select>
+                </div>
+                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
-            <table>
+            <table id="expzinc-table">
                 <thead>
                 <tr>
                     <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th>
@@ -858,218 +880,390 @@
                 <tbody id="data-body"></tbody>
             </table>
         </div>
+        <div class="pagination-controls" id="pagination-controls">
+            <button id="prev-page">&laquo; Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page">Suivant &raquo;</button>
+        </div>
     </div>
 </div>
 
 <script>
-    let currentId = null;
+    const API_BASE_URL = 'http://localhost:8080/api/expzinconcf';
 
-    // Utility to format date for display
+    let editingId = null;
+    let rawAllTableData = [];
+    let filteredAndSortedData = [];
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    const expzincForm = document.getElementById('expzinc-form');
+    const entryIdInput = document.getElementById('entry-id');
+    const dateInput = document.getElementById('date');
+    const heureEntreeInput = document.getElementById('heureEntree');
+    const heureSortieInput = document.getElementById('heureSortie');
+    const transporteurSelect = document.getElementById('transporteur-select');
+    const numeroBLInput = document.getElementById('numeroBL');
+    const matriculeInput = document.getElementById('matricule');
+    const tbInput = document.getElementById('tb');
+    const tareInput = document.getElementById('tare');
+    const tnhInput = document.getElementById('tnh');
+    const numeroContenaireInput = document.getElementById('numeroContenaire');
+    const posteSelect = document.getElementById('poste-select');
+    const lieuDechargementSelect = document.getElementById('lieu-dechargement-select');
+    const observationInput = document.getElementById('observation');
+    const submitBtn = document.getElementById('submit-btn');
+    const formSectionTitle = document.getElementById('form-section-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const tableBody = document.getElementById('data-body');
+    const messageDiv = document.getElementById('message');
+
+    const monthFilterSelect = document.getElementById('monthFilter');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
+
+    function calculateTNH() {
+        const tb = parseFloat(tbInput.value) || 0;
+        const tare = parseFloat(tareInput.value) || 0;
+        tnhInput.value = (tb - tare).toFixed(2);
+    }
+
+    tbInput.addEventListener('input', calculateTNH);
+    tareInput.addEventListener('input', calculateTNH);
+
+    function showMessage(msg, type) {
+        messageDiv.innerHTML = `<div class="alert ${type}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}
+            </div>`;
+        messageDiv.style.display = 'block';
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+            messageDiv.innerHTML = '';
+        }, 5000);
+    }
+
     function formatDateForDisplay(isoDate) {
         if (!isoDate) return '';
         const [year, month, day] = isoDate.split('-');
-        return `${day}/${month}/${year}`; // Format DD/MM/YYYY for display
+        return `${day}/${month}/${year}`;
     }
 
-    document.getElementById('expzinc-form').addEventListener('submit', function (e) {
+    function clearForm() {
+        editingId = null;
+        expzincForm.reset();
+        formSectionTitle.textContent = 'Ajouter ou Modifier une entrée';
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+        submitBtn.style.backgroundColor = 'var(--primary-color)';
+        submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
+        submitBtn.onmouseover = null;
+        submitBtn.onmouseout = null;
+        cancelEditBtn.style.display = 'none';
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+
+        if (transporteurSelect) transporteurSelect.value = "";
+        if (posteSelect) posteSelect.value = "";
+        if (lieuDechargementSelect) lieuDechargementSelect.value = "";
+        tnhInput.value = "";
+        numeroContenaireInput.value = "";
+    }
+
+    async function loadAllRefs() {
+        try {
+            const response = await fetch('http://localhost:8080/api/refs');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            fillSelect("transporteur-select", data.transporteurs);
+            fillSelect("poste-select", data.postes);
+            fillSelect("lieu-dechargement-select", data.lieuxDeDechargement);
+        } catch (error) {
+            console.warn("⚠️ Échec du chargement des références :", error);
+            showMessage("Échec du chargement des options de référence.", 'error');
+        }
+    }
+
+    function fillSelect(selectId, items) {
+        const select = document.getElementById(selectId);
+        if (!select) {
+            console.warn(`⚠️ Select element with ID '${selectId}' not found.`);
+            return;
+        }
+        select.innerHTML = '<option value="">-- Choisir --</option>';
+        items.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item;
+            opt.textContent = item;
+            select.appendChild(opt);
+        });
+    }
+
+    function applyFiltersAndSort() {
+        let dataToProcess = [...rawAllTableData];
+
+        const monthValue = monthFilterSelect.value;
+        if (monthValue && monthValue !== 'all') {
+            const selectedMonth = parseInt(monthValue, 10) - 1;
+            dataToProcess = dataToProcess.filter(e => {
+                const d = new Date(e.date);
+                if (isNaN(d)) return false;
+                return d.getMonth() === selectedMonth;
+            });
+        }
+
+        filteredAndSortedData = dataToProcess.sort(
+            (a, b) => new Date(b.date) - new Date(a.date)
+        );
+
+        currentPage = 1;
+        displayTablePage(currentPage);
+    }
+
+    async function loadTable() {
+        tableBody.innerHTML = `<tr><td colspan="14" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`;
+        try {
+            const res = await fetch(API_BASE_URL);
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            rawAllTableData = await res.json();
+            applyFiltersAndSort();
+        } catch (error) {
+            console.error("Erreur lors du chargement des données:", error);
+            tableBody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
+            showMessage(`❌ Erreur de chargement des données: ${error.message}`, 'error');
+        }
+    }
+
+    function displayTablePage(page) {
+        tableBody.innerHTML = '';
+
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        else if (totalPages === 0) currentPage = 0;
+
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const paginatedData = filteredAndSortedData.slice(startIndex, endIndex);
+
+        let totalTNH = 0;
+
+        if (!Array.isArray(paginatedData) || paginatedData.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `<td colspan="14" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée pour cette page.</td>`;
+            tableBody.appendChild(noDataRow);
+        } else {
+            paginatedData.forEach(item => {
+                const tnHCalculated = (parseFloat(item.tb) - parseFloat(item.tare)).toFixed(2);
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                        <td>${formatDateForDisplay(item.date)}</td>
+                        <td>${item.heureEntree ? item.heureEntree.substring(0, 5) : "—"}</td>
+                        <td>${item.heureSortie ? item.heureSortie.substring(0, 5) : "—"}</td>
+                        <td>${item.transporteur || '—'}</td>
+                        <td>${item.numeroBL || '—'}</td>
+                        <td>${item.matricule || '—'}</td>
+                        <td>${parseFloat(item.tb).toFixed(2)}</td>
+                        <td>${parseFloat(item.tare).toFixed(2)}</td>
+                        <td>${tnHCalculated}</td>
+                        <td>${item.numeroContenaire || '—'}</td>
+                        <td>${item.poste || '—'}</td>
+                        <td>${item.lieuDeDechargement || '—'}</td>
+                        <td class="observation-cell">${item.observation || '—'}</td>
+                        <td class="table-actions">
+                            <button onclick="editEntry(${item.id})"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteEntry(${item.id})"><i class="fas fa-trash-alt"></i></button>
+                        </td>`;
+                tableBody.appendChild(row);
+                totalTNH += parseFloat(tnHCalculated) || 0;
+            });
+        }
+
+        // Display total row if there is data
+        if (filteredAndSortedData.length > 0) {
+            const totalRow = document.createElement("tr");
+            totalRow.classList.add('total-row');
+            // Calculate total TN H for all filtered data, not just the current page
+            const totalTNHAllFiltered = filteredAndSortedData.reduce((sum, item) => sum + (parseFloat(item.tb) - parseFloat(item.tare)), 0);
+
+            totalRow.innerHTML = `
+                <td colspan="8" style="text-align: right; padding-right: 20px;">TOTAL (TN H):</td>
+                <td><strong>${totalTNHAllFiltered.toFixed(2)}</strong></td>
+                <td colspan="5"></td>`;
+            tableBody.appendChild(totalRow);
+        }
+
+        setupPagination();
+    }
+
+    function setupPagination() {
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        pageInfoSpan.textContent = `Page ${currentPage > 0 ? currentPage : 0} / ${totalPages > 0 ? totalPages : 0}`;
+
+        prevPageBtn.disabled = currentPage <= 1 || totalPages === 0;
+        nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+    }
+
+    expzincForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         function formatTime(value) {
             return value && value.length === 5 ? value + ":00" : value;
         }
 
-        const tbValue = parseFloat(document.getElementById('tb').value);
-        const tareValue = parseFloat(document.getElementById('tare').value);
-        const tnH = (tbValue - tareValue).toFixed(2);
+        const tbValue = parseFloat(tbInput.value);
+        const tareValue = parseFloat(tareInput.value);
+        const tnHCalculated = tbValue - tareValue;
 
-        const formData = {
-            date: document.getElementById('date').value,
-            heureEntree: formatTime(document.getElementById('heureEntree').value),
-            heureSortie: formatTime(document.getElementById('heureSortie').value),
-            transporteur: document.getElementById('transporteur').value,
-            numeroBL: document.getElementById('numeroBL').value,
-            matricule: document.getElementById('matricule').value,
-            tb: tbValue,
-            tare: tareValue,
-            tnH: parseFloat(tnH), // Store calculated TNH
-            numeroContenaire: document.getElementById('numeroContenaire').value,
-            poste: parseInt(document.getElementById('poste').value),
-            lieuDeDechargement: document.getElementById('lieuDechargement').value,
-            observation: document.getElementById('observation').value
+        const data = {
+            date: dateInput.value,
+            heureEntree: formatTime(heureEntreeInput.value),
+            heureSortie: formatTime(heureSortieInput.value),
+            transporteur: transporteurSelect.value,
+            numeroBL: numeroBLInput.value,
+            matricule: matriculeInput.value,
+            tb: parseFloat(tbValue.toFixed(2)),
+            tare: parseFloat(tareValue.toFixed(2)),
+            tnH: parseFloat(tnHCalculated.toFixed(2)),
+            numeroContenaire: numeroContenaireInput.value,
+            poste: posteSelect.value,
+            lieuDeDechargement: lieuDechargementSelect.value,
+            observation: observationInput.value
         };
 
-        const url = currentId ? `/api/expzinconcf/${currentId}` : "/api/expzinconcf";
-        const method = currentId ? "PUT" : "POST";
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...';
 
-        fetch(url, {
-            method: method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        }).then(response => {
-            if (response.status === 409) {
-                alert("❌ Doublon détecté ! L'entrée avec le même N° BL ou N° Contenaire existe déjà.");
-                return;
-            }
-            if (!response.ok) {
-                return response.text().then(text => { throw new Error(text || 'Erreur réseau ou du serveur.'); });
-            }
-            return response.json();
-        }).then(() => {
-            alert(currentId ? '✅ Modifié avec succès.' : '✅ Enregistré avec succès.');
-            loadTable();
-            document.getElementById('expzinc-form').reset();
-            currentId = null;
-            const submitButton = document.querySelector('#expzinc-form button[type="submit"]');
-            submitButton.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
-            submitButton.style.backgroundColor = 'var(--primary-color)';
-            submitButton.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
-        }).catch(error => {
-            console.error('Error:', error);
-            alert(`❌ Une erreur est survenue: ${error.message}`);
-        });
-    });
-
-    function loadTable() {
-        fetch("/api/expzinconcf")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.getElementById("data-body");
-                tbody.innerHTML = '';
-                let totalTNH = 0;
-
-                // Sort by date DESC
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                if (data.length === 0) {
-                    const noDataRow = document.createElement('tr');
-                    noDataRow.innerHTML = `<td colspan="14" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée.</td>`;
-                    tbody.appendChild(noDataRow);
+        try {
+            let res;
+            if (editingId === null) {
+                res = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                if (res.status === 409) {
+                    showMessage("❌ Doublon détecté ! L'entrée avec le même N° BL ou N° Contenaire existe déjà.", 'error');
                     return;
                 }
-
-                data.forEach(item => {
-                    const tnH = (item.tb - item.tare).toFixed(2); // Recalculate for display if not provided in item
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${formatDateForDisplay(item.date)}</td>
-                        <td>${item.heureEntree}</td>
-                        <td>${item.heureSortie}</td>
-                        <td>${item.transporteur}</td>
-                        <td>${item.numeroBL}</td>
-                        <td>${item.matricule}</td>
-                        <td>${item.tb}</td>
-                        <td>${item.tare}</td>
-                        <td>${tnH}</td>
-                        <td>${item.numeroContenaire}</td>
-                        <td>${item.poste}</td>
-                        <td>${item.lieuDeDechargement || '-'}</td>
-                        <td>${item.observation || '-'}</td>
-                        <td class="table-actions">
-                            <button onclick="editEntry(${item.id})"><i class="fas fa-edit"></i> Modifier</button>
-                            <button class="delete-btn" onclick="deleteEntry(${item.id})"><i class="fas fa-trash-alt"></i> Supprimer</button>
-                        </td>`;
-                    tbody.appendChild(row);
-                    totalTNH += parseFloat(tnH) || 0;
+                if (!res.ok) throw new Error("Erreur lors de l'ajout.");
+                showMessage('✅ Enregistré avec succès.', 'success');
+            } else {
+                data.id = editingId;
+                res = await fetch(`${API_BASE_URL}/${editingId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
                 });
-
-                const totalRow = document.createElement("tr");
-                totalRow.classList.add('total-row');
-                totalRow.innerHTML = `
-                    <td colspan="8" style="text-align: right; padding-right: 20px;">TOTAL:</td>
-                    <td><strong>${totalTNH.toFixed(2)}</strong></td>
-                    <td colspan="5"></td>`;
-                tbody.appendChild(totalRow);
-            })
-            .catch(error => {
-                console.error("Erreur lors du chargement des données:", error);
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
-            });
-    }
-
-    function editEntry(id) {
-        fetch(`/api/expzinconcf/${id}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(item => {
-                currentId = item.id;
-                document.getElementById('date').value = item.date;
-                document.getElementById('heureEntree').value = item.heureEntree.substring(0, 5);
-                document.getElementById('heureSortie').value = item.heureSortie.substring(0, 5);
-                document.getElementById('transporteur').value = item.transporteur;
-                document.getElementById('numeroBL').value = item.numeroBL;
-                document.getElementById('matricule').value = item.matricule;
-                document.getElementById('tb').value = item.tb;
-                document.getElementById('tare').value = item.tare;
-                document.getElementById('numeroContenaire').value = item.numeroContenaire;
-                document.getElementById('poste').value = item.poste;
-                document.getElementById('lieuDechargement').value = item.lieuDeDechargement;
-                document.getElementById('observation').value = item.observation || '';
-
-                const submitButton = document.querySelector('#expzinc-form button[type="submit"]');
-                submitButton.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-                submitButton.style.backgroundColor = '#F39C12'; // Orange for update
-                submitButton.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
-            })
-            .catch(error => {
-                console.error("Erreur lors de la récupération des données pour modification:", error);
-                alert("❌ Impossible de charger l'entrée pour modification.");
-            });
-    }
-
-    function deleteEntry(id) {
-        if (confirm("❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.")) {
-            fetch(`/api/expzinconcf/${id}`, { method: 'DELETE' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(() => {
-                    alert('✅ Supprimé avec succès.');
-                    loadTable();
-                })
-                .catch(error => {
-                    console.error("Erreur lors de la suppression:", error);
-                    alert('❌ Impossible de supprimer l\'entrée.');
-                });
-        }
-    }
-
-    function exporterExcel() {
-        window.location.href = '/api/expzinconcf/export';
-    }
-
-    // Sidebar toggle functionality
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-
-        // Check local storage for preferred state
-        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-        if (isCollapsed) {
-            sidebar.classList.add('collapsed');
+                if (!res.ok) throw new Error("Erreur lors de la mise à jour.");
+                showMessage('✅ Modifié avec succès.', 'success');
+            }
+        } catch (error) {
+            console.error('Operation failed:', error);
+            showMessage(`❌ Une erreur est survenue: ${error.message}`, 'error');
+            return;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+            submitBtn.style.backgroundColor = 'var(--primary-color)';
         }
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            const currentState = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentState); // Save state to local storage
-        });
+        clearForm();
+        loadTable();
     });
 
-    // Load table data when the page loads
-    window.onload = loadTable;
+    async function deleteEntry(id) {
+        if (!confirm('❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.')) {
+            return;
+        }
+        try {
+            const res = await fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            showMessage('✅ Supprimé avec succès.', 'success');
+            loadTable();
+        } catch (error) {
+            console.error("Erreur lors de la suppression:", error);
+            showMessage(`❌ Impossible de supprimer l'entrée: ${error.message}`, 'error');
+        }
+    }
+
+    async function editEntry(id) {
+        try {
+            const res = await fetch(`${API_BASE_URL}/${id}`);
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            const item = await res.json();
+
+            editingId = item.id;
+            dateInput.value = item.date || '';
+            heureEntreeInput.value = item.heureEntree ? item.heureEntree.substring(0, 5) : '';
+            heureSortieInput.value = item.heureSortie ? item.heureSortie.substring(0, 5) : '';
+            transporteurSelect.value = item.transporteur || '';
+            numeroBLInput.value = item.numeroBL || '';
+            matriculeInput.value = item.matricule || '';
+            tbInput.value = item.tb ?? '';
+            tareInput.value = item.tare ?? '';
+            tnhInput.value = (parseFloat(item.tb) - parseFloat(item.tare)).toFixed(2);
+            numeroContenaireInput.value = item.numeroContenaire || '';
+            posteSelect.value = item.poste || '';
+            lieuDechargementSelect.value = item.lieuDeDechargement || '';
+            observationInput.value = item.observation || '';
+
+            formSectionTitle.textContent = "Modifier l'entrée existante";
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+            submitBtn.style.backgroundColor = '#F39C12'; // Orange shade for update button
+            submitBtn.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+            submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E08E0B';
+            submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#F39C12';
+            cancelEditBtn.style.display = 'inline-flex';
+
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données pour modification:", error);
+            showMessage(`❌ Impossible de charger l'entrée pour modification: ${error.message}`, 'error');
+        }
+    }
+
+    function exportExcel() {
+        window.location.href = `${API_BASE_URL}/export`;
+        showMessage('Exportation Excel lancée...', 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const icon = toggle.querySelector('.fas');
+
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            sidebar.classList.add('collapsed');
+            icon.classList.replace('fa-chevron-left','fa-chevron-right');
+        }
+        toggle.addEventListener('click', () => {
+            const collapsed = sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', collapsed);
+            icon.classList.toggle('fa-chevron-right');
+            icon.classList.toggle('fa-chevron-left');
+        });
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) displayTablePage(--currentPage);
+        });
+        nextPageBtn.addEventListener('click', () => {
+            const total = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+            if (currentPage < total) displayTablePage(++currentPage);
+        });
+        monthFilterSelect.addEventListener('change', applyFiltersAndSort);
+
+        cancelEditBtn.addEventListener('click', clearForm);
+
+        loadAllRefs();
+        clearForm();
+        loadTable();
+    });
 </script>
 </body>
 </html>
