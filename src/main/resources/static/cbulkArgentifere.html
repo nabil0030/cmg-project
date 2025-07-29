@@ -8,7 +8,7 @@
     <style>
         /* --- Root Variables for a Modern Theme --- */
         :root {
-            --primary-color: #4A90E2; /* Modern Blue */
+            --primary-color: #FFA500; /* Orange CMG */
             --secondary-color: #2C3E50; /* Darker Blue-Gray for sidebar */
             --accent-color: #2ECC71; /* Green for success/highlights */
             --text-dark: #333333;
@@ -16,12 +16,12 @@
             --bg-light: #F8F9FA; /* Off-white background */
             --card-bg: #FFFFFF;
             --border-color: #E0E0E0;
-            --input-border-focus: #4A90E2;
+            --input-border-focus: #FFA500; /* Orange focus */
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
             --border-radius: 10px;
-            --sidebar-width: 260px;
-            --sidebar-width-collapsed: 75px;
+            --sidebar-width: 220px;
+            --sidebar-width-collapsed: 60px;
         }
 
         body {
@@ -148,13 +148,13 @@
         }
 
         .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.3); /* Lighter active background */
+            background-color: rgba(255, 165, 0, 0.3); /* Lighter active background for orange */
             border-left: 5px solid var(--accent-color); /* Stronger highlight for active */
             font-weight: 600;
         }
 
         .sidebar.collapsed .nav-item.active {
-            background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
+            background-color: rgba(255, 165, 0, 0.5); /* Stronger highlight for active */
             border-radius: var(--border-radius); /* Rounded background */
             margin: 0 10px; /* Some margin to show background */
             border-left: none; /* No border when collapsed, use background */
@@ -227,7 +227,7 @@
             z-index: 11; /* Above sidebar */
         }
         .sidebar-toggle:hover {
-            background-color: #397BC7;
+            background-color: #E09000; /* Darker orange on hover */
             transform: scale(1.1);
         }
         .sidebar.collapsed .sidebar-toggle .fas {
@@ -298,9 +298,6 @@
         .section-actions {
             display: flex;
             gap: 10px;
-            /* Added for month filter alignment */
-            align-items: center;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
 
         .section-actions button, .section-actions input[type="text"] {
@@ -314,11 +311,11 @@
             transition: background-color 0.3s ease;
         }
         .section-actions button:hover {
-            background-color: rgba(74, 144, 226, 0.1);
+            background-color: rgba(255, 165, 0, 0.1); /* Light orange hover */
         }
 
         /* --- Form Styling --- */
-        #cbulkForm {
+        #cbulkArgentifereForm { /* Changed ID */
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -349,7 +346,7 @@
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--input-border-focus);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Subtle glow effect */
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2); /* Subtle glow effect for orange */
             outline: none;
             background-color: white;
         }
@@ -360,7 +357,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #cbulkForm button[type="submit"], #cbulkForm button[type="button"] {
+        #cbulkArgentifereForm button[type="submit"] { /* Changed ID */
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -370,7 +367,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3); /* Button shadow */
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3); /* Button shadow for orange */
             margin-top: 15px; /* Space above button */
             justify-self: end; /* Align button to the right */
             width: fit-content;
@@ -379,28 +376,10 @@
             gap: 8px;
         }
 
-        #cbulkForm button[type="submit"]:hover, #cbulkForm button[type="button"]:hover {
-            background-color: #397BC7; /* Darker blue on hover */
+        #cbulkArgentifereForm button[type="submit"]:hover { /* Changed ID */
+            background-color: #E09000; /* Darker orange on hover */
             transform: translateY(-2px); /* Slight lift */
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
-        }
-
-        #cbulkForm .form-buttons {
-            grid-column: 1 / -1; /* Span all columns */
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px; /* Space between buttons */
-            margin-top: 15px;
-        }
-
-        #cbulkForm .form-buttons button[type="button"] {
-            background-color: #6C757D; /* Grey for Export button */
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
-        }
-
-        #cbulkForm .form-buttons button[type="button"]:hover {
-            background-color: #5A6268;
-            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 165, 0, 0.4);
         }
 
         /* --- Table Styling --- */
@@ -430,7 +409,7 @@
         }
 
         th {
-            background-color: var(--primary-color);
+            background-color: var(--primary-color); /* Use primary orange */
             color: white;
             font-weight: 600;
             text-transform: uppercase;
@@ -450,7 +429,7 @@
         }
 
         tbody tr:hover {
-            background-color: #EBF2FA; /* Light highlight on row hover */
+            background-color: #FAEDD6; /* Light orange highlight on row hover */
             transform: translateY(-2px); /* Subtle lift */
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             cursor: pointer;
@@ -481,7 +460,7 @@
         }
 
         .table-actions button:hover {
-            background-color: #397BC7;
+            background-color: #E09000; /* Darker orange on hover */
             transform: translateY(-1px);
         }
 
@@ -505,91 +484,6 @@
             box-shadow: none !important;
         }
 
-        /* --- Alert Messages --- */
-        .alert {
-            padding: 10px 12px; /* Reduced padding */
-            margin-bottom: 12px; /* Reduced margin */
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            font-size: 0.85rem; /* Slightly smaller font */
-            display: flex;
-            align-items: center;
-            gap: 6px; /* Reduced gap */
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            animation: fadeInDown 0.5s ease-out;
-        }
-        .alert.success {
-            background-color: #D4EDDA;
-            color: #155724;
-            border: 1px solid #C3E6CB;
-        }
-        .alert.error {
-            background-color: #F8D7DA;
-            color: #721C24;
-            border: 1px solid #F5C6CB;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Pagination Styling --- */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-light);
-        }
-
-        .pagination button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .pagination button:hover:not(:disabled) {
-            background-color: #397BC7; /* Darker blue on hover */
-            transform: translateY(-1px);
-        }
-
-        .pagination button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-
-        .pagination span {
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-
-
-        /* Responsive adjustments for modal */
-        @media (max-width: 768px) {
-            .modal-content-box {
-                padding: 15px;
-                width: 95%;
-            }
-            #confirmMessage {
-                font-size: 1rem;
-                margin-bottom: 15px;
-            }
-            .modal-actions button {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
-        }
 
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
@@ -631,13 +525,13 @@
                 border-left: none; /* Remove border when collapsed */
             }
             .sidebar .nav-item i {
-                margin-right: 0;
+                margin-right: 0; /* No margin when text is hidden */
             }
             .sidebar .nav-item a {
                 display: none; /* Hide link text */
             }
             .sidebar .nav-item.active {
-                background-color: rgba(74, 144, 226, 0.5); /* Stronger highlight for active */
+                background-color: rgba(255, 165, 0, 0.5); /* Stronger highlight for active orange */
                 border-radius: var(--border-radius); /* Rounded background */
                 margin: 0 10px; /* Some margin to show background */
                 border-left: none; /* No border when collapsed, use background */
@@ -729,7 +623,7 @@
             }
             .nav-item.active {
                 border-left: 5px solid var(--accent-color); /* Bring back border for active */
-                background-color: rgba(74, 144, 226, 0.2);
+                background-color: rgba(255, 165, 0, 0.2); /* Light orange for active */
             }
             .sidebar.collapsed { /* Remove collapsed state on small screens */
                 width: 100%;
@@ -764,14 +658,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #cbulkForm {
+            #cbulkArgentifereForm { /* Changed ID */
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #cbulkForm .form-buttons {
-                flex-direction: column; /* Stack buttons vertically */
-                align-items: center; /* Center buttons */
-            }
-            #cbulkForm .form-buttons button {
+            #cbulkArgentifereForm button[type="submit"] { /* Changed ID */
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -779,11 +669,9 @@
                 border-left: none;
                 border-right: none;
             }
-        }
     </style>
 </head>
 <body>
-
 <div class="sidebar" id="sidebar">
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-chevron-left"></i>
@@ -796,7 +684,7 @@
             </h1>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <i class="fas fa-home"></i>
                 <a href="index.html"><span>Dashboard</span></a>
             </li>
@@ -824,7 +712,7 @@
                 <i class="fas fa-truck-loading"></i>
                 <a href="chauxViveLafarge.html"><span>Chaux Vive Lafarge</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <i class="fas fa-truck-loading"></i>
                 <a href="cbulkArgentifere.html"><span>C,BULK(stuffing lead)</span></a>
             </li>
@@ -853,12 +741,12 @@
 
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="expPbCmgOnf.html"><span>  PB-ONCF  </span></a>
+                <a href="expPbCmgOnf.html"><span> PB-ONCF </span></a>
 
             </li>
             <li class="nav-item">
                 <i class="fas fa-truck-loading"></i>
-                <a href="synthese.html"><span> synthese  </span></a>
+                <a href="synthese.html"><span> synthese </span></a>
 
             </li>
             <li class="nav-item">
@@ -886,11 +774,12 @@
 <div class="main-content">
     <h1 class="page-title">C BULK ARGENTIFÈRE</h1>
 
+    <div id="message"></div>
     <div class="form-section">
         <div class="section-header">
-            <h2>Ajouter ou Modifier une entrée</h2>
+            <h2 id="form-section-title">Ajouter ou Modifier une entrée</h2>
         </div>
-        <form id="cbulkForm">
+        <form id="cbulkArgentifereForm"> <input type="hidden" id="entry-id">
             <div class="form-group">
                 <label for="date">Date</label>
                 <input type="date" name="date" id="date" required>
@@ -904,16 +793,14 @@
                 <input type="time" name="heureSortie" id="heureSortie" required>
             </div>
             <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" name="transporteur" id="transporteur" placeholder="Transporteur" required>
-            </div>
+                <label for="transporteur-select">Transporteur</label> <select name="transporteur" id="transporteur-select" required></select> </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
                 <input type="text" name="numeroBL" id="numeroBL" placeholder="N° Bon de Livraison" required>
             </div>
             <div class="form-group">
-                <label for="matricule">Matricule</label>
-                <input type="text" name="matricule" id="matricule" placeholder="Matricule" required>
+                <label for="immatricule">Immatricule</label>
+                <input type="text" name="immatricule" id="immatricule" placeholder="Immatriculation du Véhicule" required>
             </div>
             <div class="form-group">
                 <label for="tb">TB</label>
@@ -924,17 +811,18 @@
                 <input type="number" name="tare" id="tare" placeholder="Poids TARE" step="0.01" required>
             </div>
             <div class="form-group">
-                <label for="numeroContenaire">N° Contenaire</label>
-                <input type="text" name="numeroContenaire" id="numeroContenaire" placeholder="N° Contenaire" required>
+                <label for="tnh">TN H</label>
+                <input type="number" id="tnh" readonly placeholder="Calculé automatiquement (TB - TARE)">
             </div>
             <div class="form-group">
-                <label for="poste">Poste</label>
-                <input type="number" name="poste" id="poste" placeholder="Poste" required>
+                <label for="numeroConteneur">N° Conteneur</label>
+                <input type="text" name="numeroConteneur" id="numeroConteneur" placeholder="Numéro de Conteneur" required>
             </div>
             <div class="form-group">
-                <label for="lieuDechargement">Lieu de Déchargement</label>
-                <input type="text" name="lieuDechargement" id="lieuDechargement" value="ONCF" required readonly>
-            </div>
+                <label for="poste-select">Poste</label> <select name="poste" id="poste-select" required></select> </div>
+
+            <div class="form-group">
+                <label for="lieu-dechargement-select">Lieu de Déchargement</label> <select id="lieu-dechargement-select" required></select> </div>
             <div class="form-group" style="grid-column: 1 / -1;">
                 <label for="observation">Observation</label>
                 <input type="text" name="observation" id="observation" placeholder="Ajouter des observations supplémentaires...">
@@ -942,19 +830,21 @@
 
             <div class="form-buttons">
                 <button type="submit" id="submit-btn"><i class="fas fa-save"></i> Ajouter</button>
-                <button type="button" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+                <button type="button" id="cancel-edit-btn" style="display:none;">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
             </div>
         </form>
     </div>
 
     <div class="table-section">
         <div class="section-header">
-            <h2>Historique</h2>
+            <h2>Historique des C BULK</h2>
             <div class="section-actions">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="monthFilter" style="font-size: 0.85rem; margin-bottom: 2px; color: var(--text-dark);">Filtrer par mois:</label>
                     <select id="monthFilter" style="padding: 6px 8px; font-size: 0.9rem; border-radius: 5px;">
-                        <option value="">Tous les mois</option>
+                        <option value="all">Tous les mois</option>
                         <option value="1">Janvier</option>
                         <option value="2">Février</option>
                         <option value="3">Mars</option>
@@ -969,219 +859,383 @@
                         <option value="12">Décembre</option>
                     </select>
                 </div>
+                <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
             </div>
         </div>
         <div class="table-responsive">
             <table id="cbulkTable">
                 <thead>
                 <tr>
-                    <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th><th>Matricule</th>
-                    <th>TB</th><th>TARE</th><th>TN H</th><th>N° Contenaire</th><th>Poste</th>
+                    <th>Date</th><th>H Entrée</th><th>H Sortie</th><th>Transporteur</th><th>N° BL</th><th>Immat</th>
+                    <th>TB</th><th>TARE</th><th>TN H</th><th>N° Conteneur</th><th>Poste</th>
                     <th>Lieu Déchargement</th><th>Observation</th><th>Actions</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
-        <div class="pagination" id="pagination-controls">
-            <button id="prev-page"><i class="fas fa-chevron-left"></i> Précédent</button>
-            <span id="page-info">Page 1 sur 1</span>
-            <button id="next-page">Suivant <i class="fas fa-chevron-right"></i></button>
+        <div class="pagination-controls" id="pagination-controls">
+            <button id="prev-page">&laquo; Précédent</button>
+            <span id="page-info">Page 1 / 1</span>
+            <button id="next-page">Suivant &raquo;</button>
         </div>
     </div>
 </div>
 
 <script>
-    const API_BASE_URL = window.location.origin + "/api/cbulkargentifere";
-    let currentEditId = null;
-    let rawAllTableData = [];
-    let filteredAndSortedData = [];
-    let currentPage = 1;
-    const rowsPerPage = 10;
+    const API_BASE_URL = 'http://localhost:8080/api/cbulkargentifere'; // Main API endpoint
 
-    function showMessage(msg, type) {
-        const div = document.createElement('div');
-        div.className = `alert ${type}`;
-        div.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-        const mainContent = document.querySelector('.main-content');
-        mainContent.insertBefore(div, mainContent.querySelector('.form-section'));
-        setTimeout(() => div.remove(), 4000);
+    async function loadAllRefs() {
+        try {
+            const response = await fetch('http://localhost:8080/api/refs');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            fillSelect("transporteur-select", data.transporteurs);
+            fillSelect("poste-select", data.postes);
+            fillSelect("lieu-dechargement-select", data.lieuxDeDechargement);
+
+        } catch (error) {
+            console.warn("⚠️ Échec du chargement des références :", error);
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML += `<div class="alert error">
+                <i class="fas fa-exclamation-circle"></i> Échec du chargement des options de référence.
+            </div>`;
+            messageDiv.style.display = 'block';
+            setTimeout(()=> messageDiv.style.display = 'none', 5000);
+        }
     }
 
+    function fillSelect(selectId, items) {
+        const select = document.getElementById(selectId);
+        if (!select) {
+            console.warn(`⚠️ Select element with ID '${selectId}' not found.`);
+            return;
+        }
+
+        select.innerHTML = '<option value="">-- Choisir --</option>'; // Default option as requested
+        items.forEach(item => {
+            const opt = document.createElement("option");
+            opt.value = item;
+            opt.textContent = item;
+            select.appendChild(opt);
+        });
+    }
+
+    let editingId = null;
+
+    // Pagination & Filter Variables
+    let rawAllTableData = []; // Stores ALL data fetched from the backend, unfiltered
+    let filteredAndSortedData = []; // Stores data after filtering and sorting, used for pagination
+    let currentPage = 1;
+    const rowsPerPage = 10; // Number of rows per page
+
+    // Get form elements (Updated IDs and new TN H field)
+    const cbulkArgentifereForm = document.getElementById('cbulkArgentifereForm'); // Changed ID
+    const entryIdInput = document.getElementById('entry-id');
+    const dateInput = document.getElementById('date');
+    const heureEntreeInput = document.getElementById('heureEntree');
+    const heureSortieInput = document.getElementById('heureSortie');
+    const transporteurSelect = document.getElementById('transporteur-select'); // Changed to select
+    const numeroBLInput = document.getElementById('numeroBL');
+    const immatriculeInput = document.getElementById('immatricule');
+    const tbInput = document.getElementById('tb');
+    const tareInput = document.getElementById('tare');
+    const tnhInput = document.getElementById('tnh'); // Added TN H input
+    const numeroConteneurInput = document.getElementById('numeroConteneur'); // New N° Conteneur
+    const posteSelect = document.getElementById('poste-select'); // Changed to select
+    const lieuDechargementSelect = document.getElementById('lieu-dechargement-select'); // Changed to select
+    const observationInput = document.getElementById('observation');
+    const submitBtn = document.getElementById('submit-btn');
+    const formSectionTitle = document.getElementById('form-section-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const tableBody = document.querySelector("#cbulkTable tbody");
+    const messageDiv = document.getElementById('message');
+
+    // Pagination & Filter Elements
+    const monthFilterSelect = document.getElementById('monthFilter');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageInfoSpan = document.getElementById('page-info');
+
+    // Function to calculate TN H
+    function calculerTNH() {
+        const tb = parseFloat(tbInput.value) || 0;
+        const tare = parseFloat(tareInput.value) || 0;
+        tnhInput.value = (tb - tare).toFixed(2);
+    }
+
+    // Add event listeners for TB and TARE inputs to calculate TN H
+    tbInput.addEventListener('input', calculerTNH);
+    tareInput.addEventListener('input', calculerTNH);
+
+
+    function showMessage(msg, type){
+        messageDiv.innerHTML = `<div class="alert ${type}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}
+            </div>`;
+        messageDiv.style.display = 'block';
+        setTimeout(()=> {
+            messageDiv.style.display = 'none';
+            messageDiv.innerHTML = '';
+        }, 5000);
+    }
+
+    function formatDateForDisplay(isoDate) {
+        if (!isoDate) return '';
+        const [year, month, day] = isoDate.split('-');
+        return `${day}/${month}/${year}`;
+    }
+
+    function clearForm() {
+        editingId = null;
+        cbulkArgentifereForm.reset(); // Changed ID
+        formSectionTitle.textContent = 'Ajouter ou Modifier une entrée';
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
+        submitBtn.style.backgroundColor = 'var(--primary-color)';
+        submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)'; // Updated shadow
+        submitBtn.onmouseover = null;
+        submitBtn.onmouseout = null;
+        cancelEditBtn.style.display = 'none';
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
+
+        // Reset select fields to default option
+        if(transporteurSelect) transporteurSelect.value = "";
+        if(posteSelect) posteSelect.value = "";
+        if(lieuDechargementSelect) lieuDechargementSelect.value = "";
+        tnhInput.value = ""; // Clear TN H field on form clear
+        numeroConteneurInput.value = ""; // Clear N° Conteneur field
+    }
+
+    // Applies filters and sorting to raw data, then updates filteredAndSortedData
     function applyFiltersAndSort() {
         let dataToProcess = [...rawAllTableData];
-        const monthFilter = document.getElementById('monthFilter').value;
 
-        if (monthFilter) {
-            const selectedMonth = parseInt(monthFilter, 10) - 1; // 0 = janvier
+        // Filter by month if a month is selected
+        const monthValue = monthFilterSelect.value;
+        if (monthValue && monthValue !== 'all') {
+            const selectedMonth = parseInt(monthValue, 10) - 1; // 0 = January
             dataToProcess = dataToProcess.filter(e => {
-                if (!e.date) return false;
-                const entryDate = new Date(e.date);
-                if (isNaN(entryDate)) return false;
-                // On garde uniquement les entrées du mois sélectionné
-                return entryDate.getMonth() === selectedMonth;
+                const d = new Date(e.date);
+                if (isNaN(d)) return false;
+                return d.getMonth() === selectedMonth;
             });
         }
 
-        // Tri décroissant par date (plus récent d'abord)
+        // Sort by date (descending - most recent first)
         filteredAndSortedData = dataToProcess.sort(
             (a, b) => new Date(b.date) - new Date(a.date)
         );
 
-        currentPage = 1;
+        currentPage = 1; // Reset to first page after applying filters
         displayTablePage(currentPage);
     }
 
     async function loadTable() {
-        const tbody = document.querySelector('#cbulkTable tbody');
-        tbody.innerHTML = `
-      <tr>
-        <td colspan="14" style="text-align:center; color:var(--text-light)">
-          <i class="fas fa-spinner fa-spin"></i> Chargement...
-        </td>
-      </tr>`;
+        tableBody.innerHTML = `<tr><td colspan="15" style="text-align: center; color: var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Chargement des données...</td></tr>`;
 
         try {
             const res = await fetch(API_BASE_URL);
-            if (!res.ok) throw new Error('Erreur réseau/serveur');
-            rawAllTableData = await res.json();
-            applyFiltersAndSort();
-        } catch (err) {
-            console.error(err);
-            showMessage(`❌ ${err.message}`, 'error');
-            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:red;">Erreur de chargement</td></tr>`;
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            rawAllTableData = await res.json(); // Store raw data
+            applyFiltersAndSort(); // Filter, sort and display
+        } catch (error) {
+            console.error("Erreur lors du chargement des données:", error);
+            tableBody.innerHTML = `<tr><td colspan="15" style="text-align: center; padding: 20px; color: #E74C3C;">Erreur de chargement des données.</td></tr>`;
+            showMessage(`❌ Erreur de chargement des données: ${error.message}`, 'error');
         }
     }
 
+    // Function to display data for the current page
     function displayTablePage(page) {
-        const tbody = document.querySelector('#cbulkTable tbody');
-        tbody.innerHTML = '';
-        const start = (page - 1) * rowsPerPage;
-        const slice = filteredAndSortedData.slice(start, start + rowsPerPage);
+        tableBody.innerHTML = ''; // Clear existing rows
 
-        if (!slice.length) {
-            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:var(--text-light);">
-        Aucune donnée pour cette page.
-      </td></tr>`;
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        else if (totalPages === 0) currentPage = 0;
+
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const paginatedData = filteredAndSortedData.slice(startIndex, endIndex);
+
+        if (!Array.isArray(paginatedData) || paginatedData.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `<td colspan="14" style="text-align: center; padding: 20px; color: var(--text-light);">Aucune donnée trouvée pour cette page.</td>`;
+            tableBody.appendChild(noDataRow);
         } else {
-            slice.forEach(e => {
-                const tb = parseFloat(e.tb);
-                const tare = parseFloat(e.tare);
-                const tnh = (!isNaN(tb) && !isNaN(tare)) ? (tb - tare).toFixed(2) : '';
-                tbody.insertAdjacentHTML('beforeend', `
-          <tr>
-            <td data-label="Date">${e.date||''}</td>
-            <td data-label="H Entrée">${e.heureEntree||''}</td>
-            <td data-label="H Sortie">${e.heureSortie||''}</td>
-            <td data-label="Transporteur">${e.transporteur||''}</td>
-            <td data-label="N° BL">${e.numeroBL||''}</td>
-            <td data-label="Matricule">${e.matricule||''}</td>
-            <td data-label="TB">${!isNaN(tb)?tb.toFixed(2):''}</td>
-            <td data-label="TARE">${!isNaN(tare)?tare.toFixed(2):''}</td>
-            <td data-label="TN H">${tnh}</td>
-            <td data-label="N° Contenaire">${e.numeroContenaire||''}</td>
-            <td data-label="Poste">${e.poste??''}</td>
-            <td data-label="Lieu Déchargement">${e.lieuDechargement||''}</td>
-            <td data-label="Observation">${e.observation||''}</td>
-            <td class="table-actions">
-              <button onclick='editRow(${JSON.stringify(e)})' title="Modifier">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="delete-btn" onclick='deleteRow("${e.id||e._id}")' title="Supprimer">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </td>
-          </tr>
-        `);
+            paginatedData.forEach(entry => {
+                const tnhCalculated = (parseFloat(entry.tb) - parseFloat(entry.tare)).toFixed(2);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                        <td>${formatDateForDisplay(entry.date)}</td>
+                        <td>${entry.heureEntree ? entry.heureEntree.substring(0, 5) : "—"}</td>
+                        <td>${entry.heureSortie ? entry.heureSortie.substring(0, 5) : "—"}</td>
+                        <td>${entry.transporteur || '—'}</td>
+                        <td>${entry.numeroBL || '—'}</td>
+                        <td>${entry.immatricule || '—'}</td>
+                        <td>${parseFloat(entry.tb).toFixed(2)}</td>
+                        <td>${parseFloat(entry.tare).toFixed(2)}</td>
+                        <td>${tnhCalculated}</td>
+                        <td>${entry.numeroConteneur || '—'}</td>
+                        <td>${entry.poste || '—'}</td>
+                        <td>${entry.lieuDechargement || '—'}</td>
+                        <td>${entry.observation || '—'}</td>
+                        <td class="table-actions">
+                            <button onclick="editRow(${entry.id})"><i class="fas fa-edit"></i> </button>
+                            <button class="delete-btn" onclick="deleteRow(${entry.id})"><i class="fas fa-trash-alt"></i> </button>
+                        </td>`;
+                tableBody.appendChild(row);
             });
         }
-
-        setupPagination();
+        setupPagination(); // Update pagination controls
     }
 
+    // Function to set up and update pagination controls
     function setupPagination() {
-        const total = Math.ceil(filteredAndSortedData.length / rowsPerPage) || 1;
-        document.getElementById('page-info').textContent = `Page ${currentPage} sur ${total}`;
-        document.getElementById('prev-page').disabled = currentPage === 1;
-        document.getElementById('next-page').disabled = currentPage === total;
+        const totalPages = Math.ceil(filteredAndSortedData.length / rowsPerPage);
+        pageInfoSpan.textContent = `Page ${currentPage > 0 ? currentPage : 0} / ${totalPages > 0 ? totalPages : 0}`;
+
+        prevPageBtn.disabled = currentPage <= 1 || totalPages === 0;
+        nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
     }
 
-    document.getElementById('cbulkForm').onsubmit = async e => {
+
+    cbulkArgentifereForm.addEventListener('submit', async function(e) { // Changed ID
         e.preventDefault();
-        const f = e.target;
-        const tb = parseFloat(f.tb.value), tare = parseFloat(f.tare.value);
-        const payload = {
-            date: f.date.value,
-            heureEntree: f.heureEntree.value,
-            heureSortie: f.heureSortie.value,
-            transporteur: f.transporteur.value,
-            numeroBL: f.numeroBL.value,
-            matricule: f.matricule.value,
-            tb, tare,
-            tnh: isNaN(tb - tare) ? null : parseFloat((tb - tare).toFixed(2)),
-            numeroContenaire: f.numeroContenaire.value,
-            poste: parseInt(f.poste.value),
-            lieuDechargement: f.lieuDechargement.value,
-            observation: f.observation.value
+        const form = e.target;
+
+        const tb = parseFloat(tbInput.value);
+        const tare = parseFloat(tareInput.value);
+        const tnh = tb - tare; // Calculate TN H
+
+        const data = {
+            date: dateInput.value,
+            heureEntree: heureEntreeInput.value,
+            heureSortie: heureSortieInput.value,
+            transporteur: transporteurSelect.value, // Changed to select
+            numeroBL: numeroBLInput.value,
+            immatricule: immatriculeInput.value,
+            tb: parseFloat(tb.toFixed(2)),
+            tare: parseFloat(tare.toFixed(2)),
+            tnh: parseFloat(tnh.toFixed(2)), // Added TN H
+            numeroConteneur: numeroConteneurInput.value, // Added N° Conteneur
+            poste: posteSelect.value, // Changed to select
+            lieuDechargement: lieuDechargementSelect.value, // Changed to select
+            observation: observationInput.value
         };
 
-        const btn = document.getElementById('submit-btn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> En cours...';
 
         try {
-            const method = currentEditId ? 'PUT' : 'POST';
-            const url = currentEditId ? `${API_BASE_URL}/${currentEditId}` : API_BASE_URL;
-            const res = await fetch(url, {
-                method, headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(payload)
-            });
-            if (!res.ok) {
-                let msg = await res.text();
-                if (res.status === 409) msg = 'Doublon détecté !';
-                throw new Error(msg || 'Erreur serveur');
+            let res;
+            if (editingId === null) {
+                res = await fetch(API_BASE_URL + '/add', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                if (res.status === 409) {
+                    showMessage("❌ Doublon détecté ! L'entrée avec le même N° BL ou Immatricule existe déjà.", 'error');
+                    return;
+                }
+                if (!res.ok) throw new Error("Erreur lors de l'ajout.");
+                showMessage('✅ Ajouté avec succès.', 'success');
+            } else {
+                data.id = editingId;
+                res = await fetch(API_BASE_URL + '/update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                if (!res.ok) throw new Error("Erreur lors de la mise à jour.");
+                showMessage('✅ Mis à jour avec succès.', 'success');
             }
-            await res.json();
-            showMessage('✅ Opération réussie.', 'success');
-            f.reset();
-            currentEditId = null;
-            document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée";
-            loadTable();
-        } catch (err) {
-            console.error(err);
-            showMessage(`❌ ${err.message}`, 'error');
+        } catch (error) {
+            console.error('Operation failed:', error);
+            showMessage(`❌ Une erreur est survenue: ${error.message}`, 'error');
+            return;
         } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
+            submitBtn.style.backgroundColor = 'var(--primary-color)';
         }
-    };
 
-    function editRow(item) {
-        currentEditId = item.id || item._id;
-        for (const k of ['date','heureEntree','heureSortie','transporteur','numeroBL','matricule','tb','tare','numeroContenaire','poste','lieuDechargement','observation']) {
-            document.getElementById(k).value = item[k] ?? '';
+        clearForm();
+        loadTable();
+    });
+
+    async function deleteRow(id) {
+        if (!confirm('❗ Voulez-vous supprimer cette ligne ? Cette action est irréversible.')) {
+            return;
         }
-        document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
-        document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-        document.querySelector('.form-section').scrollIntoView({behavior:'smooth'});
+        try {
+            const res = await fetch(`${API_BASE_URL}/delete/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            showMessage('✅ Supprimé avec succès.', 'success');
+            loadTable();
+        } catch (error) {
+            console.error("Erreur lors de la suppression:", error);
+            showMessage(`❌ Impossible de supprimer l'entrée: ${error.message}`, 'error');
+        }
     }
 
-    function deleteRow(id) {
-        if (!confirm('❗ Confirmer la suppression ?')) return;
-        fetch(`${API_BASE_URL}/${id}`, {method:'DELETE'})
-            .then(async r => {
-                if (!r.ok) throw new Error(await r.text() || 'Erreur suppression');
-                showMessage('✅ Suppression réussie.', 'success');
-                loadTable();
-            })
-            .catch(err => {
-                console.error(err);
-                showMessage(`❌ ${err.message}`, 'error');
-            });
+    async function editRow(id) {
+        try {
+            // Fetch all data and find the specific entry for editing
+            const res = await fetch(API_BASE_URL);
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            const entries = await res.json();
+            const entry = entries.find(e => e.id === id);
+
+            if (!entry) {
+                showMessage("Entrée non trouvée.", 'error');
+                return;
+            }
+
+            editingId = entry.id;
+            dateInput.value = entry.date || '';
+            heureEntreeInput.value = entry.heureEntree ? entry.heureEntree.substring(0, 5) : '';
+            heureSortieInput.value = entry.heureSortie ? entry.heureSortie.substring(0, 5) : '';
+            transporteurSelect.value = entry.transporteur || ''; // Changed to select
+            numeroBLInput.value = entry.numeroBL || '';
+            immatriculeInput.value = entry.immatricule || '';
+            tbInput.value = entry.tb ?? '';
+            tareInput.value = entry.tare ?? '';
+            tnhInput.value = (parseFloat(entry.tb) - parseFloat(entry.tare)).toFixed(2); // Set TN H on edit
+            numeroConteneurInput.value = entry.numeroConteneur || ''; // Set N° Conteneur
+            posteSelect.value = entry.poste || ''; // Changed to select
+            lieuDechargementSelect.value = entry.lieuDechargement || ''; // Changed to select
+            observationInput.value = entry.observation || '';
+
+            formSectionTitle.textContent = "Modifier l'entrée existante";
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+            submitBtn.style.backgroundColor = '#F39C12'; // Orange shade for update button
+            submitBtn.style.boxShadow = '0 5px 15px rgba(243, 156, 18, 0.3)';
+            submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E08E0B';
+            submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#F39C12';
+            cancelEditBtn.style.display = 'inline-flex';
+
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données pour modification:", error);
+            showMessage(`❌ Impossible de charger l'entrée pour modification: ${error.message}`, 'error');
+        }
     }
 
     function exportExcel() {
-        window.open(`${API_BASE_URL}/export`, '_blank');
+        window.location.href = `${API_BASE_URL}/export`;
+        showMessage('Exportation Excel lancée...', 'success');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1213,7 +1267,12 @@
         });
         month.addEventListener('change', applyFiltersAndSort);
 
-        loadTable();
+        cancelEditBtn.addEventListener('click', clearForm); // Added event listener
+
+        // Initial loads
+        loadAllRefs(); // Load reference data for selects
+        clearForm(); // Clear form and set default date
+        loadTable(); // Load main table data
     });
 </script>
 
