@@ -8,20 +8,20 @@
     <style>
         /* --- Root Variables for a Modern Theme --- */
         :root {
-            --primary-color: #4A90E2; /* Modern Blue */
-            --secondary-color: #2C3E50; /* Darker Blue-Gray for sidebar */
-            --accent-color: #2ECC71; /* Green for success/highlights */
+            --primary-color: #FFA500; /* Orange CMG */
+            --secondary-color: #2C3E50;
+            --accent-color: #2ECC71;
             --text-dark: #333333;
             --text-light: #666666;
-            --bg-light: #F8F9FA; /* Off-white background */
+            --bg-light: #F8F9FA;
             --card-bg: #FFFFFF;
             --border-color: #E0E0E0;
-            --input-border-focus: #4A90E2;
+            --input-border-focus: #FFA500;
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
             --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
             --border-radius: 10px;
-            --sidebar-width: 260px;
-            --sidebar-width-collapsed: 75px;
+            --sidebar-width: 220px;
+            --sidebar-width-collapsed: 60px;
         }
 
         body {
@@ -315,7 +315,7 @@
         }
 
         /* --- Form Styling --- */
-        #chauxForm {
+        #chauxViveLafargeForm {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid for inputs */
             gap: 20px; /* Space between inputs */
@@ -357,7 +357,7 @@
             grid-column: 1 / -1; /* Make textarea span all columns */
         }
 
-        #chauxForm button[type="submit"] {
+        #chauxViveLafargeForm button[type="submit"] {
             padding: 14px 25px; /* Larger button */
             background-color: var(--primary-color);
             color: white;
@@ -376,7 +376,7 @@
             gap: 8px;
         }
 
-        #chauxForm button[type="submit"]:hover {
+        #chauxViveLafargeForm button[type="submit"]:hover {
             background-color: #397BC7; /* Darker blue on hover */
             transform: translateY(-2px); /* Slight lift */
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
@@ -658,10 +658,10 @@
             .form-section, .table-section {
                 padding: 20px;
             }
-            #chauxForm {
+            #chauxViveLafargeForm {
                 grid-template-columns: 1fr; /* Single column layout for forms */
             }
-            #chauxForm button[type="submit"] {
+            #chauxViveLafargeForm button[type="submit"] {
                 width: 100%; /* Full width button */
             }
             .table-responsive {
@@ -779,7 +779,7 @@
     <div class="section-header">
         <h2 id="form-section-title">Ajouter ou Modifier une entrée</h2>
     </div>
-    <form id="chauxForm">
+    <form id="chauxViveLafargeForm">
         <input type="hidden" id="entry-id"> <div class="form-group">
         <label for="date">Date</label>
         <input type="date" name="date" id="date" required>
@@ -814,6 +814,10 @@
             <input type="number" name="tare" id="tare" placeholder="Poids TARE" step="0.01" required>
         </div>
         <div class="form-group">
+            <label for="netCmg">NET CMG</label>
+            <input type="number" name="netCmg" id="netCmg" placeholder="Calculé automatiquement" step="0.01" readonly>
+        </div>
+        <div class="form-group">
             <label for="netLafarge">Net LAFARGE</label>
             <input type="number" name="netLafarge" id="netLafarge" placeholder="Net LAFARGE" step="0.01" required>
         </div>
@@ -823,12 +827,13 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="lieuChargement">Lieu Chargement</label>
-            <input type="text" name="lieuChargement" id="lieuChargement" value="LAFARGE" required readonly>
+            <label for="lieu-chargement-select">Lieu de chargement</label>
+            <select id="lieu-chargement-select" required>
+            </select>
         </div>
         <div class="form-group">
-            <label for="lieuDechargement">Lieu Déchargement</label>
-            <input type="text" name="lieuDechargement" id="lieuDechargement" value="LAVERIE" required readonly>
+            <label for="lieu-dechargement-select">Lieu Déchargement</label>
+            <select id="lieu-dechargement-select" required></select>
         </div>
         <div class="form-group" style="grid-column: 1 / -1;">
             <label for="observation">Observation</label>
@@ -895,7 +900,10 @@
 
         const refConfig = {
             "transporteur-select": { endpoint: "transporteurs", key: "nom" },
-            "poste-select": { endpoint: "postes", key: "nom" }
+            "poste-select": { endpoint: "postes", key: "nom" },
+            "lieu-chargement-select": { endpoint: "lieux-chargement", key: "nom" },
+            "lieu-dechargement-select": { endpoint: "lieux-dechargement", key: "nom" }
+
         };
 
         function fillSelect(selectId, values, valueKey) {
@@ -966,7 +974,7 @@
     const rowsPerPage = 10; // Number of rows per page
 
     // Get form elements
-    const chauxForm = document.getElementById('chauxForm');
+    const chauxViveLafargeForm = document.getElementById('chauxViveLafargeForm');
     const entryIdInput = document.getElementById('entry-id');
     const dateInput = document.getElementById('date');
     const heureEntreeInput = document.getElementById('heureEntree');
@@ -976,10 +984,11 @@
     const immatriculeInput = document.getElementById('immatricule');
     const tbInput = document.getElementById('tb');
     const tareInput = document.getElementById('tare');
+    const netCmgInput = document.getElementById('netCmg'); // Added
     const netLafargeInput = document.getElementById('netLafarge');
     const posteSelect = document.getElementById('poste-select');
-    const lieuChargementInput = document.getElementById('lieuChargement');
-    const lieuDechargementInput = document.getElementById('lieuDechargement');
+    const lieuChargementSelect = document.getElementById('lieu-chargement-select');
+    const lieuDechargementSelect = document.getElementById('lieu-dechargement-select'); // Changed to select
     const observationInput = document.getElementById('observation');
     const submitBtn = document.getElementById('submit-btn');
     const formSectionTitle = document.getElementById('form-section-title');
@@ -992,6 +1001,17 @@
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
     const pageInfoSpan = document.getElementById('page-info');
+
+    // Function to calculate NET CMG
+    function calculerNet() {
+        const tb = parseFloat(tbInput.value) || 0;
+        const tare = parseFloat(tareInput.value) || 0;
+        netCmgInput.value = (tb - tare).toFixed(2);
+    }
+
+    // Add event listeners for TB and TARE inputs to calculate NET CMG
+    tbInput.addEventListener('input', calculerNet);
+    tareInput.addEventListener('input', calculerNet);
 
 
     function showMessage(msg, type){
@@ -1013,7 +1033,7 @@
 
     function clearForm() {
         editingId = null;
-        chauxForm.reset();
+        chauxViveLafargeForm.reset();
         formSectionTitle.textContent = 'Ajouter ou Modifier une entrée';
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Ajouter';
         submitBtn.style.backgroundColor = 'var(--primary-color)';
@@ -1030,6 +1050,9 @@
 
         if(transporteurSelect) transporteurSelect.value = "";
         if(posteSelect) posteSelect.value = "";
+        if(lieuChargementSelect) lieuChargementSelect.value = "";
+        if(lieuDechargementSelect) lieuDechargementSelect.value = "";
+        netCmgInput.value = ""; // Clear NET CMG field on form clear
     }
 
     // Applies filters and sorting to raw data, then updates filteredAndSortedData
@@ -1106,7 +1129,7 @@
                         <td>${entry.poste || '—'}</td>
                         <td>${parseFloat(entry.netLafarge).toFixed(2)}</td>
                         <td>${ecartCalculated}</td>
-                        <td>${entry.lieuChargement || '—'}</td>
+                        <td data-label="Lieu chargement">${entry.lieuChargement || ''}</td>
                         <td>${entry.lieuDechargement || '—'}</td>
                         <td>${entry.observation || '—'}</td>
                         <td class="table-actions">
@@ -1129,7 +1152,7 @@
     }
 
 
-    chauxForm.addEventListener('submit', async function(e) {
+    chauxViveLafargeForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const form = e.target;
 
@@ -1153,8 +1176,8 @@
             netLafarge: parseFloat(netLafarge.toFixed(2)),
             ecart: parseFloat(ecart.toFixed(2)),
             poste: posteSelect.value,
-            lieuChargement: lieuChargementInput.value,
-            lieuDechargement: lieuDechargementInput.value,
+            lieuChargement: lieuChargementSelect.value,
+            lieuDechargement: lieuDechargementSelect.value,
             observation: observationInput.value
         };
 
@@ -1236,10 +1259,11 @@
             immatriculeInput.value = entry.immatricule || '';
             tbInput.value = entry.tb ?? '';
             tareInput.value = entry.tare ?? '';
+            netCmgInput.value = (parseFloat(entry.tb) - parseFloat(entry.tare)).toFixed(2); // Set NET CMG on edit
             netLafargeInput.value = entry.netLafarge ?? '';
             posteSelect.value = entry.poste || '';
-            lieuChargementInput.value = entry.lieuChargement || '';
-            lieuDechargementInput.value = entry.lieuDechargement || '';
+            lieuChargementSelect.value = entry.lieuChargement || '';
+            lieuDechargementSelect.value = entry.lieuDechargement || '';
             observationInput.value = entry.observation || '';
 
             formSectionTitle.textContent = "Modifier l'entrée existante";
@@ -1316,3 +1340,4 @@
     });
 </script>
 </body>
+</html>
