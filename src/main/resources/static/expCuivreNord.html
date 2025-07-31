@@ -502,6 +502,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Pagination styles */
+        .pagination button {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .pagination button:hover {
+            background: rgba(0, 0, 0, .05);
+        }
+
         /* --- Responsive Design --- */
         @media (max-width: 1200px) {
             .main-content {
@@ -810,8 +822,8 @@
                 <input type="time" id="hSortie" required>
             </div>
             <div class="form-group">
-                <label for="transporteur">Transporteur</label>
-                <input type="text" id="transporteur" placeholder="Nom du transporteur" required>
+                <label for="transporteurSelect">Transporteur</label>
+                <select id="transporteurSelect" required></select>
             </div>
             <div class="form-group">
                 <label for="numeroBL">N° BL</label>
@@ -834,12 +846,12 @@
                 <input type="text" id="numeroContenaire" placeholder="Numéro du contenaire" required>
             </div>
             <div class="form-group">
-                <label for="poste">Poste</label>
-                <input type="number" id="poste" placeholder="Poste (1, 2 ou 3)" min="1" max="3" required>
+                <label for="posteSelect">Poste</label>
+                <select id="posteSelect" required></select>
             </div>
             <div class="form-group">
-                <label for="lieuDeDechargement">Lieu de déchargement</label>
-                <input type="text" id="lieuDeDechargement" placeholder="Ex: Port de Safi" required>
+                <label for="lieuSelect">Lieu de déchargement</label>
+                <select id="lieuSelect" required></select>
             </div>
             <div class="form-group" style="grid-column: span 2;">
                 <label for="observation">Observation</label>
@@ -856,6 +868,17 @@
             <h2>Historique des Expéditions</h2>
             <div class="section-actions">
                 <button onclick="exportExcel()"><i class="fas fa-file-excel"></i> Exporter Excel</button>
+            </div>
+        </div>
+        <div class="section-tools" style="display:flex;align-items:center;gap:20px;margin-bottom:15px">
+            <label>Mois :
+                <input type="month" id="monthFilter">
+            </label>
+
+            <div class="pagination" style="margin-left:auto;display:flex;align-items:center;gap:10px">
+                <button id="prevPage" title="Page précédente">«</button>
+                <span id="pageInfo">1/1</span>
+                <button id="nextPage" title="Page suivante">»</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -884,6 +907,11 @@
     </div>
 </div>
 <script>
+    const REF_API = '/api/refs';
+    const ROWS_PER_PAGE = 10;
+    let currentPage = 1;
+    let fullData = [];   // toutes les lignes reçues du serveur
+    let tableData = [];   // données après filtre mois
     let currentEditId = null;
 
     // A utility function to show messages, consistent with Chaux Vive
@@ -897,6 +925,92 @@
         setTimeout(()=> div.remove(), 4000);
     }
 
+    /* Nouvelle fonction loadRefs pour un seul appel API */
+    async function loadRefs() {
+        try {
+            const res = await fetch(REF_API);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const refs = await res.json();
+
+            // NB : vérifiez bien les clés JSON renvoyées par votre contrôleur :
+            //      "transporteurs", "postes", "lieuxDeDechargement" (orthographe exacte ⇩)
+            fillSelect('transporteurSelect', refs.transporteurs || []);
+            // Si 'postes' contient des nombres, utilisez .map(String) pour les options de select
+            fillSelect('posteSelect',        (refs.postes || []).map(String));
+            fillSelect('lieuSelect',         refs.lieuxDeDechargement || []);
+        } catch (e) {
+            console.error('Erreur chargement refs', e);
+            showMessage(`❌ Erreur lors du chargement des listes de référence: ${e.message}`, 'error');
+        }
+    }
+
+    /* utilitaire commun */
+    function fillSelect(selectId, values) {
+        const sel = document.getElementById(selectId);
+        sel.innerHTML = values
+            .map(v => `<option value="${v}">${v}</option>`)
+            .join('');
+    }
+
+    document.getElementById('monthFilter').addEventListener('change', () => {
+        const moisChoisi = document.getElementById('monthFilter').value;
+        tableData = moisChoisi
+            ? fullData.filter(d => d.date.startsWith(moisChoisi))
+            : [...fullData];
+        currentPage = 1;
+        renderTable();
+    });
+
+    document.getElementById('prevPage').onclick = () => {
+        if (currentPage > 1) { currentPage--; renderTable(); }
+    };
+    document.getElementById('nextPage').onclick = () => {
+        if (currentPage < Math.ceil(tableData.length / ROWS_PER_PAGE)) {
+            currentPage++; renderTable();
+        }
+    };
+
+    function renderTable() {
+        const tbody = document.getElementById('data-body');
+        tbody.innerHTML = '';
+
+        const start = (currentPage - 1) * ROWS_PER_PAGE;
+        const slice = tableData.slice(start, start + ROWS_PER_PAGE);
+
+        if (slice.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;">Aucune donnée</td></tr>`;
+        } else {
+            slice.forEach(e => {
+                const tnH = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${e.date || ''}</td>
+                    <td>${e.hEntree || ''}</td>
+                    <td>${e.hSortie || ''}</td>
+                    <td>${e.transporteur || ''}</td>
+                    <td>${e.numeroBL || ''}</td>
+                    <td>${e.matricule || ''}</td>
+                    <td>${e.tb ?? ''}</td>
+                    <td>${e.tare ?? ''}</td>
+                    <td>${tnH}</td>
+                    <td>${e.numeroContenaire || ''}</td>
+                    <td>${e.poste ?? ''}</td>
+                    <td>${e.lieuDeDechargement || ''}</td>
+                    <td>${e.observation || ''}</td>
+                    <td class="table-actions">
+                        <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> </button>
+                        <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> </button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('pageInfo').textContent =
+            `${currentPage}/${Math.max(1, Math.ceil(tableData.length / ROWS_PER_PAGE))}`;
+    }
+
     function loadTable() {
         fetch('/api/exp-cuivre-nord')
             .then(res => {
@@ -906,44 +1020,9 @@
                 return res.json();
             })
             .then(data => {
-                const tbody = document.getElementById('data-body');
-                tbody.innerHTML = ''; // Clear existing rows
-                // Sort data by date in descending order
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                if (!Array.isArray(data) || data.length === 0) {
-                    const noDataRow = document.createElement('tr');
-                    noDataRow.innerHTML = `<td colspan="14" style="text-align: center;">Aucune donnée trouvée.</td>`;
-                    tbody.appendChild(noDataRow);
-                    return;
-                }
-
-                data.forEach(e => {
-                    // Calculate TNH on the client-side for display, assuming it's TB - TARE
-                    const tnH = (parseFloat(e.tb) - parseFloat(e.tare)).toFixed(2);
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                            <td>${e.date || ''}</td>
-                            <td>${e.hEntree || ''}</td>
-                            <td>${e.hSortie || ''}</td>
-                            <td>${e.transporteur || ''}</td>
-                            <td>${e.numeroBL || ''}</td>
-                            <td>${e.matricule || ''}</td>
-                            <td>${e.tb ?? ''}</td>
-                            <td>${e.tare ?? ''}</td>
-                            <td>${tnH}</td>
-                            <td>${e.numeroContenaire || ''}</td>
-                            <td>${e.poste ?? ''}</td>
-                            <td>${e.lieuDeDechargement || ''}</td>
-                            <td>${e.observation || ''}</td>
-                            <td class="table-actions">
-                                <button onclick='editRow(${JSON.stringify(e)})'><i class="fas fa-edit"></i> Modifier</button>
-                                <button class="delete-btn" onclick='deleteRow("${e.id}")'><i class="fas fa-trash-alt"></i> Supprimer</button>
-                            </td>
-                        `;
-                    tbody.appendChild(tr);
-                });
+                fullData = Array.isArray(data) ? data.sort((a,b)=>new Date(b.date)-new Date(a.date)) : [];
+                tableData = [...fullData];
+                renderTable();
             })
             .catch(error => {
                 console.error("Erreur lors du chargement des données:", error);
@@ -958,21 +1037,21 @@
 
         const tbValue = parseFloat(document.getElementById('tb').value);
         const tareValue = parseFloat(document.getElementById('tare').value);
-        const tnHValue = (tbValue - tareValue).toFixed(2); // Calculate TNH
+        const tnHValue = (tbValue - tareValue).toFixed(2);
 
         const entry = {
             date: document.getElementById('date').value,
             hEntree: document.getElementById('hEntree').value,
             hSortie: document.getElementById('hSortie').value,
-            transporteur: document.getElementById('transporteur').value,
+            transporteur: document.getElementById('transporteurSelect').value, // Changed to select
             numeroBL: document.getElementById('numeroBL').value,
             matricule: document.getElementById('matricule').value,
             tb: tbValue,
             tare: tareValue,
-            tnH: parseFloat(tnHValue), // Include TNH in the data sent
+            tnH: parseFloat(tnHValue),
             numeroContenaire: document.getElementById('numeroContenaire').value,
-            poste: parseInt(document.getElementById('poste').value),
-            lieuDeDechargement: document.getElementById('lieuDeDechargement').value,
+            poste: parseInt(document.getElementById('posteSelect').value), // Changed to select
+            lieuDeDechargement: document.getElementById('lieuSelect').value, // Changed to select
             observation: document.getElementById('observation').value
         };
 
@@ -987,8 +1066,8 @@
             .then(async res => {
                 if (!res.ok) {
                     let msg = (await res.text());
-                    if(res.status === 409) msg = 'Doublon détecté !'; // Specific message for 409 conflict
-                    throw new Error(msg || 'Erreur inconnue.');
+                    if(res.status === 409) msg = 'Doublon détecté !';
+                    throw new Error(msg || 'Doublon détecté');
                 }
                 return res.json();
             })
@@ -996,9 +1075,8 @@
                 showMessage('✅ Opération réussie.', 'success');
                 this.reset();
                 currentEditId = null;
-                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer'; // Reset button text
-                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée"; // Reset form title
-                // Reset button styles to default
+                document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+                document.querySelector('.form-section h2').textContent = "Ajouter ou Modifier une entrée";
                 const submitBtn = document.getElementById('submit-btn');
                 submitBtn.style.backgroundColor = 'var(--primary-color)';
                 submitBtn.style.boxShadow = '0 5px 15px rgba(74, 144, 226, 0.3)';
@@ -1017,21 +1095,20 @@
         document.getElementById('date').value = item.date || '';
         document.getElementById('hEntree').value = item.hEntree || '';
         document.getElementById('hSortie').value = item.hSortie || '';
-        document.getElementById('transporteur').value = item.transporteur || '';
+        document.getElementById('transporteurSelect').value = item.transporteur || ''; // Changed to select
         document.getElementById('numeroBL').value = item.numeroBL || '';
         document.getElementById('matricule').value = item.matricule || '';
         document.getElementById('tb').value = item.tb ?? '';
         document.getElementById('tare').value = item.tare ?? '';
         document.getElementById('numeroContenaire').value = item.numeroContenaire || '';
-        document.getElementById('poste').value = item.poste ?? '';
-        document.getElementById('lieuDeDechargement').value = item.lieuDeDechargement || '';
+        document.getElementById('posteSelect').value = item.poste ?? ''; // Changed to select
+        document.getElementById('lieuSelect').value = item.lieuDeDechargement || ''; // Changed to select
         document.getElementById('observation').value = item.observation || '';
 
-        // Change form title and button for edit mode
         document.querySelector('.form-section h2').textContent = "Modifier l'entrée existante";
         const submitBtn = document.getElementById('submit-btn');
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
-        submitBtn.style.backgroundColor = '#FFA500'; // Orange color for update
+        submitBtn.style.backgroundColor = '#FFA500';
         submitBtn.style.boxShadow = '0 5px 15px rgba(255, 165, 0, 0.3)';
         submitBtn.onmouseover = () => submitBtn.style.backgroundColor = '#E69500';
         submitBtn.onmouseout = () => submitBtn.style.backgroundColor = '#FFA500';
@@ -1067,26 +1144,21 @@
         const sidebarToggle = document.getElementById('sidebarToggle');
         const toggleIcon = sidebarToggle.querySelector('.fas');
 
-        // Check localStorage for the last sidebar state
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
 
-        // Apply the stored state on page load
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
             toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
         } else {
-            // Ensure it's not collapsed and the icon is correct if not collapsed
             sidebar.classList.remove('collapsed');
             toggleIcon.classList.replace('fa-chevron-right', 'fa-chevron-left');
         }
 
-        // Add event listener for the toggle button
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             const currentlyCollapsed = sidebar.classList.contains('collapsed');
-            localStorage.setItem('sidebarCollapsed', currentlyCollapsed); // Save state
+            localStorage.setItem('sidebarCollapsed', currentlyCollapsed);
 
-            // Toggle icon direction
             if (currentlyCollapsed) {
                 toggleIcon.classList.replace('fa-chevron-left', 'fa-chevron-right');
             } else {
@@ -1094,8 +1166,8 @@
             }
         });
 
-        // Initial load of table data when the DOM is ready
         loadTable();
+        loadRefs();
     });
 </script>
 </body>
